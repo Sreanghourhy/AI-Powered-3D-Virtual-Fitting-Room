@@ -106,3 +106,18 @@ class GarmentOut(ApiModel):
             ),
             active=garment.active,
         )
+
+
+# ---- Jobs -------------------------------------------------------------------
+
+
+class JobOut(ApiModel):
+    id: uuid.UUID
+    type: str
+    status: Literal["queued", "processing", "done", "failed"]
+    progress: int
+    step: str | None
+    error: str | None
+    created_at: datetime
+    started_at: datetime | None
+    finished_at: datetime | None

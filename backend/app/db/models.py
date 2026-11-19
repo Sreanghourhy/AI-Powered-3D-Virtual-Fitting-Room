@@ -95,3 +95,30 @@ class Garment(Base):
     active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
     sort_order: Mapped[int] = mapped_column(default=0)
     created_at: Mapped[datetime] = mapped_column(default=utcnow)
+
+
+JOB_STATUSES = ("queued", "processing", "done", "failed")
+
+
+class Job(UUIDPrimaryKey, Base):
+    """Background job (e.g. 3D reconstruction). Processed by app.worker, one at a time."""
+
+    __tablename__ = "jobs"
+    __table_args__ = (
+        CheckConstraint("status IN ('queued', 'processing', 'done', 'failed')", name="status"),
+        CheckConstraint("progress BETWEEN 0 AND 100", name="progress"),
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    type: Mapped[str] = mapped_column(String(64))
+    ref_id: Mapped[str | None] = mapped_column(String(64), default=None)  # e.g. body_model id
+    payload: Mapped[dict] = mapped_column(JSON, default=dict)
+    status: Mapped[str] = mapped_column(String(16), default="queued", index=True)
+    progress: Mapped[int] = mapped_column(default=0)
+    step: Mapped[str | None] = mapped_column(String(64), default=None)
+    error: Mapped[str | None] = mapped_column(String(500), default=None)  # user-safe message
+    created_at: Mapped[datetime] = mapped_column(default=utcnow, index=True)
+    started_at: Mapped[datetime | None] = mapped_column(default=None)
+    finished_at: Mapped[datetime | None] = mapped_column(default=None)
