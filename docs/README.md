@@ -46,7 +46,7 @@ This folder turns the planning PDF (`AI_3D_Virtual_Fitting_Room_Step_by_Step_Pla
 
 - ✅ SvelteKit + TypeScript + Tailwind CSS starter at the repo root (`src/`, placeholder fitting-room page, `Garment` type).
 - ✅ Git repo (GitHub remote), FastAPI backend with `/health`, Three.js viewer demo at `/viewer-demo`, frontend ↔ backend proxy.
-- ✅ Phase 1 design docs written (requirements waiting for owner sign-off).
+- ✅ Phase 1 complete and approved (20 Nov 2026).
 - ❌ No database, auth, capture or reconstruction yet. Next: [Phase 2](tasks/phase-2-foundation.md).
 
 Start with [Phase 0](tasks/phase-0-start-today.md).

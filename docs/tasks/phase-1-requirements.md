@@ -7,12 +7,12 @@
 
 ---
 
-### P1-01 · Finalize requirements list   `S`
+### P1-01 · Finalize requirements list   `S` ✅
 **Depends on:** —
 - [x] Review [01-project-overview.md](../01-project-overview.md) FR-01…FR-09
 - [x] Mark each Must / Should / Could / Later (added FR-10…FR-15 and NFR-01…NFR-05)
 - [x] Write the out-of-scope list explicitly
-- [ ] **Owner sign-off** (see Sign-off table in 01-project-overview.md)
+- [x] **Owner sign-off**: approved 20 Nov 2026 (see Sign-off table in 01-project-overview.md)
 
 **Done when:** requirements are reviewed and signed off (even if by yourself, with a date).
 

@@ -65,8 +65,9 @@ The app must **not** offer controls to change the customer's face or body propor
 
 | Item | Status |
 |------|--------|
-| Requirements FR-01…FR-15, NFR-01…NFR-05 | **Proposed (20 Nov 2026), waiting for the owner's approval** |
-| Out-of-scope list (§1.5) | **Proposed, waiting for approval** |
+| Requirements FR-01…FR-15, NFR-01…NFR-05 | ✅ **Approved by project owner, 20 Nov 2026** |
+| Out-of-scope list (§1.5) | ✅ **Approved, 20 Nov 2026** |
+| Phase 1 design docs (flows, consent v1, capture steps, garment format, targets, wireframes, test cases) | ✅ **Approved with no changes, 20 Nov 2026** |
 
 ## 1.4 Technical constraints (must be understood before building)
 
