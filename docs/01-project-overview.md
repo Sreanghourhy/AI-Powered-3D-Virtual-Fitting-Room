@@ -42,6 +42,31 @@ The app must **not** offer controls to change the customer's face or body propor
 | FR-07 | Customer can view, export (where feasible) and delete their profile; access restricted to their own data | Must |
 | FR-08 | No controls to edit face or body proportions | Must |
 | FR-09 | Size recommendations | Later (optional) |
+| FR-10 | Show processing progress while the model is being built (async job) | Must |
+| FR-11 | Reject poor captures with clear, specific retake instructions | Must |
+| FR-12 | Rescan to replace the saved model (old one deleted when new one is ready) | Should |
+| FR-13 | Remember the last selected outfit between visits | Should |
+| FR-14 | Save a screenshot of the current outfit to the device | Could |
+| FR-15 | Admin screen to manage the garment catalog | Could (seed script is enough for MVP) |
+
+### Non-functional requirements
+
+| ID | Requirement | Target |
+|----|-------------|--------|
+| NFR-01 | Works in mobile Safari (iOS 17+) and Chrome (Android 12+) for capture; desktop Chrome/Safari/Firefox for viewing | — |
+| NFR-02 | Customer files encrypted at rest; HTTPS in transit | 100% of files |
+| NFR-03 | Owner-only access to models and captures | 0 cross-user leaks in tests |
+| NFR-04 | Viewer usable on a mid-range phone | ≥ 30 fps while rotating |
+| NFR-05 | Accessibility: readable contrast, keyboard-usable forms, text alternatives for instructions | WCAG 2.2 AA for non-3D UI |
+
+> **Priority key (MoSCoW):** Must = MVP fails without it · Should = expected in MVP if time allows · Could = nice to have · Later = after MVP.
+
+### Sign-off
+
+| Item | Status |
+|------|--------|
+| Requirements FR-01…FR-15, NFR-01…NFR-05 | **Proposed (20 Nov 2026), waiting for the owner's approval** |
+| Out-of-scope list (§1.5) | **Proposed, waiting for approval** |
 
 ## 1.4 Technical constraints (must be understood before building)
 

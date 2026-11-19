@@ -1,4 +1,4 @@
-# Photo Capture Guide (draft v0.1)
+# Photo Capture Guide (v0.2)
 
 How to capture a person with a phone so the 3D reconstruction has the best chance of working. These steps become the on-screen instructions in Phase 1 (P1-04) and Phase 3.
 
@@ -31,13 +31,13 @@ How to capture a person with a phone so the 3D reconstruction has the best chanc
 ## 4. Capture method A — photos (recommended for first tests)
 
 1. Stand **about 1.5–2 m** away, so the **whole body fits in the frame with a small margin** above the head and below the feet.
-2. **Ring 1 (chest height):** walk in a full circle around the person and take a photo **every ~15–20°**, about **20–24 photos**.
-3. **Ring 2 (higher, phone above head, tilted down):** another full circle, about **12–16 photos**.
-4. **Ring 3 (knee height, tilted up):** another full circle, about **12–16 photos**.
-5. **Face close-ups:** about 6 photos from front, front-left, left, front-right, right, and slightly below.
-6. Each photo must **overlap ~60–70%** with the previous one. Move the phone, never ask the person to turn.
+2. **Ring 1 (chest height):** walk a full circle around the person and take a photo at **12 positions, every 30°** (like a clock face: 12, 1, 2 … 11 o'clock). Add extra photos in between for difficult areas if you like.
+3. **Ring 2 (phone above head, tilted down):** the same 12 positions.
+4. **Ring 3 (knee height, tilted up):** the same 12 positions.
+5. **Face close-ups (about 60 cm away):** 4 photos: front, left, right, slightly from below.
+6. Neighbouring photos must **overlap ~60–70%**. Move the phone; never ask the person to turn.
 
-**Total:** about 50–60 photos.
+**Total:** minimum 36, target 40, maximum 80 photos. These are the MVP numbers from [capture-steps.md](capture-steps.md).
 
 ## 5. Capture method B — video
 

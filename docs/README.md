@@ -15,6 +15,17 @@ This folder turns the planning PDF (`AI_3D_Virtual_Fitting_Room_Step_by_Step_Pla
 | 5 | [MVP acceptance](05-mvp-acceptance.md) | The checklist that defines "MVP done" |
 | 6 | [Task backlog](tasks/README.md) | All phases broken into small tasks (≤ 1 day each) |
 
+### Phase 1 design documents
+
+| Document | What it covers |
+|----------|----------------|
+| [User flows](user-flows.md) | Sign up → scan, return visit, delete, retake |
+| [Consent text v1](consent-v1.md) | On-screen consent and disclaimer labels |
+| [Capture guide](capture-guide.md) / [Capture steps](capture-steps.md) | How to photograph a person / on-screen steps and error messages |
+| [Garment format](garment-format.md) | GLB spec + metadata for catalog items |
+| [Wireframes](wireframes/README.md) | Consent, Capture, My Model, Catalog, Try-On |
+| [Test cases](test-cases.md) | TC-01…TC-50 mapped to MVP items A1–A6 |
+
 ## Roadmap at a glance
 
 | Phase | Weeks | Goal | Task file |
@@ -35,6 +46,7 @@ This folder turns the planning PDF (`AI_3D_Virtual_Fitting_Room_Step_by_Step_Pla
 
 - ✅ SvelteKit + TypeScript + Tailwind CSS starter at the repo root (`src/`, placeholder fitting-room page, `Garment` type).
 - ✅ Git repo (GitHub remote), FastAPI backend with `/health`, Three.js viewer demo at `/viewer-demo`, frontend ↔ backend proxy.
-- ❌ No database, auth, capture or reconstruction yet.
+- ✅ Phase 1 design docs written (requirements waiting for owner sign-off).
+- ❌ No database, auth, capture or reconstruction yet. Next: [Phase 2](tasks/phase-2-foundation.md).
 
 Start with [Phase 0](tasks/phase-0-start-today.md).
