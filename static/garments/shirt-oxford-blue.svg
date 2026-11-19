@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Oxford shirt, blue">
+  <rect width="512" height="512" fill="#f1f5f9"/>
+  <path d="M176 96 L120 120 L64 200 L120 236 L152 196 L152 432 L360 432 L360 196 L392 236 L448 200 L392 120 L336 96 Q256 156 176 96 Z" fill="#93c5fd" stroke="#334155" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M256 140 L256 432" stroke="#334155" stroke-width="4"/><circle cx="256" cy="200" r="5" fill="#334155"/><circle cx="256" cy="260" r="5" fill="#334155"/><circle cx="256" cy="320" r="5" fill="#334155"/><circle cx="256" cy="380" r="5" fill="#334155"/>
+</svg>

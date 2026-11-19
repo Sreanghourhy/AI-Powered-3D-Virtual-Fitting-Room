@@ -6,7 +6,7 @@ Data model reference: docs/02-architecture.md §2.4
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import JSON, Boolean, CheckConstraint, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, UUIDPrimaryKey, utcnow
@@ -71,3 +71,27 @@ class AuditLog(UUIDPrimaryKey, Base):
     action: Mapped[str] = mapped_column(String(64))  # e.g. "auth.login", "model.delete"
     target: Mapped[str | None] = mapped_column(String(128), default=None)  # opaque id only
     created_at: Mapped[datetime] = mapped_column(default=utcnow, index=True)
+
+
+GARMENT_CATEGORIES = ("top", "bottom")  # MVP: shirts and pants only
+
+
+class Garment(Base):
+    """Public catalog item. Spec: docs/garment-format.md"""
+
+    __tablename__ = "garments"
+    __table_args__ = (CheckConstraint("category IN ('top', 'bottom')", name="category"),)
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)  # kebab-case slug
+    name: Mapped[str] = mapped_column(String(120))
+    category: Mapped[str] = mapped_column(String(16), index=True)
+    model_url: Mapped[str] = mapped_column(String(255))
+    thumbnail_url: Mapped[str] = mapped_column(String(255))
+    colors: Mapped[list[str]] = mapped_column(JSON, default=list)
+    sizes: Mapped[list[str]] = mapped_column(JSON, default=list)
+    source_author: Mapped[str] = mapped_column(String(120))
+    source_license: Mapped[str] = mapped_column(String(64))
+    source_url: Mapped[str | None] = mapped_column(String(255), default=None)
+    active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
+    sort_order: Mapped[int] = mapped_column(default=0)
+    created_at: Mapped[datetime] = mapped_column(default=utcnow)
