@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api import auth, health
+from app.api import auth, consents, health
 from app.core.config import get_settings
 
 
@@ -16,6 +16,7 @@ def create_app() -> FastAPI:
     )
     app.include_router(health.router)
     app.include_router(auth.router)
+    app.include_router(consents.router)
     return app
 
 

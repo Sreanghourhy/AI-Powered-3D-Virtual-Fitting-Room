@@ -35,3 +35,29 @@ class UserOut(ApiModel):
     id: uuid.UUID
     email: str
     created_at: datetime
+
+
+# ---- Consent ----------------------------------------------------------------
+
+CONSENT_SCOPE = "capture_and_store_body_model"
+
+
+class ConsentRequest(ApiModel):
+    version: str = Field(max_length=32)
+    # Both on-screen checkboxes from docs/consent-v1.md must be ticked.
+    confirms_adult_and_self: bool
+    agrees_to_capture_and_storage: bool
+
+
+class ConsentOut(ApiModel):
+    id: uuid.UUID
+    version: str
+    scope: str
+    granted_at: datetime
+    withdrawn_at: datetime | None
+
+
+class ConsentStatus(ApiModel):
+    required_version: str
+    accepted: bool
+    consents: list[ConsentOut]

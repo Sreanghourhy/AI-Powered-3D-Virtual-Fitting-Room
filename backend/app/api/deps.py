@@ -39,3 +39,15 @@ def get_current_user(session: CurrentSession) -> User:
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+def require_consent(user: CurrentUser, db: DbSession, settings: AppSettings) -> User:
+    """Guard for capture endpoints: user must have accepted the current consent version."""
+    from app.services.consent import active_consent
+
+    if active_consent(db, user, settings.consent_version) is None:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "Consent required before capture")
+    return user
+
+
+ConsentedUser = Annotated[User, Depends(require_consent)]
