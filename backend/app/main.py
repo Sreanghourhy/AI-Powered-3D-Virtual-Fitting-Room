@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api import health
+from app.api import auth, health
 from app.core.config import get_settings
 
 
@@ -15,6 +15,7 @@ def create_app() -> FastAPI:
         openapi_url=None if settings.environment == "production" else "/openapi.json",
     )
     app.include_router(health.router)
+    app.include_router(auth.router)
     return app
 
 

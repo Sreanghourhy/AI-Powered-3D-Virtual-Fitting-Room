@@ -4,8 +4,12 @@ import os
 import tempfile
 from collections.abc import Iterator
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
+
+if TYPE_CHECKING:
+    from fastapi.testclient import TestClient
 
 # Must be set before the app is imported.
 os.environ["FR_ENVIRONMENT"] = "test"
@@ -28,3 +32,14 @@ def data_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Path]:
     yield tmp_path
     reset_engine()
     get_settings.cache_clear()
+
+
+@pytest.fixture
+def client(data_dir: Path) -> Iterator["TestClient"]:
+    """API client on a fresh database. HTTPS so Secure cookies are sent back."""
+    from fastapi.testclient import TestClient
+
+    from app.main import create_app
+
+    with TestClient(create_app(), base_url="https://testserver") as test_client:
+        yield test_client
