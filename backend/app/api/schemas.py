@@ -2,9 +2,13 @@
 
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING, Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 from pydantic.alias_generators import to_camel
+
+if TYPE_CHECKING:
+    from app.db.models import Garment
 
 
 class ApiModel(BaseModel):
@@ -61,3 +65,44 @@ class ConsentStatus(ApiModel):
     required_version: str
     accepted: bool
     consents: list[ConsentOut]
+
+
+# ---- Garments (matches src/lib/types/garment.ts) ---------------------------
+
+GarmentCategory = Literal["top", "bottom"]
+
+
+class GarmentSourceOut(ApiModel):
+    author: str
+    license: str
+    url: str | None = None
+
+
+class GarmentOut(ApiModel):
+    id: str
+    name: str
+    category: GarmentCategory
+    model_url: str
+    thumbnail_url: str
+    colors: list[str]
+    sizes: list[str]
+    source: GarmentSourceOut
+    active: bool
+
+    @classmethod
+    def from_model(cls, garment: "Garment") -> "GarmentOut":
+        return cls(
+            id=garment.id,
+            name=garment.name,
+            category=garment.category,  # type: ignore[arg-type]
+            model_url=garment.model_url,
+            thumbnail_url=garment.thumbnail_url,
+            colors=garment.colors,
+            sizes=garment.sizes,
+            source=GarmentSourceOut(
+                author=garment.source_author,
+                license=garment.source_license,
+                url=garment.source_url,
+            ),
+            active=garment.active,
+        )

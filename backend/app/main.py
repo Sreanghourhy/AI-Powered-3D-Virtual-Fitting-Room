@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api import auth, consents, health
+from app.api import auth, consents, garments, health
 from app.core.config import get_settings
 
 
@@ -17,6 +17,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(auth.router)
     app.include_router(consents.router)
+    app.include_router(garments.router)
     return app
 
 
