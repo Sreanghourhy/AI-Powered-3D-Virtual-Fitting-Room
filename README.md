@@ -4,12 +4,28 @@ A SvelteKit + TypeScript + Tailwind CSS starter. Includes a responsive placehold
 
 ## Getting started
 
-Use Node.js 22.12+ (Node.js 24 LTS recommended).
+Use Node.js 22.12+ (Node.js 24 LTS recommended) and Python 3.12+.
+
+**1. Backend (FastAPI), one-time setup:**
 
 ```sh
-npm install
-npm run dev -- --open
+cd backend
+python3.12 -m venv .venv
+.venv/bin/pip install -e ".[dev]"
+cd ..
 ```
+
+**2. Run (two terminals):**
+
+```sh
+npm run dev:api        # FastAPI on http://localhost:8000
+npm install            # first time only
+npm run dev -- --open  # SvelteKit on http://localhost:5173
+```
+
+The frontend proxies `/api/*` to the backend, and the home page shows **Backend: ok** when both are running. The 3D viewer demo is at `/viewer-demo`.
+
+Project plan and task backlog: see [`docs/`](docs/README.md).
 
 ## Project structure
 
@@ -47,6 +63,8 @@ Empty directories contain `.gitkeep` files so Git preserves the structure. Impor
 - `npm run check:watch` — continuous validation
 - `npm run build` — production build
 - `npm run preview` — preview the production build locally
+- `npm run dev:api` — FastAPI backend with auto-reload (port 8000)
+- `npm run test:api` — backend tests (pytest)
 
 ## Development guidance
 
@@ -54,5 +72,5 @@ Create pages under `src/routes` using `+page.svelte`. Add server endpoints with 
 
 Tailwind CSS uses its Vite plugin and `@import 'tailwindcss'` in `src/routes/layout.css`. A separate Tailwind configuration file is not required for this starter.
 
-For the 3D viewer, add a rendering library when you begin that feature and initialize browser-only APIs on the client. The included adapter-auto supports automatic deployment detection; select a target-specific adapter when choosing hosting.
+The 3D viewer uses Three.js + Threlte (`src/lib/components/fitting-room/ModelViewer.svelte`). Only public, licensed sample models go in `static/models/` (see its README). The included adapter-auto supports automatic deployment detection; select a target-specific adapter when choosing hosting.
 # AI-Powered-3D-Virtual-Fitting-Room
