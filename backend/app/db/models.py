@@ -3,10 +3,11 @@
 Data model reference: docs/02-architecture.md §2.4 (single user, CR-02: no users/sessions/consents)
 """
 
+import uuid
 from datetime import datetime
 
-from sqlalchemy import JSON, Boolean, CheckConstraint, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import JSON, Boolean, CheckConstraint, ForeignKey, String, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, UUIDPrimaryKey, utcnow
 
@@ -67,3 +68,45 @@ class Job(UUIDPrimaryKey, Base):
     created_at: Mapped[datetime] = mapped_column(default=utcnow, index=True)
     started_at: Mapped[datetime | None] = mapped_column(default=None)
     finished_at: Mapped[datetime | None] = mapped_column(default=None)
+
+
+# Milestone 1: 8 body views (turning 45° each) + 5 face close-ups.
+BODY_VIEWS = (
+    "front", "front_right", "right", "back_right", "back", "back_left", "left", "front_left",
+)  # fmt: skip
+FACE_VIEWS = ("face_front", "face_left_45", "face_right_45", "face_left_90", "face_right_90")
+SCAN_VIEWS = BODY_VIEWS + FACE_VIEWS
+
+
+class Scan(UUIDPrimaryKey, Base):
+    """One capture session. Only one 'saved' scan is kept (single-user prototype)."""
+
+    __tablename__ = "scans"
+    __table_args__ = (CheckConstraint("status IN ('capturing', 'saved')", name="status"),)
+
+    status: Mapped[str] = mapped_column(String(16), default="capturing", index=True)
+    created_at: Mapped[datetime] = mapped_column(default=utcnow)
+    completed_at: Mapped[datetime | None] = mapped_column(default=None)
+
+    images: Mapped[list["ScanImage"]] = relationship(
+        back_populates="scan", cascade="all, delete-orphan", passive_deletes=True
+    )
+
+
+class ScanImage(UUIDPrimaryKey, Base):
+    """One photo of a scan, stored encrypted (storage_key → data/blobs)."""
+
+    __tablename__ = "scan_images"
+    __table_args__ = (UniqueConstraint("scan_id", "view", name="scan_view"),)
+
+    scan_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("scans.id", ondelete="CASCADE"), index=True
+    )
+    view: Mapped[str] = mapped_column(String(32))
+    storage_key: Mapped[str] = mapped_column(String(32))
+    width: Mapped[int]
+    height: Mapped[int]
+    size_bytes: Mapped[int]
+    created_at: Mapped[datetime] = mapped_column(default=utcnow)
+
+    scan: Mapped[Scan] = relationship(back_populates="images")

@@ -11,12 +11,12 @@ from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
 from app.db.base import Base
-from app.db.models import AuditLog, Job
+from app.db.models import AuditLog, Job, Scan, ScanImage
 from app.services.audit import audit
 from app.services.storage import StorageService
 
 # Delete order: children before parents.
-DISCARD_MODELS: list[type[Base]] = [Job, AuditLog]
+DISCARD_MODELS: list[type[Base]] = [ScanImage, Scan, Job, AuditLog]
 
 
 @dataclass

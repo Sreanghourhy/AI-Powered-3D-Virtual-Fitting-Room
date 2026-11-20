@@ -69,3 +69,23 @@ class JobOut(ApiModel):
     created_at: datetime
     started_at: datetime | None
     finished_at: datetime | None
+
+
+# ---- Scans (Milestone 1) ---------------------------------------------------
+
+
+class ScanImageOut(ApiModel):
+    id: uuid.UUID
+    view: str
+    width: int
+    height: int
+    size_bytes: int
+
+
+class ScanOut(ApiModel):
+    id: uuid.UUID
+    status: Literal["capturing", "saved"]
+    created_at: datetime
+    completed_at: datetime | None
+    images: list[ScanImageOut]
+    missing_views: list[str]

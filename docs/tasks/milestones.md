@@ -16,11 +16,11 @@ Voice prompts, server-side MediaPipe quality checks, consistency checks (distanc
 ### M1-01 · Plan and docs   `XS` ✅
 - [x] This file; change log CR-03
 
-### M1-02 · Backend: save scans   `M`
-- [ ] Tables `scans` (status capturing/saved) and `scan_images` (13 named views)
-- [ ] `POST /scans`, `POST /scans/{id}/images` (JPEG/PNG, ≤ 8 MB, signature check, re-encoded without metadata, encrypted), `DELETE /scans/{id}/images/{imageId}`, `POST /scans/{id}/complete`, `GET /scans/current`
-- [ ] One current scan: completing a new scan deletes the old one and its files
-- [ ] Discard deletes scans and images
+### M1-02 · Backend: save scans   `M` ✅
+- [x] Tables `scans` (status capturing/saved) and `scan_images` (13 named views)
+- [x] `POST /scans`, `POST /scans/{id}/images` (JPEG/PNG, ≤ 8 MB, signature check, re-encoded without metadata, encrypted), `DELETE /scans/{id}/images/{imageId}`, `POST /scans/{id}/complete`, `GET /scans/current`
+- [x] One current scan: completing a new scan deletes the old one and its files
+- [x] Discard deletes scans and images
 
 ### M1-03 · Frontend: MediaPipe pose helpers   `M`
 - [ ] `@mediapipe/tasks-vision` with WASM + pose model **self-hosted** in `static/mediapipe/` (no third-party requests while the camera is on)
