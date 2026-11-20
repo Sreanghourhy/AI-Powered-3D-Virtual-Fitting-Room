@@ -1,109 +1,106 @@
-# Test Cases (v1)
+# Test Cases (v3, CR-02 — single user, MacBook camera)
 
-Each MVP acceptance item (A1–A6 in [05-mvp-acceptance.md](05-mvp-acceptance.md)) has at least one test case. **Type:** M = manual, A = automated (pytest / Playwright).
-
-Test data: consenting adult testers, or the CC BY sample model. Never use real customer data in automated tests.
+**Type:** M = manual, A = automated (pytest / Vitest / Playwright). The owner is the only test subject. Automated tests use synthetic images or fixtures, never real scans.
 
 ---
 
-## A1 — Account, consent, guided capture & upload
+## A1 — Opens to the fitting room; scan, review, retake
 
 | ID | Type | Steps | Expected result |
 |----|------|-------|-----------------|
-| TC-01 | A | Sign up with new email + valid password | 201; session cookie set (`HttpOnly`, `Secure`, `SameSite=Lax`) |
-| TC-02 | A | Sign up with an existing email | 409; no second account |
-| TC-03 | A | Log in with wrong password | 401; generic message ("Email or password is wrong") |
-| TC-04 | A | Open `/capture` without consent | Redirect to `/consent`; API capture endpoints return 403 |
-| TC-05 | M | Consent screen: tick only one box | "Agree" stays disabled |
-| TC-06 | A | Accept consent | Record stored with `consent-v1` + timestamp |
-| TC-07 | M | MacBook, **Chrome**: customer alone completes calibration, 8 body views (auto-capture) and 5 face close-ups | All steps ≤ 4 min (Q2); upload progress shown; result screen appears |
-| TC-08 | M | Same on MacBook **Safari** | Same as TC-07 |
-| TC-09 | M | Deny camera permission (browser), and separately in macOS Privacy settings | Clear message with both fixes; no crash |
-| TC-51 | M | Leave the capture page mid-way, and finish a capture | Camera light turns off in both cases |
-| TC-52 | M | Capture with **Center Stage ON** and move during views | Rejected with `framing_changed` (or warning if not detectable; see P3-02) |
-| TC-53 | A | Upload a view whose body orientation doesn't match the declared view | Rejected with `wrong_view` |
-| TC-54 | A | Upload a set where the person height differs > 8% from calibration in one view | Rejected with `distance_changed` for that view |
+| TC-01 | A | Open `/` | Fitting room loads directly; no login, sign-up, profile or consent screen exists |
+| TC-02 | A | Request old routes `/login`, `/signup`, `/consent`, `/my-model`, `/try-on`, `/capture` | Removed (404) or redirected to `/` / `/scan` |
+| TC-03 | M | First **Start Scan** | Privacy notice appears before the camera starts; "Don't show again" works |
+| TC-07 | M | Chrome: calibration → 8 body views (auto-capture) → 5 face close-ups | All steps ≤ 4 min (Q2) |
+| TC-08 | M | Same in Safari | Same as TC-07 |
+| TC-09 | M | Deny camera (browser), and separately in macOS Privacy settings | Clear help for both; no crash |
+| TC-20 | M | Retake one flagged view | Only that image is replaced |
+| TC-51 | M | Leave `/scan` mid-way; finish a scan | Camera light turns off in both cases |
 
-## A1 — Negative capture cases (Flow 4)
+## A1/A2 — Quality checks (Flow 3)
 
 | ID | Type | Steps | Expected result |
 |----|------|-------|-----------------|
-| TC-10 | A | Submit session with a deliberately blurry photo | Rejected with `blurry` for that photo number |
-| TC-11 | A | Submit a dark set (low brightness) | Rejected with `too_dark` |
-| TC-12 | A | Submit a backlit set | Rejected with `backlit` |
-| TC-13 | A | Submit a set with feet cut off | Rejected with `body_cut_off` |
-| TC-14 | A | Submit a set with two people visible | Rejected with `multiple_people` |
-| TC-15 | A | Submit a set with no back view | Rejected with `missing_view` (back) |
-| TC-16 | A | Submit 6 body views and 2 face close-ups | Rejected with `too_few_photos` |
-| TC-17 | A | Upload a 20 MB image | 413 |
-| TC-18 | A | Upload a `.exe` renamed to `.jpg` | 415 (magic-byte check) |
-| TC-19 | A | Upload a JPEG containing metadata (e.g. EXIF/GPS) | Stored file has no metadata |
-| TC-20 | M | Retake only the flagged photos and resubmit | Accepted; only retaken photos were re-uploaded |
+| TC-10 | A | Blurry view | Rejected `blurry` for that view |
+| TC-11 | A | Dark set | Rejected `too_dark` |
+| TC-12 | A | Backlit set | Rejected `backlit` |
+| TC-13 | A | Feet cut off | Rejected `body_cut_off` |
+| TC-14 | A | Two people visible | Rejected `multiple_people` |
+| TC-15 | A | No back view | Rejected `missing_view` (back) |
+| TC-16 | A | 6 body views + 2 face close-ups | Rejected `too_few_photos` |
+| TC-17 | A | 20 MB image | 413 |
+| TC-18 | A | `.exe` renamed to `.jpg` | 415 (signature check) |
+| TC-19 | A | JPEG with metadata | Stored image has no metadata |
+| TC-52 | M | Center Stage ON and moving | `framing_changed` (or a warning if not detectable; see P3-02) |
+| TC-53 | A | View orientation doesn't match the declared view | `wrong_view` |
+| TC-54 | A | Person height differs > 8% from calibration | `distance_changed` |
 
-## A2 — Model generated, reviewed, saved, reopened
+## A2 — Generate 3D Model (real person, no avatar fallback)
 
 | ID | Type | Steps | Expected result |
 |----|------|-------|-----------------|
-| TC-21 | A | Accepted session → job runs (fixture reconstruction) | Status goes queued → processing → review → ready |
-| TC-22 | M | Watch My Model during processing | Progress % updates without refresh |
-| TC-23 | A | Reconstruction fails (broken input) | Status `failed` with readable reason; "Rescan" shown |
-| TC-24 | A | Model with impossible height (e.g. 5 m) | Cannot reach `ready` |
-| TC-25 | A | Sign out → sign in → open My Model | Same model id loads; no rescan needed |
-| TC-26 | A | Rescan, then new model becomes ready | Only one model exists; old files deleted |
+| TC-21 | A | Generate on an accepted scan (fixture reconstruction) | Job queued → processing → ready; progress visible |
+| TC-22 | M | Watch the fitting room during processing | Progress % updates without refresh |
+| TC-23 | A | Reconstruction fails | Model `failed` + readable reason; viewer shows **no body**; no avatar/sample model loaded |
+| TC-24 | A | Output with impossible height (e.g. 5 m) | Cannot become `ready` |
+| TC-26 | A | Rescan and generate again | One current model; old files deleted |
+| TC-55 | A | Search the generated-model code paths for any fallback to the sample/avatar GLB | None exists (`static/models/sample.glb` only used by `/viewer-demo`) |
 
 ## A3 — 360° viewer
 
 | ID | Type | Steps | Expected result |
 |----|------|-------|-----------------|
-| TC-27 | M | Desktop: drag to rotate a full circle, scroll to zoom | Smooth rotation; zoom limited (can't go inside model or too far) |
-| TC-28 | M | Phone: one-finger rotate, pinch zoom | Same as TC-27; page doesn't scroll while rotating |
+| TC-27 | M | Drag a full circle, scroll to zoom | Smooth; zoom limited |
 | TC-29 | M | Rotate under the floor | Camera stops at the limit |
-| TC-30 | M | Measure first load (model + 1 outfit) on local network | ≤ 5 s (Q7) |
-| TC-31 | M | FPS while rotating on a mid-range phone | ≥ 30 fps (Q9) |
-| TC-32 | M | Check UI for body/face edit controls | None exist (FR-08) |
+| TC-30 | M | First load (model + outfit) | ≤ 5 s (Q7) |
+| TC-31 | M | FPS while rotating | ≥ 30 (Q9) |
+| TC-32 | M | Look for body/face edit controls | None exist (FR-07) |
 
-## A4 — 2 shirts × 2 pants, independently
+## A4 — Shirts and pants independently
 
 | ID | Type | Steps | Expected result |
 |----|------|-------|-----------------|
-| TC-33 | A | Select each of the 4 shirt/pants combinations | Correct garment ids in scene; body not reloaded |
-| TC-34 | A | Change shirt only | Pants object unchanged (same instance) |
+| TC-33 | A | Each of the 4 shirt/pants combinations | Correct garments in scene; body not reloaded |
+| TC-34 | A | Change shirt only | Pants object unchanged |
 | TC-35 | M | Swap a cached garment | ≤ 0.3 s (Q8) |
-| TC-36 | M | Select ∅ for shirt | Shirt removed, pants stay |
-| TC-37 | A | Leave and return | Last outfit restored |
-| TC-38 | A | Garment GLB fails to load | Toast shown; previous garment stays |
+| TC-36 | M | Shirt = None | Shirt removed, pants stay |
+| TC-37 | A | Reload the app | Last outfit restored |
+| TC-38 | A | Garment file fails to load | Message shown; previous garment stays |
+| TC-56 | A | Request a garment category other than top/bottom | Rejected (422) / not stored (DB check) |
 
-## A5 — Privacy and deletion
+## A5 — Privacy and local-only access
 
 | ID | Type | Steps | Expected result |
 |----|------|-------|-----------------|
-| TC-39 | A | User B requests user A's model metadata, asset, capture, job | 404 for every endpoint (no existence leak) |
-| TC-40 | A | Request model asset while logged out | 401 |
-| TC-41 | A | Inspect `data/` after upload | No plaintext images/GLB (magic bytes not found) |
-| TC-42 | A | Asset response headers | `Cache-Control: private, no-store` |
-| TC-43 | A | Delete 3D model only | Model + captures gone; account remains; can rescan |
-| TC-44 | A | Delete account | 0 DB rows and 0 files for that user (Q11); session invalid |
-| TC-45 | A | Log in with deleted account | 401 |
-| TC-46 | A | Withdraw consent | Captures and models deleted; capture locked |
-| TC-47 | A | Export my data | ZIP contains account JSON, consent history, model GLB |
-| TC-48 | A | 20 rapid failed logins | 429 after the limit |
+| TC-41 | A | Inspect `data/` after upload | No plaintext images/GLB (signatures not found) |
+| TC-42 | A | Model asset response headers | `Cache-Control: no-store` |
+| TC-44 | A | **Discard** (`DELETE /data`) | 0 scan/model/job rows and 0 blob files (Q10) |
+| TC-57 | A | Request with `Host: evil.example` | Rejected (400) |
+| TC-58 | A | `POST`/`PUT`/`DELETE` without `X-Fitting-Room: 1` | Rejected (403) |
+| TC-59 | A | CORS preflight from another origin | No `Access-Control-Allow-*` headers |
+| TC-60 | M | Backend start command | Listens on 127.0.0.1 only |
+| TC-61 | M | Network panel while the camera is on | No third-party requests (NFR-03) |
 
 ## A6 — Disclosure
 
 | ID | Type | Steps | Expected result |
 |----|------|-------|-----------------|
-| TC-49 | A | Render Consent, My Model, Try-On | Each shows its disclaimer text exactly as in consent-v1 |
-| TC-50 | M | Pilot survey: "Does the try-on show your exact size?" | ≥ 90% answer "No" (Q12) |
+| TC-49 | A | Render the fitting room and the scan page | "Visual preview only" and model-approximation notices present |
+| TC-62 | M | Review the feasibility report | F1–F11 filled; failed experiments and alternatives listed |
 
 ---
+
+## Removed by CR-02 (kept for traceability)
+
+TC-04 to TC-06 (consent per account), TC-25 (sign out/in), TC-28 (phone gestures for capture flow), TC-39, TC-40 (other user / logged out), TC-43, TC-45 to TC-48 (account deletion, login, consent withdrawal, login rate limit), TC-50 (pilot survey with other people). The old TC-01 to TC-03 (sign-up/login) have been **replaced** with new content under the same IDs.
 
 ## Traceability
 
 | Acceptance item | Test cases |
 |-----------------|-----------|
-| A1 | TC-01 … TC-20, TC-51 … TC-54 |
-| A2 | TC-21 … TC-26 |
-| A3 | TC-27 … TC-32 |
-| A4 | TC-33 … TC-38 |
-| A5 | TC-39 … TC-48 |
-| A6 | TC-49, TC-50 |
+| A1 | TC-01–03, TC-07–20, TC-51–54 |
+| A2 | TC-21–24, TC-26, TC-55 |
+| A3 | TC-27, TC-29–32 |
+| A4 | TC-33–38, TC-56 |
+| A5 | TC-41, TC-42, TC-44, TC-57–61 |
+| A6 | TC-49, TC-62 |

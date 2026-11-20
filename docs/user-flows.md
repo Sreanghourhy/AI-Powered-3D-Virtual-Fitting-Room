@@ -1,100 +1,82 @@
-# User Flows (v2 — MacBook camera, 20 Nov 2026)
+# User Flows (v3 — single user, MacBook camera, CR-02)
 
-Four core flows for the MVP. Screen names match the wireframes in [wireframes/](wireframes/README.md).
+One user (the owner), one MacBook. No login, accounts or profiles. Screens match [wireframes/](wireframes/README.md).
 
 ---
 
-## Flow 1 — First visit: sign up → scan → see my model
+## Flow 1 — Scan and generate my 3D model
 
 ```mermaid
 flowchart TD
-    A[Home] --> B[Sign up]
-    B --> C[Consent screen]
-    C -- Decline --> C1[Account kept, capture locked.<br/>Can browse catalog only]
-    C -- Accept current version --> D[Capture: setup checklist<br/>incl. video effects off]
-    D --> D2[Camera permission<br/>MacBook built-in camera]
-    D2 --> E[Calibration on floor X<br/>+ A-pose guide]
-    E --> F[8 body views, person turns 45° each<br/>auto-capture + voice cues]
-    F --> F2[5 face close-ups at ~70 cm]
-    F2 --> G[Review thumbnails / retake any]
-    G --> H[Upload with progress]
-    H --> I{Quality checks}
-    I -- Rejected --> R[Flow 4: retake guidance]
-    I -- Accepted --> J[My Model: processing %]
-    J --> K{Reconstruction job}
-    K -- Failed --> R
-    K -- Ready --> L[My Model: 360° preview + limitations notice]
-    L --> M[Try-On]
-```
-
-| # | Step | Screen | System does |
-|---|------|--------|-------------|
-| 1 | Taps **Get started** | Home | — |
-| 2 | Enters email + password | Sign up | Creates account (password hashed) |
-| 3 | Reads and accepts consent | Consent | Stores consent record (current version) with time |
-| 4 | Confirms setup checklist (light, clothes, floor X, **video effects off**) | Capture | — |
-| 5 | Allows camera access | Capture | Opens the MacBook built-in camera (`getUserMedia`) |
-| 6 | Stands on the X; calibration turns green | Capture | Checks full body, single person, brightness; stores person height |
-| 7 | Turns 45° at a time for 8 body views | Capture | Live pose/orientation; auto-captures when still; voice cues |
-| 8 | Comes closer for 5 face close-ups | Capture | Face-size guide |
-| 9 | Reviews thumbnails, retakes bad ones; clicks **Upload** | Capture | Encrypted upload to localhost; metadata removed; **camera stops** |
-| 10 | Waits | My Model | Quality + consistency checks, then queues reconstruction job |
-| 11 | Sees progress (%) — may leave and come back | My Model | Job runs (may take minutes) |
-| 12 | Rotates finished model 360° | My Model | Streams private GLB |
-| 13 | Clicks **Try on clothes** | Try-On | — |
-
-## Flow 2 — Return visit: try on outfits
-
-```mermaid
-flowchart LR
-    A[Sign in] --> B{Has ready model?}
-    B -- No --> C[My Model: start capture]
-    B -- Yes --> D[Try-On with last outfit]
-    D --> E[Pick shirt] --> F[Viewer swaps top only]
-    D --> G[Pick pants] --> H[Viewer swaps bottom only]
-    F & H --> I[Rotate 360° / zoom]
-    I --> J[Outfit auto-saved]
+    A[Open app → Fitting room /] --> B[Click Start Scan]
+    B --> N{First time?}
+    N -- yes --> P[Privacy notice → Start camera]
+    N -- no --> C
+    P --> C[Camera access: MacBook built-in camera]
+    C -- denied --> X[Help: browser + macOS camera settings]
+    C --> D[Setup checklist: light, floor X, video effects off]
+    D --> E[Calibration on the X: full body, one person, brightness]
+    E --> F[8 body views, turning 45° each; auto-capture + voice cues]
+    F --> G[5 face close-ups at ~70 cm]
+    G --> H[Review → retake any view]
+    H --> I[Click Generate 3D Model]
+    I --> J[Upload to localhost + camera stops]
+    J --> K{Quality + consistency checks}
+    K -- fail --> R[Flow 3: retake the listed views]
+    K -- pass --> L[Fitting room: progress %]
+    L --> M{Reconstruction}
+    M -- failed --> F2[Flow 3: failure + reasons, NO avatar]
+    M -- ready --> V[My model in the 360° viewer]
 ```
 
 | # | Step | System does |
 |---|------|-------------|
-| 1 | Signs in | Session cookie |
-| 2 | Lands on Try-On | Loads saved model + last outfit (no rescan) |
-| 3 | Picks a shirt | Loads only the shirt GLB; body and pants stay |
-| 4 | Picks pants | Loads only the pants GLB |
-| 5 | Rotates / zooms | Client-side only |
-| 6 | Leaves | Outfit saved |
+| 1 | Opens `http://localhost:5173` | Shows the fitting room: "No scan yet" + **Start Scan** |
+| 2 | Clicks **Start Scan** | First time: privacy notice |
+| 3 | Allows camera | `getUserMedia` on the built-in camera |
+| 4 | Ticks the setup checklist | — |
+| 5 | Stands on the X; calibration turns green | MediaPipe pose + brightness; stores person height |
+| 6 | Turns 45° at a time (8 views) | Auto-capture when orientation is right and still ≥ 1 s; voice cues |
+| 7 | Comes closer for 5 face close-ups | Face-size guide |
+| 8 | Reviews and retakes | Images kept in memory only |
+| 9 | Clicks **Generate 3D Model** | Uploads to localhost (encrypted, metadata removed), **camera stops**, checks run |
+| 10 | Back in the fitting room, sees progress | Reconstruction job runs (minutes) |
+| 11 | Sees the model, rotates 360° | GLB streamed from localhost |
 
-## Flow 3 — Delete my profile
+## Flow 2 — Try on shirts and pants
 
 ```mermaid
-flowchart TD
-    A[Account / My Model] --> B[Delete my data]
-    B --> C[Explain what is deleted<br/>+ backup purge within 30 days]
-    C --> D[Type DELETE to confirm]
-    D --> E[Delete account, model, captures, outfits]
-    E --> F[Signed out + confirmation screen]
+flowchart LR
+    A[Fitting room with my model] --> B[Pick shirt] --> C[Only the shirt changes]
+    A --> D[Pick pants] --> E[Only the pants change]
+    C & E --> F[Rotate 360° / zoom]
+    F --> G[Outfit remembered locally]
 ```
 
-Options on this screen:
-- **Delete my 3D model only.** Keeps the account and lets the user rescan later.
-- **Delete my account and all data.** Deletes everything.
-- **Export my data first** (a link to the export).
+- Choosing a shirt never reloads the body or the pants, and choosing pants never changes the shirt.
+- "None" removes that garment.
+- Before a model exists, the pickers can be browsed but nothing is rendered on a body. **No sample or avatar body is shown in its place.**
 
-## Flow 4 — Capture rejected → retake
+## Flow 3 — Problems: retake or failed reconstruction
 
 ```mermaid
 flowchart TD
-    A[Quality checks fail] --> B[Result screen: list of problems]
-    B --> C{Problem type}
-    C -- Blurry / wrong direction / face too small --> D[Retake only those views]
-    C -- Too dark / backlit --> E[Show lighting tips → restart]
-    C -- Missing view / moved off X / pose changed --> F[Retake those views]
-    C -- Framing changed (Center Stage) / 2 people --> G[Fix setup → restart whole capture]
-    D & E & F & G --> H[Upload again]
+    A{What failed?} -- quality check on some views --> B[List: view + reason + fix]
+    B --> C[Retake only those views → Generate again]
+    A -- setup problem: framing changed / 2 people / too dark --> D[Fix setup → rescan]
+    A -- reconstruction failed --> E[Show failure reason + tips<br/>keep images until Discard]
+    E --> F[Try Generate again / Rescan / Discard]
 ```
 
 Rules:
-- Each problem is shown in plain words with a fix, e.g. *"The right view shows the wrong direction. Retake it and follow the turn diagram."* (codes in [capture-steps.md](capture-steps.md))
-- If only a few photos are bad, retake just those. If the problem affects the whole set, restart.
-- After **3 failed attempts**, show the full capture guide and suggest a better place or time.
+- Every problem is shown in plain words with a fix (codes in [capture-steps.md](capture-steps.md)).
+- A failed reconstruction **never** shows a generic avatar. The viewer stays empty with the reason.
+- After 3 failed attempts, show the full capture guide.
+
+## Flow 4 — Discard everything
+
+```mermaid
+flowchart LR
+    A[Fitting room: Discard scan & model] --> B[Confirm: deletes photos, model and outfit from this MacBook]
+    B --> C[DELETE /data] --> D[Fitting room back to 'No scan yet']
+```

@@ -8,12 +8,14 @@
 | R2 | **Scan mesh can't take new clothes** (original clothing baked in) | High | High | Research body-template fitting and retopology **early** (Phase 4), not after the UI is finished. | 4 |
 | R3 | **Garment fit looks unrealistic** | Medium | High | Start with a small curated set of prepared garments. Label results as visual previews. | 6 |
 | R4 | **Long processing times** on a MacBook | Medium | Medium | Async jobs with progress display. Never promise instant results. Benchmark early. | 2, 4 |
-| R5 | **Sensitive personal data** leak or misuse | Very high | Low–Medium | Consent, access control, encryption, minimization, deletion from day 1. See [03-privacy-security.md](03-privacy-security.md). | All |
+| R5 | **Sensitive personal data** (your face/body images) leak | High | Low | Local only, encrypted at rest, camera off outside scanning, Discard. See [03-privacy-security.md](03-privacy-security.md). | All |
 | R6 | **Model/tool licenses** block commercial use (e.g. SMPL-X) | High | Medium | Check licenses in Phase 4 before committing. Prefer permissive options. | 4 |
 | R7 | **Mac-only hardware**: many research repos need NVIDIA CUDA | Medium | High | Prefer Mac-native tools (Apple Object Capture, CPU/MPS paths). Rent a GPU only after a concrete bottleneck shows up. | 4 |
 | R8 | **macOS video effects** (Center Stage auto-framing, Portrait blur, Studio Light) change framing or appearance | High | Medium | Setup checklist; framing-consistency check (`framing_changed`); test detection in P3-02 | 3 |
 | R9 | **Fixed camera geometry**: landscape only, ~2.5 m distance, face only ~85 px wide in body views | High | High | Separate face close-ups; template-fitting approach; measure in P3-02 | 3, 4 |
 | R10 | **Person moves between views** (turning changes arm pose or position) | High | Medium | Floor marker, A-pose cues, stillness-based auto-capture, consistency checks (`distance_changed`, `pose_changed`) | 3 |
+| R12 | **No authentication**: other websites in the same browser, or DNS rebinding, could try to call the local backend | High | Low–Medium | 127.0.0.1 bind, Host allow-list, `X-Fitting-Room` header on writes, no CORS (P2R-02) | 2R |
+| R13 | **Reconstruction fails or looks wrong**, tempting a generic-avatar fallback | High | Medium | Explicit failure state with reasons; tests forbid any avatar fallback (TC-23, TC-55); log failed experiments | 4 |
 | R11 | **Browser camera controls** (exposure / white-balance lock) may be unsupported in Safari/Chrome on macOS | Medium | Medium | Measure in P3-01; rely on stable front lighting + brightness checks | 3 |
 
 ## 4.2 Costs
@@ -30,7 +32,7 @@ SvelteKit, FastAPI, MediaPipe, OpenCV, Blender, Three.js, SQLite/PostgreSQL, and
 | Better external USB webcam | **Only** if the feasibility gate fails on resolution or face detail. Requires owner approval (requirement change). |
 | Commercial model license (e.g. SMPL-X) | If a licensed body model is chosen for a commercial product |
 | Cloud storage, hosting, domain, backups | Before a public deployment |
-| Security monitoring | Before handling real customers at scale |
+| Security monitoring | Only if the app is ever used by other people online (new change request) |
 
 No reliable fixed budget is possible before benchmarking.
 

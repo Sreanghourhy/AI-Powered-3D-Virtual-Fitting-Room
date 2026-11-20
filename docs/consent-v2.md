@@ -1,6 +1,8 @@
 # Consent Text — v2 (MacBook camera)
 
-> **Version:** `consent-v2` · **Status:** ✅ Approved 20 Nov 2026, live in the app (P3-00) · **Date:** 20 Nov 2026
+> ⚠️ **Retired by CR-02** (single-user prototype, no accounts): replaced by the in-app [privacy notice](privacy-notice.md) once CR-02 is approved. Code removed in P2R-04.
+>
+> **Version:** `consent-v2` · **Status:** Approved 20 Nov 2026, retired · **Date:** 20 Nov 2026
 > **Replaces:** [consent-v1](consent-v1.md) (phone + helper wording).
 > **What changed from v1:** the camera is the MacBook's built-in camera; the views are front, sides, back and face close-ups; no helper. Everything else is unchanged.
 > Engineering draft, not legal advice.

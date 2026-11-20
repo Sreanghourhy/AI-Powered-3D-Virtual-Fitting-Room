@@ -1,5 +1,7 @@
 # Wireframes — Catalog & Try-On · P1-09
 
+> ⚠️ **Superseded by CR-02 (20 Nov 2026).** Merged into the single [fitting room](fitting-room.md) screen. Account/sign-in elements no longer apply. The catalog grid layout is still used for `/catalog`.
+
 ## Catalog
 
 ### Phone (`/catalog`)

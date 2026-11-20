@@ -3,7 +3,7 @@
 > **Changed 20 Nov 2026:** capture now uses the **MacBook's built-in camera** in the browser. There is no phone and no helper. Earlier phone instructions (v0.2) are retired.
 > Distances and counts are **proposals until the feasibility tests** ([feasibility-macbook-camera.md](feasibility-macbook-camera.md)) confirm them.
 
-> 🔒 Only capture **consenting adults**, and only the account owner. Development sample captures go in `data/samples/` (git-ignored) and are never committed.
+> 🔒 Single-user prototype (CR-02): scan **only yourself**. Development samples go in `data/samples/` (git-ignored) and are never committed. Start from the fitting room with **Start Scan**.
 
 ## 1. Room setup
 
@@ -44,7 +44,7 @@
    front → front-right → right → back-right → back → back-left → left → front-left
    The app captures automatically when you are in the right direction and still. You'll hear and see the next instruction.
 3. **Face close-ups (5).** Come closer (about **70 cm**, sitting is fine): front, turn slightly left (45°), slightly right (45°), left profile (90°), right profile (90°). Neutral face, mouth closed.
-4. **Review.** Check the thumbnails, retake any view, then upload.
+4. **Review.** Check the thumbnails, retake any view, then click **Generate 3D Model**.
 
 **Total:** 8 body views + 5 face close-ups = **13 images** (min 11, max 30 including retakes).
 
@@ -63,4 +63,4 @@ data/samples/<subject-code>/<YYYY-MM-DD>-macbook/
   body-front.jpg, body-front-right.jpg, …, face-front.jpg, …, settings.json
 ```
 
-Use a **subject code** (S01, S02…), never a real name. Keep the consent record separate.
+Use a session code (S01, S02…), never your name.

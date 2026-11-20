@@ -54,7 +54,7 @@ pipeline/garments/LICENSES.md  # source + license of every garment
 static/garments/               # exported GLB + thumbnails (public catalog assets)
 ```
 
-Garments are public catalog assets, so they may be served from `static/`. Customer models never are.
+Garments are public catalog assets, so they may be served from `static/`. Scanned body models never are.
 
 ## 5. Acceptance check for a new garment
 

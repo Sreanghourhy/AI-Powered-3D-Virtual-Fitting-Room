@@ -4,8 +4,9 @@
 **Deliverable:** Selectable shirt + pants combinations on a saved model (at least 2 × 2).
 
 > How garments are fitted depends on decision **D1** from Phase 4.
-> - If the body is a **shared template with a skeleton** → rig garments once to the same skeleton (skinned meshes). This works for every user.
-> - If the body is a **raw scan** → garments need per-user alignment and the original clothes will show through. Expect weaker results.
+> - If the body is a **template fitted to my scan, with a skeleton** → rig garments once to the same skeleton (skinned meshes), and they follow my real proportions.
+> - If the body is a **raw scan** → garments need alignment per scan, and the original clothes will show through. Expect weaker results.
+> **CR-02:** single user, garments shown in the fitting room at `/`; shirts and pants only.
 
 ---
 
@@ -58,7 +59,7 @@
 ### P6-07 · Alignment using landmarks (scan path or fine-tuning)   `M`
 **Depends on:** P6-05
 - [ ] Use stored body landmarks (shoulders, hips, waist) to scale/position garments
-- [ ] Per-user offsets saved with the model
+- [ ] Offsets saved with the current model
 
 **Done when:** garments sit at shoulders/waist on all 3 test subjects.
 
@@ -77,7 +78,7 @@
 ### P6-10 · ⚠️ Evaluate cloth simulation need   `S`
 **Depends on:** P6-06…P6-09
 - [ ] Score current results; list garments that look wrong
-- [ ] Decide: rigid/skinned is enough for MVP, or try offline simulation (e.g. Blender cloth bake per user) later
+- [ ] Decide: rigid/skinned is enough for MVP, or try offline simulation (e.g. Blender cloth bake per model) later
 - [ ] Write `docs/adr/003-garment-fitting.md` (decision D5)
 
 **Done when:** decision recorded.
@@ -89,13 +90,13 @@
 - [ ] Shirt and pants pickers (thumbnails) update the viewer
 - [ ] "None" option for each slot
 
-**Done when:** a user switches shirt and pants independently in the UI.
+**Done when:** shirt and pants switch independently in the fitting room.
 
 ### P6-12 · Outfit save   `S`
 **Depends on:** P6-11
-- [ ] `outfits` table + `PUT /outfits/current`; restore on return visit
+- [ ] Single-row `outfit` table + `GET/PUT /outfit`; restore on reload
 
-**Done when:** last outfit reappears after sign-out/in.
+**Done when:** the last outfit reappears after reloading the app.
 
 ### P6-13 · Catalog → Try-On link   `XS`
 **Depends on:** P6-11

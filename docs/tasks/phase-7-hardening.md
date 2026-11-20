@@ -1,116 +1,68 @@
-# Phase 7 — Privacy, Reliability & Testing (Weeks 17–18)
+# Phase 7 — Privacy, Reliability & Testing (CR-02, single user, local)
 
-**Goal:** Make the prototype safe to give to pilot users.
-**Deliverable:** Test report and a secure pilot build.
+> **Rewritten 20 Nov 2026 (CR-02):** no accounts, so no access-control audit between users. Focus on localhost protection, discard, local data and reliability.
 
-> Many privacy controls were already built in earlier phases (🔒 tasks). This phase **verifies** and completes them.
-> Checklist source: [03-privacy-security.md](../03-privacy-security.md).
+**Goal:** Make the prototype safe and dependable for daily personal use.
+**Deliverable:** Test report and a tagged prototype build.
 
 ---
 
-## Privacy & security
+### P7-01 · 🔒 Localhost protection audit   `S`
+- [ ] Every endpoint behind the Host check and write-header rule; 127.0.0.1 binding confirmed (TC-57 to TC-60)
 
-### P7-01 · 🔒 Access control audit   `S`
-**Depends on:** —
-- [ ] List every endpoint; confirm auth + owner check
-- [ ] Automated test: user B tries every user-A resource URL → 404
+**Done when:** an automated test covers every state-changing endpoint.
 
-**Done when:** test covers 100% of user-data endpoints and passes.
+### P7-02 · 🔒 Discard completeness   `S`
+- [ ] Discard removes rows and blobs for scans, images, models, jobs and outfit; temp files from failed jobs too
 
-### P7-02 · 🔒 Account & data deletion   `M`
-**Depends on:** P2-08
-- [ ] `DELETE /me`: delete captures, models, outfits, consents, sessions, blobs; anonymize audit log
-- [ ] Confirmation screen ("type DELETE")
-- [ ] Test: after deletion, no blob files and no DB rows for that user remain
+**Done when:** TC-44 passes after a full scan → generate → try-on cycle.
 
-**Done when:** deletion test passes.
+### P7-03 · 🔒 Raw image lifetime   `XS`
+- [ ] Confirm images are kept only until Discard (or a rescan replaces them); document it in the privacy notice
 
-### P7-03 · 🔒 Backup deletion policy   `S`
-**Depends on:** P7-02
-- [ ] Decide backup method and retention (e.g. 30 days)
-- [ ] Deletions list → purge from backups or let them expire; document it
-- [ ] Mention the purge time in the consent text
+**Done when:** behaviour matches [03-privacy-security.md](../03-privacy-security.md) §3.3.
 
-**Done when:** `docs/backup-policy.md` written and consent text updated (v2 if changed).
-
-### P7-04 · 🔒 Data export   `S`
-**Depends on:** P5-02
-- [ ] `GET /me/export` → ZIP with account info JSON, consent history, model GLB
-
-**Done when:** the export downloads and opens.
-
-### P7-05 · 🔒 Encryption & secrets review   `S`
-**Depends on:** —
-- [ ] Confirm no plaintext customer files on disk (`grep` image magic bytes in `data/`)
-- [ ] Keys not in Git; key rotation procedure written
+### P7-04 · 🔒 Encryption and secrets review   `S`
+- [ ] No plaintext images/GLB on disk; key not in Git; key-loss consequence documented
 
 **Done when:** checklist signed off.
 
-### P7-06 · 🔒 Raw capture minimization   `S`
-**Depends on:** P4-13
-- [ ] Delete raw photos/videos after model is `ready` (unless the user opted in to keep them)
-- [ ] Clean temp dirs after every job (including failed ones)
+### P7-05 · 🔒 Camera privacy review   `XS`
+- [ ] Camera off outside `/scan`; no third-party requests while the camera is on (TC-51, TC-61)
 
-**Done when:** test shows raw files gone after a successful job.
+**Done when:** verified in Chrome and Safari.
 
-### P7-07 · 🔒 Rate limits & upload limits   `S`
-**Depends on:** P3-03
-- [ ] Rate-limit login, signup and uploads
-- [ ] Verify size/count/type limits with oversized and fake files
+### P7-06 · 🔒 Upload limits   `XS`
+- [ ] Oversized, fake-type and too-many uploads rejected (413/415/422)
 
-**Done when:** abuse tests return 413/415/429 as expected.
+**Done when:** tests pass.
 
-### P7-08 · 🔒 Security headers & cookies   `XS`
-**Depends on:** —
-- [ ] CSP, `X-Content-Type-Options`, `Referrer-Policy`; cookies `HttpOnly`/`Secure`/`SameSite`
-
-**Done when:** headers verified in browser dev tools.
-
-### P7-09 · 🔒 Dependency & secret scan   `XS`
-**Depends on:** —
+### P7-07 · 🔒 Dependency and secret scan   `XS`
 - [ ] `npm audit`, `pip-audit`; scan Git history for secrets
 
 **Done when:** no high/critical issues open.
 
-## Reliability
+### P7-08 · Job robustness   `S`
+- [ ] Worker restart marks interrupted jobs failed; disk-space check before reconstruction; timeouts
 
-### P7-10 · Job robustness   `S`
-**Depends on:** P4-14
-- [ ] Worker restart resumes/fails stuck jobs; one job at a time to protect the Mac
-- [ ] Disk-space check before a job
+**Done when:** killing the worker mid-job leaves a clear failed state with Try again.
 
-**Done when:** killing the worker mid-job leaves a clear `failed`/retry state.
+### P7-09 · Logging without personal data   `XS`
+- [ ] No images, file contents or paths of personal files in logs
 
-### P7-11 · Logging without personal data   `S`
-**Depends on:** —
-- [ ] Structured logs; no images, emails or tokens in logs
+**Done when:** a log review is clean.
 
-**Done when:** a log review shows no personal data.
+### P7-10 · End-to-end test suite   `M`
+- [ ] Playwright: open `/` → (fixture) scan → generate → try 2×2 → reload → discard
 
-### P7-12 · Move to PostgreSQL (if pilot needs it)   `S`
-**Depends on:** —
-- [ ] Run Alembic migrations on Postgres; run all tests
+**Done when:** the full flow passes in one command.
 
-**Done when:** tests pass on Postgres (or decision to keep SQLite for pilot is recorded).
-
-## Testing
-
-### P7-13 · End-to-end test suite   `M`
-**Depends on:** P5-11, P6-16
-- [ ] Playwright: signup → consent → (fixture) upload → model ready → try-on 2×2 → export → delete
-
-**Done when:** full flow passes in one command.
-
-### P7-14 · Variation testing   `M`
-**Depends on:** —
-- [ ] Test across body types, poses, skin tones, hair, lighting and all garments (consenting adults)
-- [ ] Record failures honestly. Don't claim perfect accuracy.
+### P7-11 · Variation testing (owner)   `M`
+- [ ] Owner scans in different clothes, lighting and times; record failures honestly; no accuracy claims
 
 **Done when:** results table in the test report.
 
-### P7-15 · Test report + pilot build   `S`
-**Depends on:** all above
-- [ ] `docs/test-report.md`: what passed, what failed, known limitations, open risks
-- [ ] Tag a pilot release in Git
+### P7-12 · Test report + tagged build   `S`
+- [ ] `docs/test-report.md`: passed, failed, limits, open risks; Git tag `v0.1-prototype`
 
-**Done when:** report written and `v0.1-pilot` tag created.
+**Done when:** report written and tag pushed.

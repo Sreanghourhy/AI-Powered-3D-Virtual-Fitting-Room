@@ -5,8 +5,8 @@
 > **Updated 20 Nov 2026:** builds on the Phase 3 feasibility gate (P3-05 smoke test). With a fixed camera, **approach B (body-template fitting) is primary**, and photogrammetry is a comparison only.
 **Deliverable:** Rotatable prototype model with documented limitations, plus **decision D1** (body representation).
 
-> This is the riskiest phase. Do research tasks P4-01…P4-04 early, in parallel with Phase 2, if you can.
-> Use only consenting adult test subjects or licensed sample data.
+> This is the riskiest phase. Do research tasks P4-01…P4-04 early if you can.
+> **CR-02:** single user. The test data is the **owner's own scans** (plus licensed sample data). **If reconstruction fails, the app shows the failure. It never substitutes a generic avatar.** Every failed experiment is logged with an alternative.
 
 ---
 
@@ -38,8 +38,8 @@
 
 ### P4-04 · Prepare standard test dataset   `S`
 **Depends on:** P3-20
-- [ ] 3 consenting adults, captured with the Phase 3 MacBook-camera workflow, good conditions
-- [ ] Stored encrypted under `data/`; consent recorded
+- [ ] 3 scans **of yourself** in different clothes/lighting, captured with the Phase 3 workflow
+- [ ] Stored encrypted under `data/`
 
 **Done when:** 3 accepted capture sessions are available.
 
@@ -99,7 +99,8 @@
 **Depends on:** P4-05…P4-11
 - [ ] Fill the scorecard; pick representation + tool
 - [ ] Write `docs/adr/001-body-representation.md` and `docs/adr/002-reconstruction-tool.md`
-- [ ] If nothing works well enough: write what is needed (GPU, different capture, paid service) and its cost → go back to [04-risks-and-costs.md](../04-risks-and-costs.md)
+- [ ] **Garment-readiness check (F11):** can the chosen output carry separate shirt and pants layers (clean body surface, skeleton/rig, original clothes not baked into the shape)?
+- [ ] If nothing works well enough: write what is needed (GPU, different capture, external camera, paid service) and its cost → go back to [04-risks-and-costs.md](../04-risks-and-costs.md). **Do not switch to a generic avatar.**
 
 **Done when:** ADRs written and the plan for Phases 5–6 is confirmed or changed.
 
@@ -107,7 +108,7 @@
 
 ### P4-13 · Reconstruction adapter in backend   `M`
 **Depends on:** P4-12, P3-10
-- [ ] `services/reconstruction/` with an interface `run(session_id) -> glb_bytes, metrics`
+- [ ] `services/reconstruction/` with an interface `run(scan_id) -> glb_bytes, metrics` (started by **Generate 3D Model**)
 - [ ] Implement the chosen method (call CLI/script via subprocess)
 - [ ] Decrypt inputs to a temp dir, **delete temp files after**, encrypt outputs
 
@@ -116,20 +117,21 @@
 ### P4-14 · Job progress + failure handling   `S`
 **Depends on:** P4-13
 - [ ] Progress steps (preparing / reconstructing / cleaning / saving)
-- [ ] Timeouts; clear error message on failure; model status `failed`
+- [ ] Timeouts; clear error message on failure; model status `failed` with `failure_reason`
+- [ ] Test: a failed job never results in any GLB being shown (no sample/avatar fallback, TC-23, TC-55)
 
 **Done when:** a broken input ends in `failed` with a readable reason, not a crash.
 
 ### P4-15 · Model review step   `S`
 **Depends on:** P4-13
 - [ ] Automatic checks: triangle count, bounding box height plausible (1.2–2.2 m), no huge holes
-- [ ] Status `review` → `ready` (manual approve endpoint for admin in prototype)
+- [ ] Checks fail → `failed` with a reason; checks pass → `ready`
 
 **Done when:** an obviously broken model can't reach `ready`.
 
 ### P4-16 · Document limitations   `S`
 **Depends on:** P4-12
 - [ ] `docs/model-limitations.md`: what looks wrong (hair, hands, loose clothes, back of head), typical runtime, what users must do for best results
-- [ ] Short user-facing version for the My Model screen
+- [ ] Short version shown in the fitting room
 
 **Done when:** both versions are written.

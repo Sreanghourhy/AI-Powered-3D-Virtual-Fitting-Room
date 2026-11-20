@@ -1,6 +1,6 @@
 # Consent Text — v1
 
-> ⚠️ **Superseded** by [consent-v2](consent-v2.md) (MacBook camera) (approved 20 Nov 2026). Kept for the record because some accounts may have accepted v1.
+> ⚠️ **Retired** (CR-01 → v2, CR-02 → [privacy notice](privacy-notice.md)). Superseded by [consent-v2](consent-v2.md) (MacBook camera) (approved 20 Nov 2026). Kept for the record because some accounts may have accepted v1.
 >
 > **Version:** `consent-v1` · **Status:** Approved 20 Nov 2026, superseded · **Date:** 20 Nov 2026
 > Engineering draft only, not legal advice. Have it reviewed for the countries where you launch before real customers use it.

@@ -1,61 +1,54 @@
-# 3. Privacy & Security
+# 3. Privacy & Data Handling (v3, CR-02 — single user, local only)
 
-Face and body scans are **sensitive personal data**. In many jurisdictions, face data used to identify someone can count as biometric data. The plan requires these controls **from the first prototype**, not only in Phase 7.
+Face and body images are sensitive, even in a personal prototype. Everything stays **on this MacBook**.
 
-> Check which privacy laws apply where you launch (for example GDPR in the EU or local data-protection law) before the pilot. This document is an engineering checklist, not legal advice.
+## 3.1 Privacy notice (replaces consent records)
 
-## 3.1 Consent
+- [ ] Show the short [privacy notice](privacy-notice.md) the first time **Start Scan** is clicked, before the camera starts. "Don't show again" is stored in the browser only.
+- [ ] Scan **only yourself**.
 
-- [ ] Show a consent screen **before** the camera opens.
-- [ ] Explain in plain language: what is captured, why, where it is stored, how long (until the customer deletes it), and how to delete it.
-- [ ] Store a consent record with a **version number**. If the text changes, ask again.
-- [ ] Withdrawing consent means the user's data gets deleted.
-- [ ] Capture only **adults**, and only with their own consent. Test data must come from consenting adults or properly licensed sample data.
+## 3.2 Camera
 
-## 3.2 Data minimization
+- [ ] Request the camera only on `/scan`, after the privacy notice.
+- [ ] Stop all camera tracks when the scan finishes, is cancelled, or the page is left. The camera light must turn off.
+- [ ] Turn **off** macOS video effects (Center Stage, Portrait, Studio Light, backgrounds). They change framing and real appearance.
+- [ ] No third-party network requests while the camera is on. MediaPipe models and WASM are served from this app.
 
-- [ ] Keep raw photos/videos only as long as reconstruction needs them. Delete them after the model is approved, unless the user opts in to keep them.
-- [ ] Remove all image metadata on upload (re-encode server-side).
-- [ ] Captured images stay **in browser memory only** until the user presses Upload (no localStorage / IndexedDB).
-- [ ] Don't log images, file contents, or personal details.
+## 3.3 Data minimisation and lifetime
 
-## 3.3 Encryption & storage
+- [ ] Captured images stay **in browser memory** until **Generate 3D Model** is clicked (no localStorage / IndexedDB for images).
+- [ ] Uploaded images are re-encoded server-side with **all metadata removed**.
+- [ ] One current scan and model only. A new scan replaces the old one once the new model is ready, and old files are deleted.
+- [ ] Images and model are kept locally until **Discard scan & model** (local persistence, D11).
+- [ ] Logs never contain images, file contents or file paths of personal data.
 
-- [ ] Encrypt every customer file at rest (e.g. AES-GCM via Python `cryptography`) under `data/`, which is git-ignored.
-- [ ] Keep encryption keys out of Git (in `.env`/keychain; later a secrets manager).
-- [ ] Never place customer files in `static/` or any public URL.
-- [ ] Capture and upload happen on the same MacBook via `http://localhost` (a browser secure context). **Any non-localhost deployment must use HTTPS.**
+## 3.4 Storage and encryption
 
-## 3.4 Camera
+- [ ] Every image and model is encrypted at rest (AES-256-GCM) under `data/`, which is git-ignored.
+- [ ] The encryption key lives in `backend/.env` (git-ignored). Losing it makes stored files unreadable.
+- [ ] Scan images and models are never placed in `static/` or any public URL.
+- [ ] No cloud storage. If the Mac is backed up (e.g. Time Machine), `data/` is backed up **encrypted**. Discard + a new backup removes it over time.
 
-- [ ] Request the camera only on the capture page, after consent.
-- [ ] Stop all camera tracks when the user finishes, cancels or leaves the page (the camera light turns off).
-- [ ] Ask users to turn **off** macOS video effects (Center Stage, Portrait, Studio Light, backgrounds). They change framing and real appearance.
-- [ ] No third-party network requests while the camera is on (computer-vision models are self-hosted).
+## 3.5 Localhost protection (no authentication, so the server itself must be locked down)
 
-## 3.4b Access control
+- [ ] The backend listens on **127.0.0.1 only** (never `0.0.0.0`).
+- [ ] Requests with a `Host` other than `localhost` / `127.0.0.1` (with port) are rejected. This blocks DNS-rebinding attacks.
+- [ ] State-changing requests (`POST`/`PUT`/`DELETE`) need the header `X-Fitting-Room: 1`. **No CORS**, so other websites can't send it.
+- [ ] The Vite dev server keeps its default host checks; don't expose it with `--host` on a network.
+- [ ] Any future non-localhost deployment needs HTTPS **and** authentication again. That is out of scope (CR-02).
 
-- [ ] Every model/capture endpoint checks `resource.user_id == current_user.id`.
-- [ ] Use opaque random IDs (UUIDv4), never sequential IDs, in URLs.
-- [ ] Session cookies must be `HttpOnly`, `Secure`, `SameSite=Lax`.
-- [ ] Rate-limit login and uploads.
-- [ ] Write an audit log for model access, export and deletion.
+## 3.6 Upload safety
 
-## 3.5 Upload safety
+- [ ] JPEG/PNG only, checked by file signature, ≤ 8 MB per image, ≤ 30 images, ≤ 150 MB per scan.
+- [ ] Images are re-encoded before processing.
 
-- [ ] Enforce a max file size and file count per session.
-- [ ] Allow only these types: `image/jpeg`, `image/png`, `image/heic`, `video/mp4`, `video/quicktime`. Check the real file signature too, not just the extension.
-- [ ] Re-encode images server-side before processing.
+## 3.7 Discard
 
-## 3.6 Deletion
+- [ ] **Discard scan & model** (`DELETE /data`) removes scans, images, models, jobs, outfit and **all their encrypted files** in one step, with a confirmation.
+- [ ] A test proves no blobs and no rows remain afterwards.
 
-- [ ] `DELETE /me` removes the account, consents, captures, models and outfits from primary storage at once.
-- [ ] Backups: write down how long backups are kept (e.g. 30 days) and how deleted users get purged from them, and tell users this.
-- [ ] Deleting a user also deletes their encryption key, if you use per-user keys (crypto-shredding).
-- [ ] Add a test that proves no files remain after deletion.
+## 3.8 Honest disclosure
 
-## 3.7 Honest disclosure (product requirement)
-
-- [ ] Label the try-on as a **visual preview**, not an accurate size or fit.
-- [ ] Explain model fidelity limits (hair, loose clothing, hidden areas).
-- [ ] Don't show any size claim until a validated size feature exists.
+- [ ] Label the try-on as a **visual preview**, not size or fit.
+- [ ] Show the model's known limits (hair, hands, loose clothing, hidden areas).
+- [ ] If reconstruction fails, say so with the reasons. **Never** show a generic avatar in place of the person.

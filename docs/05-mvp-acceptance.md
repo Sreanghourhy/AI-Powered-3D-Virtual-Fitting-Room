@@ -1,33 +1,30 @@
-# 5. MVP Acceptance Checklist
+# 5. MVP Acceptance Checklist (v3, CR-02)
 
-The MVP is **done** only when every item passes on a real test run with a consenting adult tester.
+The MVP is **done** only when every item passes on the owner's MacBook, with the owner as the scanned person.
 
 | # | Criterion | How to verify | Built in |
 |---|-----------|---------------|----------|
-| A1 | A customer can create an account, consent to capture, and upload one guided multi-angle session **captured alone with the MacBook built-in camera** | Manual E2E on the MacBook: sign up → consent → calibration → 8 body views + face close-ups → upload succeeds | P2, P3 |
-| A2 | A model can be generated, reviewed, saved, and reopened after signing out | Sign out → sign in → same model loads | P4, P5 |
-| A3 | The model rotates in a browser-based 3D viewer | Drag to rotate 360°, zoom works on desktop and phone | P5 |
-| A4 | At least **2 shirts and 2 pants** can be switched independently on a test model | All 4 combinations render without reloading the body | P6 |
-| A5 | Customer data is private; the customer can request model deletion | Second user gets 403/404 on first user's model; delete removes all files | P7 |
-| A6 | Model fidelity, garment fit and capture limits are clearly disclosed | Disclaimers visible on Consent, My Model and Try-On screens | P1, P7 |
+| A1 | The app opens **directly** to the fitting room. **Start Scan** → allow camera → guided multi-angle capture (8 body views + face close-ups) → review and retake work. | Manual run in Chrome and Safari; no login or profile screen appears | P2R, P3 |
+| A2 | **Generate 3D Model** produces a model of the **actual captured person**. If it can't, a clear failure with reasons is shown and **no generic avatar** appears. | Successful run + a deliberately bad scan | P3, P4 |
+| A3 | The model rotates 360° and zooms in the browser viewer | Drag to rotate a full circle, scroll to zoom | P5 |
+| A4 | At least **2 shirts and 2 pants** can be switched **independently** on the generated model | All 4 combinations render without reloading the body | P6 |
+| A5 | Privacy: camera off outside scanning; images and model stored **only on this MacBook**, encrypted; backend reachable only from localhost; **Discard** removes everything | Camera light check; file inspection; host/header tests; discard test | P2R, P3, P7 |
+| A6 | Limits are disclosed: visual preview only, model approximation, failed experiments documented | Notices visible; feasibility report complete | P3, P4, P7 |
 
-## Quality targets (set in Phase 1, P1-06 — 20 Nov 2026)
+## Quality targets
 
 | ID | Metric | Target | How measured | Phase |
 |----|--------|--------|--------------|-------|
-| Q1 | Capture accepted by quality checks | **≥ 60% first try, ≥ 85% by 2nd try** | Session status logs | P3, P8 |
-| Q2 | Time to complete capture (first-time user, alone) | **≤ 4 min** | Start→upload timestamps | P3, P8 |
-| Q3 | Reconstruction success (accepted capture → `ready` model) | **≥ 80%** | Job status | P4, P8 |
-| Q4 | Reconstruction time on the MacBook | **≤ 30 min** per model (measure in Phase 4; revise if needed) | Job timestamps | P4 |
-| Q5 | Face likeness rated by the scanned person | **≥ 3.5 / 5** average | Pilot survey | P4, P8 |
-| Q6 | Model file size sent to browser | **≤ 15 MB** | GLB size | P4, P5 |
-| Q7 | Viewer first load (model + 1 outfit), local network | **≤ 5 s** | Browser timing | P5 |
-| Q8 | Garment swap (already cached / first load) | **≤ 0.3 s / ≤ 1.5 s** | Browser timing | P6 |
-| Q9 | Viewer frame rate while rotating, mid-range phone | **≥ 30 fps** | Browser perf tools | P5 |
-| Q10 | Cross-user data access in tests | **0** | Automated access test | P7 |
-| Q11 | Files left after account deletion | **0** | Automated deletion test | P7 |
-| Q12 | Testers who understand "visual preview, not size" | **≥ 90%** | Pilot survey | P8 |
+| Q1 | Scan accepted by quality checks | **≥ 60% first try, ≥ 85% by 2nd try** | Scan status log | P3, P8 |
+| Q2 | Time to complete a scan (alone) | **≤ 4 min** | Start → Generate timestamps | P3 |
+| Q3 | Reconstruction success (accepted scan → `ready`) | **≥ 80%** of good scans | Job status | P4 |
+| Q4 | Reconstruction time on the M4 Pro | **≤ 30 min** (revise after Phase 4 benchmarks) | Job timestamps | P4 |
+| Q5 | Likeness (owner's own rating) | silhouette ≥ 3.5 / 5, face ≥ 3 / 5 | Self-rating per scan | P4, P8 |
+| Q6 | Model file size | **≤ 15 MB** | GLB size | P4 |
+| Q7 | Viewer first load (model + outfit) | **≤ 5 s** | Browser timing | P5 |
+| Q8 | Garment swap (cached / first load) | **≤ 0.3 s / ≤ 1.5 s** | Browser timing | P6 |
+| Q9 | Viewer frame rate while rotating | **≥ 30 fps** | Browser perf tools | P5 |
+| Q10 | Files left after Discard | **0** | Automated test | P2R, P7 |
+| Q11 | Requests accepted from a non-localhost Host / without the write header | **0** | Automated test | P2R |
 
-Camera feasibility checks F1–F10 are in [feasibility-macbook-camera.md §8](feasibility-macbook-camera.md#8-go--no-go-criteria-measured-in-p3-01-to-p3-05).
-
-These targets are a starting point. Phase 4 may show that Q4 or Q5 needs changing; record any change in an ADR.
+Camera feasibility checks F1–F11 are in [feasibility-macbook-camera.md §8](feasibility-macbook-camera.md#8-go--no-go-criteria-measured-in-p3-01-to-p3-05). Targets can be revised after measurement; record the change in [change-log.md](change-log.md).

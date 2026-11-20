@@ -2,19 +2,19 @@
 
 > **Changed 20 Nov 2026:** replaces the phone + helper flow. Numbers are proposals until the feasibility gate (P3-05) confirms them.
 
-These are the steps the **Capture** screen (`/capture`) shows on the MacBook. The detailed rules are in [capture-guide.md](capture-guide.md).
+These are the steps the **Scan** screen (`/scan`) shows on the MacBook, after **Start Scan** in the fitting room (CR-02: no accounts, no consent screen; a short [privacy notice](privacy-notice.md) appears the first time). The detailed rules are in [capture-guide.md](capture-guide.md).
 
 ## MVP decisions
 
 | Decision | Choice | Reason |
 |----------|--------|--------|
 | Camera | **MacBook built-in camera** via `getUserMedia` in the browser | Owner requirement (20 Nov 2026) |
-| Who operates | **The customer alone.** No helper. | Fixed camera; hands-free auto-capture |
+| Who operates | **You, alone** (single-user prototype). No helper. | Fixed camera; hands-free auto-capture |
 | Photos or video | **Still frames** grabbed from the live video at full resolution | Each view can be checked and retaken one at a time |
 | Body views | **8**, one every 45° (front, front-right, right, back-right, back, back-left, left, front-left) | Covers front, sides and back with overlap between neighbours |
 | Face close-ups | **5** at ~70 cm (front, ±45°, ±90°) | Body views are too far away for face detail |
-| Capture trigger | **Auto-capture** when the orientation is right and the person is still ≥ 1 s. Keyboard **Space** / click as a fallback. | The customer is ~2.5 m from the keyboard |
-| Cues | Large on-screen text readable at 3 m + **voice** prompts (browser speech) + a beep on capture | Customer can't read small text from the marker |
+| Capture trigger | **Auto-capture** when the orientation is right and the person is still ≥ 1 s. Keyboard **Space** / click as a fallback. | You are ~2.5 m from the keyboard |
+| Cues | Large on-screen text readable at 3 m + **voice** prompts (browser speech) + a beep on capture | Small text can't be read from the marker |
 | Preview | Mirrored on screen; saved images **not** mirrored | Natural for the user; correct for reconstruction |
 | Image count | **Min 11** (8 body + 3 face) / **target 13** / **max 30** | Retakes allowed |
 | Formats | JPEG (quality ~0.92) or PNG, from the browser | No HEIC or video needed |
@@ -66,14 +66,14 @@ Auto-capture rule: correct orientation for this view + still ≥ 1 s + full body
 
 ### Step 6 — Review
 > **Check your photos** — 8 body + 5 face thumbnails. Warning icon on any the app flags (blurry, dark, wrong direction). Click to retake that one.
-> [ **Upload** ]
+> [ **Generate 3D Model** ]
 
-### Step 7 — Upload
-> **Uploading 9 of 13…** (progress bar). *Keep this page open.*
+### Step 7 — Generate 3D Model
+> **Uploading 9 of 13…** (progress bar). *Keep this page open.* The camera stops, then the quality checks run.
 
 ### Step 8 — Result
-- Accepted: *"Great, your photos look good. We're building your 3D model now. This can take several minutes, and you can leave this page."* → My Model
-- Rejected: list of problems + fixes → [Flow 4](user-flows.md#flow-4--capture-rejected--retake)
+- Accepted: *"Your photos look good. Building your 3D model now. This can take several minutes."* → fitting room (`/`) with progress
+- Rejected: list of problems + fixes → [Flow 3](user-flows.md#flow-3--problems-retake-or-failed-reconstruction)
 
 **Leaving the page or finishing always stops the camera** (the camera light turns off).
 

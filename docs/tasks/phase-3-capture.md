@@ -1,9 +1,10 @@
 # Phase 3 — MacBook Camera Capture & Upload (Weeks 4–5+)
 
 > **Re-planned 20 Nov 2026:** capture uses the **MacBook built-in camera** via `getUserMedia`. Phone capture, helper mode, LAN HTTPS (mkcert) and phone-to-MacBook transfer are **removed**.
-> **Status:** plan ✅ approved 20 Nov 2026 (incl. consent-v2, D8 in-browser MediaPipe, dev-only `/dev/camera-lab`). P3-00 done.
+> **Status:** plan ✅ approved 20 Nov 2026 (CR-01: D8 in-browser MediaPipe, dev-only `/dev/camera-lab`). P3-00 done.
+> **CR-02 update (waiting for approval):** single user, no accounts or consent. Runs after [Phase 2R](phase-2r-single-user.md). Capture lives at `/scan` and ends with **Generate 3D Model**. Endpoints renamed `/captures` → `/scans`.
 
-**Goal:** One customer, alone, captures guided front / side / back views and face close-ups with the MacBook camera. Images are quality-checked and stored encrypted.
+**Goal:** The owner, alone, captures guided front / side / back views and face close-ups with the MacBook camera, reviews and retakes, then clicks **Generate 3D Model**. Images are quality-checked and stored locally, encrypted.
 **Deliverable:** (1) feasibility report with go/no-go, then (2) a repeatable capture workflow with quality checks.
 
 ```text
@@ -14,7 +15,7 @@ P3-00 ─▶ P3-01 … P3-05  (feasibility spike) ─▶ 🛑 OWNER GATE ─▶ 
 
 ## Part A — Apply the requirement change to the existing app
 
-### P3-00 · 🔒 Update consent text and UI copy for MacBook capture   `S` ✅
+### P3-00 · 🔒 Update consent text and UI copy for MacBook capture   `S` ✅ (consent part superseded by CR-02 / P2R-04)
 **Depends on:** approval of [consent-v2.md](../consent-v2.md)
 - [x] Consent text component → `consent-v2` wording; backend `FR_CONSENT_VERSION` default → `consent-v2` (existing v1 consents must re-consent, which the existing re-consent banner handles)
 - [x] Replace phone/helper copy: home page step 1, My Model empty state, capture placeholder checklist
@@ -24,10 +25,10 @@ P3-00 ─▶ P3-01 … P3-05  (feasibility spike) ─▶ 🛑 OWNER GATE ─▶ 
 
 ## Part B — Feasibility spike (⚠️ measure before building)
 
-All spike code lives on a **dev-only** route `/dev/camera-lab`. It is blocked in production builds and **saves nothing to the server**, except the sample sets the owner chooses to save in P3-05 (consenting adult, `data/samples/`).
+All spike code lives on a **dev-only** route `/dev/camera-lab`. It is blocked in production builds and **saves nothing to the server**, except the owner's own sample sets saved in P3-05 (`data/samples/`, git-ignored).
 
 ### P3-01 · ⚠️ Camera capability probe   `S`
-**Depends on:** P3-00
+**Depends on:** — (independent of Phase 2R; may run in parallel)
 - [ ] List cameras; open the built-in camera with ideal 1920×1080 at 30 fps
 - [ ] Record `getSettings()` (real resolution, fps, aspect) and `getCapabilities()` (exposure / white balance / focus / zoom support)
 - [ ] Compare canvas frame grab vs `ImageCapture.takePhoto()` (if available): resolution, sharpness
@@ -63,9 +64,11 @@ All spike code lives on a **dev-only** route `/dev/camera-lab`. It is blocked in
 
 ### P3-05 · ⚠️ Sample capture + reconstruction smoke test + go/no-go   `M`
 **Depends on:** P3-02, P3-03, P3-04 (absorbs P0-06 sample capture and P0-07 first experiment)
-- [ ] Capture 1–2 sample sets (8 body + 5 face) of a consenting adult with the lab page → `data/samples/` (encrypted at rest, git-ignored)
+- [ ] Capture 1–2 sample sets (8 body + 5 face) **of yourself** with the lab page → `data/samples/` (encrypted at rest, git-ignored)
 - [ ] Quick test of **approach B** (template fit from silhouettes + keypoints, rough texture) and **approach A** (photogrammetry with masks) as a comparison
 - [ ] Owner rates silhouette and face likeness (F10)
+- [ ] Check whether the result can carry a separate shirt and pants: clean surface, body not fused with the worn clothes, skeleton/rig possible (F11)
+- [ ] Log **every failed experiment** with the reason and the proposed alternative (§10 of the feasibility doc)
 - [ ] Fill §8 in [feasibility-macbook-camera.md](../feasibility-macbook-camera.md); write a recommendation: **Go / Go with changes / No-go**
 
 **Done when:** the report is complete and 🛑 **the owner approves the decision**. P3-06+ does not start before that.
@@ -74,21 +77,21 @@ All spike code lives on a **dev-only** route `/dev/camera-lab`. It is blocked in
 
 ### Backend
 
-### P3-06 · Capture tables + consent-withdrawal deletion   `S`
+### P3-06 · Scan tables + discard   `S`
 **Depends on:** gate
-- [ ] `capture_sessions` (status: capturing / checking / rejected / accepted; calibration: person height px, resolution, browser)
-- [ ] `capture_files` (view: `front`, `front_right`, `right`, `back_right`, `back`, `back_left`, `left`, `front_left`, `face_front`, `face_left_45`, `face_right_45`, `face_left_90`, `face_right_90`; storage key; quality JSON)
-- [ ] Withdrawing consent / deleting the account deletes captures and their blobs (completes P2-05 note)
+- [ ] `scans` (status: capturing / checking / rejected / accepted; calibration: person height px, resolution, browser). One current scan.
+- [ ] `scan_images` (view: `front`, `front_right`, `right`, `back_right`, `back`, `back_left`, `left`, `front_left`, `face_front`, `face_left_45`, `face_right_45`, `face_left_90`, `face_right_90`; storage key; quality JSON)
+- [ ] `DELETE /data` (P2R-03) also deletes scans, images and their blobs
 
 **Done when:** the migration applies; a deletion test proves no blobs remain.
 
 ### P3-07 · 🔒 Capture session + upload API   `M`
 **Depends on:** P3-06
-- [ ] `POST /captures` (needs consent), `POST /captures/{id}/files` (multipart + `view`), `DELETE /captures/{id}/files/{fileId}` (retake)
+- [ ] `POST /scans`, `POST /scans/{id}/images` (multipart + `view`), `DELETE /scans/{id}/images/{imageId}` (retake)
 - [ ] Limits: JPEG/PNG only (checked by file signature), ≤ 8 MB per image, ≤ 30 images, ≤ 150 MB per session
-- [ ] Stored through encrypted `StorageService`; owner-only (404 for others)
+- [ ] Stored through encrypted `StorageService`; localhost protection applies (P2R-02)
 
-**Done when:** tests cover the happy path, too large, wrong type, too many, another user's session.
+**Done when:** tests cover the happy path, too large, wrong type, too many, unknown scan id.
 
 ### P3-08 · 🔒 Image normalisation   `S`
 **Depends on:** P3-07
@@ -121,8 +124,8 @@ All spike code lives on a **dev-only** route `/dev/camera-lab`. It is blocked in
 
 **Done when:** each rule has a passing and a failing test.
 
-### P3-13 · Submit endpoint   `S`
-- [ ] `POST /captures/{id}/submit` runs P3-09 to P3-12 → `accepted` / `rejected` with per-view reasons
+### P3-13 · Generate endpoint   `S`
+- [ ] `POST /scans/{id}/generate` (the **Generate 3D Model** button) runs P3-09 to P3-12 → `accepted` / `rejected` with per-view reasons
 - [ ] On accept: create a `body_models` row + queue the reconstruction job (dummy handler until Phase 4)
 
 **Done when:** an accepted session creates a queued job; a rejected one returns a fix list.
@@ -165,15 +168,15 @@ All spike code lives on a **dev-only** route `/dev/camera-lab`. It is blocked in
 
 **Done when:** retaking one view replaces only that image.
 
-### P3-19 · Upload with progress, retry and result   `S`
+### P3-19 · Generate 3D Model: upload, checks, result   `S`
 **Depends on:** P3-07, P3-13, P3-18
-- [ ] Upload each image with progress; retry on failure; submit; show the accept or reject result with fixes
+- [ ] **Generate 3D Model** uploads each image with progress (retry on failure), stops the camera, calls generate; shows rejections with fixes, or returns to the fitting room with generation progress
 
 **Done when:** a full session uploads and shows the result.
 
 ### P3-20 · Test the workflow 5 times   `S`
 **Depends on:** all above
-- [ ] 5 sessions (different clothes and lighting) with consenting adults
+- [ ] 5 scans of yourself (different clothes and lighting)
 - [ ] Measure success rate (Q1), time (Q2), common failures; tune thresholds; update the capture guide
 
 **Done when:** results are written in `docs/experiments/capture-test-1.md`.

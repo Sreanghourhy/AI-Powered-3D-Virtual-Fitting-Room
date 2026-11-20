@@ -6,7 +6,7 @@
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────┐
-│ ✕ Exit                                                    Step 0 / 6 │
+│ ✕ Back to fitting room                                    Step 0 / 6 │
 │                                                                      │
 │   Get ready (1 minute)                    ┌────────────────────────┐ │
 │                                           │   laptop    ·····  X   │ │
@@ -64,7 +64,7 @@
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
-## D. Review → Upload → Result (Steps 6–8)
+## D. Review → Generate 3D Model → Result (Steps 6–8)
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -74,7 +74,7 @@
 │         [▣ bk-left][▣ left][▣ fr-left]                               │
 │  Face   [▣ front][▣ left 45][▣ right 45][▣ left 90][▣ right 90]      │
 │                                                                      │
-│  Click a photo to retake it.                       [   Upload   ]    │
+│  Click a photo to retake it.          [  Generate 3D Model  ]        │
 └──────────────────────────────────────────────────────────────────────┘
 
  Uploading 9 of 13 ████████████░░░░ 69%        ✕ A few retakes needed
@@ -90,4 +90,4 @@
 - Unsupported browser
 - Upload failed, with "Retry"
 
-**Privacy:** the camera stops when you leave the page or finish. Nothing is uploaded until you press **Upload**.
+**Privacy:** the camera stops when you leave the page or finish. Nothing leaves the browser until you click **Generate 3D Model**, and then it goes only to the local backend on this MacBook.

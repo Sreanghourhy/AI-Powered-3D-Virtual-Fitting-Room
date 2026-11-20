@@ -1,6 +1,81 @@
 # Change Log — Requirements
 
+## CR-02 · Simplified single-user prototype, no authentication (20 Nov 2026)
+
+**Requested by:** project owner · **Status:** 📝 **docs updated, waiting for owner approval** · **Code:** not changed yet
+
+### New requirements (owner, summarised)
+- **Single-user personal prototype** on the owner's MacBook. The app opens **directly** to the fitting-room interface.
+- **Workflow:** Start Scan → allow camera → turn and capture angles → review/retake → **Generate 3D Model** → view in 3D → pick shirts/pants independently → rotate 360°.
+- **Remove:** login, registration, authentication, user accounts, customer profiles, profile selection, PINs, recovery codes, phone capture, multiple users, cloud profile storage, any shared-profile screen.
+- The model must be available during the session. **Optional local persistence** is acceptable; no profile UI.
+- MediaPipe for guidance, pose and quality checks. Multiple angles. **Real person only**: no generic avatar, no reshaping, and **never a silent avatar fallback if reconstruction fails**.
+- Private camera processing and storage, plus a clear **discard** option for captured images and generated data.
+- Feasibility must be **tested** and documented: full body in frame, enough angles, usable reconstruction, **geometry that supports changing shirts and pants**, limitations, failed experiments, alternatives.
+- **Priority:** MacBook camera → multi-angle capture → real-person 3D reconstruction → shirt/pants try-on → 360° viewer.
+- The Pinterest idea from the previous message is **not** part of this change. The catalog stays with prepared 3D shirts and pants.
+
+### Conflicts found in the current implementation
+
+| Component | Where | Conflict | Proposed action (task) |
+|-----------|-------|----------|------------------------|
+| Sign up / log in / log out / me API | `backend/app/api/auth.py` | Authentication not wanted | **Remove** router (P2R-01) |
+| Sessions, password hashing | `UserSession` model, `app/core/security.py` | Not needed without accounts | **Remove** (P2R-01) |
+| Users table, user ownership | `User` model, `CurrentUser` in `deps.py`, `jobs.user_id` | No accounts / multiple users | **Remove**; jobs not tied to a user (P2R-01) |
+| Consent API + guard | `app/api/consents.py`, `require_consent`, `consents` table | Was per-account consent | **Replace** with an in-app privacy notice; no stored record (P2R-01, P2R-06) |
+| Audit log `user_id` | `AuditLog` | No users | **Keep** the log, drop the user column (P2R-01) |
+| — (new) | Backend | Without accounts, other websites open in the browser could try to call `localhost:8000` | **Add** localhost protection (P2R-02) |
+| — (new) | Backend | Need "discard everything" | **Add** `DELETE /data` (P2R-03) |
+| Login / sign-up pages, AuthForm | `src/routes/(auth)/`, `AuthForm.svelte` | No login | **Remove** (P2R-04) |
+| Account menu, Sign in / Get started | `AppHeader.svelte` | No accounts | **Simplify** header (P2R-04) |
+| User lookup + SSR route guard | `hooks.server.ts` (`handle`), `(app)/+layout.server.ts`, `locals.user`, `loginUrl` | No auth | **Remove**; keep the `/api` SSR proxy (P2R-04) |
+| Consent page, consent text v2 | `(app)/consent/`, `ConsentText.svelte` | Consent flow replaced | **Remove**; add a privacy notice (P2R-04, P2R-06) |
+| Separate My Model / Try-On / Capture pages | `(app)/my-model`, `(app)/try-on`, `(app)/capture` | App should open straight to one fitting-room interface | **Merge** into `/` (fitting room) + `/scan` (capture); old URLs redirect (P2R-05) |
+| Sample model in Try-On | `(app)/try-on` uses the public CesiumMan model | Could look like a generic avatar stand-in | Main viewer shows **"No scan yet"** instead; sample model only on dev page `/viewer-demo` (P2R-05) |
+| Home landing page | `src/routes/+page.svelte` | Should open to the fitting room | **Replace** with the fitting-room interface (P2R-05) |
+| Auth / consent tests | `test_auth.py`, `test_consents.py`, parts of `test_jobs.py`, `test_models_users.py`, `redirect.test.ts`, client tests | Test removed features | **Remove or adapt**; add tests for localhost protection + discard (P2R-07) |
+
+**Kept unchanged:** catalog API and seed (2 shirts + 2 pants), encrypted storage, job worker, 3D viewer, garment picker and outfit helpers, typed client (minus auth calls), `/catalog`, `/viewer-demo`, settings, migrations tooling, Vitest/pytest setup.
+
+### Documents changed in CR-02
+| Document | Change |
+|----------|--------|
+| [01-project-overview.md](01-project-overview.md) | **Rewritten** (v3): single-user goal, 10-step workflow, FR/NFR, removed features, sign-off |
+| [02-architecture.md](02-architecture.md) | **Rewritten** (v3): local single-user architecture, pipeline, data model without users, API, decisions D9–D11 |
+| [03-privacy-security.md](03-privacy-security.md) | **Rewritten**: local data handling, camera, localhost protection, discard |
+| [04-risks-and-costs.md](04-risks-and-costs.md) | R5 reworded, R12 (localhost exposure), R13 (reconstruction failure) added |
+| [05-mvp-acceptance.md](05-mvp-acceptance.md) | **Rewritten**: A1–A6 for the single-user workflow; targets updated |
+| [user-flows.md](user-flows.md) | **Rewritten** (v3): scan → generate → try on; discard; retake / failed reconstruction |
+| [capture-guide.md](capture-guide.md), [capture-steps.md](capture-steps.md) | Start Scan entry, privacy notice, Generate 3D Model; no accounts or consent |
+| [privacy-notice.md](privacy-notice.md) | **New**: short in-app notice (replaces the consent screen) |
+| [consent-v2.md](consent-v2.md), [consent-v1.md](consent-v1.md) | Marked **retired** |
+| [feasibility-macbook-camera.md](feasibility-macbook-camera.md) | F11 (garment-ready geometry), no-avatar-fallback rule, failed-experiments log |
+| [wireframes/](wireframes/README.md) | **New** [fitting-room.md](wireframes/fitting-room.md) (main screen); capture updated; consent / my-model / catalog-try-on marked superseded |
+| [test-cases.md](test-cases.md) | **Rewritten** (v3); removed auth/multi-user cases listed |
+| [tasks/phase-2r-single-user.md](tasks/phase-2r-single-user.md) | **New**: 7 refactor tasks P2R-01 to P2R-07 |
+| [tasks/phase-3-capture.md](tasks/phase-3-capture.md), [phase-4](tasks/phase-4-reconstruction.md), [phase-5](tasks/phase-5-profiles-viewer.md), [phase-6](tasks/phase-6-try-on.md), [phase-7](tasks/phase-7-hardening.md), [phase-8](tasks/phase-8-pilot.md) | Updated for single user / no auth; Phase 5, 7 and 8 rewritten |
+| [tasks/README.md](tasks/README.md), [README.md](README.md), [phase-2-foundation.md](tasks/phase-2-foundation.md) | Counts, sequence, superseded notes |
+
+### Proposed development sequence
+1. **Phase 2R** (P2R-01 to P2R-07): remove auth/profiles, add localhost protection + discard, one fitting-room interface. About 2–3 days.
+2. **Phase 3 Part B** (P3-01 to P3-05): **real-camera feasibility tests** → 🛑 owner go/no-go.
+3. **Phase 3 Part C**: capture build (Start Scan → guided angles → review/retake).
+4. **Phase 4**: real-person reconstruction ("Generate 3D Model"), including the garment-ready geometry check.
+5. **Phase 6** shirt/pants try-on, **Phase 5** viewer polish + local persistence, then **Phase 7** privacy/reliability and **Phase 8** personal evaluation.
+
+Option: P3-01 (camera probe) doesn't depend on Phase 2R, so it can run in parallel if the owner wants camera results sooner.
+
+### Decisions needed from the owner
+1. Approve the CR-02 docs and the sequence above.
+2. Approve **removing** (not just hiding) the auth/consent code and dropping the `users`, `sessions` and `consents` tables (P2R-01).
+3. Approve **local persistence**: keep the latest scan and model on this MacBook (encrypted, under `data/`) until **Discard**, so a restart doesn't lose a slow-to-generate model.
+4. Approve replacing the consent screen with a short **privacy notice** (no stored record).
+
+---
+
 ## CR-01 · MacBook built-in camera replaces phone capture (20 Nov 2026)
+
+> Partly superseded by CR-02: consent-v2, per-user ownership and accounts are retired. The MacBook-camera parts remain valid.
 
 **Requested by:** project owner · **Status:** ✅ **approved by owner 20 Nov 2026** (docs, Phase 3 plan, consent-v2, D8, dev camera lab) · **Code:** applied in P3-00
 

@@ -1,5 +1,7 @@
 # Wireframe — Consent (`/consent`)
 
+> ⚠️ **Superseded by CR-02 (20 Nov 2026).** Consent screen removed; replaced by the [privacy notice](../privacy-notice.md).
+
 Text source: [consent-v1.md](../consent-v1.md).
 
 ```text

@@ -1,5 +1,7 @@
 # Wireframe — My Model (`/my-model`) · P1-08
 
+> ⚠️ **Superseded by CR-02 (20 Nov 2026).** Merged into the single [fitting room](fitting-room.md) screen. Account/sign-in elements no longer apply.
+
 ## States
 
 ```text

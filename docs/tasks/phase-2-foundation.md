@@ -5,6 +5,8 @@
 
 **Status (20 Nov 2026):** all 18 tasks done, ✅ **approved by owner 20 Nov 2026**. Tests: backend 71 passed (pytest + ruff clean), frontend 22 passed (Vitest), `svelte-check` 0 errors, production build OK.
 
+> **CR-02 note:** auth, sessions, consent and per-user tasks (P2-03 user parts, P2-04, P2-05, P2-12, P2-13, P2-14) are **superseded** by the single-user refactor in [phase-2r-single-user.md](phase-2r-single-user.md). Their code stays until P2R removes it.
+
 **Implementation notes**
 - Auth = server-side sessions (token hash stored) + Argon2id → decision D6.
 - Job runner = DB-backed worker, one job at a time → decision D4.

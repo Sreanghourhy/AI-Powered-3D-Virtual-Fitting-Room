@@ -20,7 +20,7 @@
 |-------|------------------|----------------------|
 | Who moves | Helper walks **around** a still person | Camera is **fixed** in the lid; the **person turns** in place |
 | Views | ~40 photos, 3 heights | ~8 body views at **one height** + face close-ups |
-| Helper | Required | **Not needed.** The customer captures alone. |
+| Helper | Required | **Not needed.** You capture alone (single-user prototype, CR-02). |
 | Orientation | Portrait possible | **Landscape only.** About 40% of the width is wasted for a standing person. |
 | Distance | 1.5–2 m | About **2.2–3 m** (full body in frame) |
 | Transfer | Phone → MacBook over LAN, needs HTTPS | Captured in the **same browser** on the MacBook, uploaded to `localhost` |
@@ -52,14 +52,14 @@ The real vFOV is measured in P3-02. Center Stage may crop the image and narrow t
 | A | **Photogrammetry** (Apple Object Capture, COLMAP) | Needs a **rigid** subject and many overlapping views from **several heights**. A turning person is not rigid: arms, head and clothing move. The static background must also be masked out. With only ~8 views at one height there is too little overlap. | **Unlikely to work well.** Keep as **one** low-cost comparison test only. |
 | B | **Body-template fitting** (fit a parametric body to silhouettes + 2D pose keypoints from front/side/back, then project the photos as texture) | Designed for **few views**. Gives a clean, watertight, rigged body, which is needed for shirt/pants fitting. | **Most promising for the MVP.** Risks: the template's shape range may smooth out unique body features; seams in the texture; **license** (e.g. SMPL-X is non-commercial unless licensed). |
 | C | **Video-based human reconstruction** (person turns slowly while recording; research methods) | Matches the turning-person setup | **Research option.** Many need CUDA and research-only licenses, and output is often not a clean mesh. Evaluate in Phase 4 only if Mac-compatible. |
-| D | **Single-image "image-to-3D" generation** | Invents the back and sides | **Rejected.** It would invent appearance, which conflicts with "preserve the customer's real appearance" and "no generic replacement avatar". |
+| D | **Single-image "image-to-3D" generation** | Invents the back and sides | **Rejected.** It would invent appearance, which conflicts with "preserve the person's real appearance" and "no generic replacement avatar". |
 
 ## 5. Expected outcome (honest summary)
 
 **Likely feasible**
-- A customer captures **alone**: guided front / sides / back views with live pose and orientation detection in the browser.
+- You capture **alone**: guided front / sides / back views with live pose and orientation detection in the browser.
 - Clean person masks against a plain background.
-- A **360° rotatable** model whose silhouette and colours come from the customer's own photos (approach B).
+- A **360° rotatable** model whose silhouette and colours come from your own photos (approach B).
 
 **Uncertain — must be tested**
 - **Face likeness.** Depends on the close-ups and how well texture projection works.
@@ -92,7 +92,7 @@ The real vFOV is measured in P3-02. Center Stage may crop the image and narrow t
 1. **Setup.** Laptop on a table, plain wall behind the person, soft even light from the front. A floor marker (tape **X**) at the calibrated distance (≈ 2.5 m).
 2. **Mac settings check.** Turn video effects off, close other camera apps, plug in power.
 3. **Calibration.** The app checks that the whole body fits, the distance, and the brightness.
-4. **8 body views** in A-pose, turning **45°** each time: front, front-right, right, back-right, back, back-left, left, front-left. The app **auto-captures** when the orientation is right and the person has been still for ~1 s. It gives big on-screen and **voice** cues, because the customer is ~2.5 m from the keyboard.
+4. **8 body views** in A-pose, turning **45°** each time: front, front-right, right, back-right, back, back-left, left, front-left. The app **auto-captures** when the orientation is right and the person has been still for ~1 s. It gives big on-screen and **voice** cues, because you are ~2.5 m from the keyboard.
 5. **Face close-ups (5)** at ~0.7 m: front, ±45°, ±90°.
 6. **Review**, retake individual views, then upload to the local backend.
 
@@ -110,14 +110,25 @@ The real vFOV is measured in P3-02. Center Stage may crop the image and narrow t
 | F8 | Brightness stability on the body across 8 views | varies ≤ 15% | _pending_ |
 | F9 | Video effects can be turned off; framing stays fixed | Crop constant across views | _pending_ |
 | F10 | Reconstruction smoke test (approach B, + A as comparison) | Owner rates silhouette and face as recognisable ≥ 3 / 5 | _pending_ |
+| F11 | Geometry supports changing shirts and pants | Clean body surface, original clothes not fused into the shape, skeleton/rig possible for skinned garments | _pending_ |
 
 **Decision options after P3-05**
 - **Go:** build the capture flow (P3-06+).
 - **Go with changes:** for example, add lighting, adjust distance or views, or use a better external USB webcam (**this needs owner approval; it is a cost and a requirement change**).
 - **No-go:** stop and rethink the capture approach with the owner.
 
+**Rule (CR-02):** if reconstruction is not good enough, report it. **Never replace the person with a generic avatar**, silently or otherwise.
+
 ## 9. Impact on the plan
 
 - **Phase 3** is restructured: a feasibility spike comes first (P3-01 to P3-05) and is gated by owner approval. Phone, helper and LAN-HTTPS tasks are removed.
 - **Phase 4:** approach **B (template fitting) is the primary candidate**. Photogrammetry stays as one comparison test.
+
+## 10. Failed experiments and alternatives (log)
+
+Filled in during P3-01 to P3-05 and Phase 4. Every attempt that didn't work stays in this table.
+
+| Date | Experiment | What happened | Why it failed | Alternative proposed |
+|------|------------|---------------|---------------|----------------------|
+| — | _none yet_ | | | |
 - **Removed from the MVP:** phone capture, helper-held capture, phone-to-MacBook transfer, local HTTPS certificates, HEIC/video uploads.

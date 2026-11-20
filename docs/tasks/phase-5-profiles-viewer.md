@@ -1,82 +1,61 @@
-# Phase 5 — Saved Profiles & 360° Viewer (Weeks 10–11)
+# Phase 5 — 360° Viewer & Local Persistence (CR-02)
 
-**Goal:** Scan once, reopen later, rotate the model.
-**Deliverable:** A customer's saved GLB loads in Three.js after sign-out/sign-in, with rotate and zoom.
+> **Rewritten 20 Nov 2026 (CR-02):** no profiles or accounts. One current model stored locally until Discard.
+
+**Goal:** Show the generated model of the real person in a smooth 360° viewer, and keep it available across reloads and restarts until discarded.
+**Deliverable:** The generated model loads in the fitting room, rotates and zooms, and is still there after a restart.
 
 ---
 
-### P5-01 · body_models API   `S`
+### P5-01 · Current model API   `S`
 **Depends on:** P4-13
-- [ ] `GET /models/me` → latest model (status, created_at, metrics, job id)
-- [ ] Owner-only; 404 for others
+- [ ] `GET /models/current` → status, created_at, metrics, failure reason, job id (404 when none)
 
-**Done when:** tests pass for owner, other user, no model.
+**Done when:** tests cover none / processing / ready / failed.
 
-### P5-02 · 🔒 Secure GLB streaming   `S`
+### P5-02 · 🔒 GLB streaming from localhost   `S`
 **Depends on:** P5-01
-- [ ] `GET /models/{id}/asset` decrypts and streams `model/gltf-binary`
-- [ ] `Cache-Control: private, no-store`; owner check
-- [ ] No public URL, no file path exposed
+- [ ] `GET /models/current/asset` decrypts and streams `model/gltf-binary`, `Cache-Control: no-store`; no file paths exposed
 
-**Done when:** owner downloads the GLB; another user gets 404; the response is not cacheable.
+**Done when:** the GLB downloads via the app; the response can't be cached.
 
-### P5-03 · Viewer loads private model   `S`
-**Depends on:** P5-02, P0-04
-- [ ] `ModelViewer` accepts a URL or an ArrayBuffer; fetch with credentials
-- [ ] Loading spinner + error state
+### P5-03 · Viewer loads the generated model   `S`
+**Depends on:** P5-02, P2R-05
+- [ ] `ModelViewer` loads the private URL; loading and error states
+- [ ] On error: show the error. **Never fall back to the sample model.**
 
-**Done when:** `/my-model` shows the user's own model.
+**Done when:** the fitting room shows the generated model.
 
 ### P5-04 · Viewer controls polish   `S`
-**Depends on:** P5-03
-- [ ] Orbit rotate (mouse + touch), pinch zoom, min/max zoom, no camera below floor
-- [ ] Auto-frame the model (fit camera to bounding box)
-- [ ] "Reset view" button; optional slow auto-rotate
-- [ ] **No** controls for body or face editing (FR-08)
+- [ ] Orbit rotate, zoom limits, no camera below the floor, auto-frame, Reset view, optional auto-rotate
+- [ ] No body/face edit controls (FR-07)
 
-**Done when:** works smoothly on phone and desktop.
+**Done when:** smooth on the MacBook in Chrome and Safari.
 
-### P5-05 · Lighting & materials   `S`
-**Depends on:** P5-03
-- [ ] Environment lighting (HDR) + soft shadow; correct colour space (sRGB)
+### P5-05 · Lighting and colour accuracy   `S`
+- [ ] HDR environment, soft shadow, sRGB output; compare skin and clothing colour with the captured photos
 
-**Done when:** skin and clothing colours look natural compared to the photos.
+**Done when:** colours look true to the photos (owner judgement).
 
 ### P5-06 · Performance   `S`
+- [ ] Meshopt/Draco compression if large; load ≤ 5 s (Q7), ≥ 30 fps (Q9)
+
+**Done when:** targets met or the gap is documented.
+
+### P5-07 · Generation progress UI   `S`
+**Depends on:** P4-14
+- [ ] Fitting room polls `GET /jobs/{id}`: queued / processing % / ready / failed (with reason, Try again / Rescan)
+
+**Done when:** a job can be watched to the end without refreshing.
+
+### P5-08 · Local persistence and rescan   `S`
 **Depends on:** P5-03
-- [ ] Measure load time; enable Draco or Meshopt compression in the export step if large
-- [ ] Hit the load-time target from Phase 1
+- [ ] After restarting backend + browser, the current model and outfit reappear
+- [ ] Rescan: old model kept until the new one is `ready`, then old files deleted (one current model)
 
-**Done when:** model loads under the target on local network.
+**Done when:** restart test passes; no orphan files after a rescan.
 
-### P5-07 · Processing status UI   `S`
-**Depends on:** P4-14, P2-17
-- [ ] My Model shows queued / processing (progress %) / review / ready / failed
-- [ ] Poll `GET /jobs/{id}` every few seconds
-- [ ] Failed → reason + "Rescan" button
+### P5-09 · E2E test: scan fixture → generate → reload   `S`
+- [ ] Playwright using a fixture GLB instead of a real scan
 
-**Done when:** a tester can watch a job finish without refreshing.
-
-### P5-08 · Return visit flow   `XS`
-**Depends on:** P5-03
-- [ ] After login, users with a `ready` model go straight to Try-On / My Model
-
-**Done when:** sign out → sign in → same model shows, no rescan.
-
-### P5-09 · Rescan (replace model)   `S`
-**Depends on:** P5-07
-- [ ] Start a new capture; old model stays until new one is `ready`, then old files are deleted
-
-**Done when:** after rescan only one model and no orphan files remain.
-
-### P5-10 · Limitations notice on My Model   `XS`
-**Depends on:** P4-16
-- [ ] Show short user-facing limitations text
-
-**Done when:** text visible next to the viewer.
-
-### P5-11 · E2E test: scan → save → reopen   `S`
-**Depends on:** all above
-- [ ] Playwright test (using a pre-made test GLB fixture instead of a real scan)
-
-**Done when:** test passes and covers MVP items A2 and A3.
+**Done when:** covers A2 (fixture path) and A3.
