@@ -28,10 +28,10 @@
 
 **Done when:** tests TC-57, TC-58 and TC-59 pass.
 
-### P2R-03 · 🔒 Backend: Discard all data   `S`
+### P2R-03 · 🔒 Backend: Discard all data   `S` ✅
 **Depends on:** P2R-01
-- [ ] `DELETE /data`: delete jobs, audit entries for scans, (scans, images, models, outfit once they exist) **and their blobs**; then remove any orphan blobs under `data/blobs/`
-- [ ] Idempotent (204 even when empty)
+- [x] `DELETE /data`: delete jobs, audit entries for scans, (scans, images, models, outfit once they exist) **and their blobs**; then remove any orphan blobs under `data/blobs/`
+- [x] Idempotent (204 even when empty)
 
 **Done when:** a test proves 0 rows and 0 blob files remain (TC-44, Q10).
 

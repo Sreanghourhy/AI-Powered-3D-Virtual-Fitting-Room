@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api import garments, health, jobs
+from app.api import data, garments, health, jobs
 from app.core.config import get_settings
 from app.core.local_only import protect
 
@@ -19,6 +19,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(garments.router)
     app.include_router(jobs.router)
+    app.include_router(data.router)
     return app
 
 

@@ -73,6 +73,19 @@ class StorageService:
     def exists(self, storage_key: str) -> bool:
         return self._path(storage_key).is_file()
 
+    def delete_all(self) -> int:
+        """Delete every blob (Discard). The blob folder only ever holds scan data."""
+        count = 0
+        if not self._root.exists():
+            return 0
+        for path in sorted(self._root.rglob("*"), reverse=True):  # files before folders
+            if path.is_file() or path.is_symlink():
+                path.unlink()
+                count += 1
+            elif path.is_dir():
+                path.rmdir()
+        return count
+
     # -- internals -------------------------------------------------------------
 
     def _path(self, storage_key: str) -> Path:
