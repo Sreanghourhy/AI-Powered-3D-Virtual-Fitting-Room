@@ -1,4 +1,4 @@
-"""Consent rules (docs/consent-v1.md, docs/03-privacy-security.md §3.1)."""
+"""Consent rules (docs/consent-v2.md, docs/03-privacy-security.md §3.1)."""
 
 from datetime import UTC, datetime
 
@@ -23,6 +23,6 @@ def active_consent(db: Session, user: User, version: str) -> Consent | None:
 
 def withdraw(db: Session, consent: Consent) -> None:
     consent.withdrawn_at = datetime.now(UTC)
-    # Withdrawing consent must delete the user's scan data (consent-v1, "Your choices").
+    # Withdrawing consent must delete the user's scan data (consent-v2, "Your choices").
     # Captures and body models don't exist until Phase 3/4. Their deletion is wired here
     # when those tables are added (tracked in docs/tasks/phase-3-capture.md, P3-02).

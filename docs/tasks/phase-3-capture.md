@@ -1,7 +1,7 @@
 # Phase 3 — MacBook Camera Capture & Upload (Weeks 4–5+)
 
 > **Re-planned 20 Nov 2026:** capture uses the **MacBook built-in camera** via `getUserMedia`. Phone capture, helper mode, LAN HTTPS (mkcert) and phone-to-MacBook transfer are **removed**.
-> **Status:** plan waiting for owner approval. Nothing implemented yet.
+> **Status:** plan ✅ approved 20 Nov 2026 (incl. consent-v2, D8 in-browser MediaPipe, dev-only `/dev/camera-lab`). P3-00 done.
 
 **Goal:** One customer, alone, captures guided front / side / back views and face close-ups with the MacBook camera. Images are quality-checked and stored encrypted.
 **Deliverable:** (1) feasibility report with go/no-go, then (2) a repeatable capture workflow with quality checks.
@@ -14,11 +14,11 @@ P3-00 ─▶ P3-01 … P3-05  (feasibility spike) ─▶ 🛑 OWNER GATE ─▶ 
 
 ## Part A — Apply the requirement change to the existing app
 
-### P3-00 · 🔒 Update consent text and UI copy for MacBook capture   `S`
+### P3-00 · 🔒 Update consent text and UI copy for MacBook capture   `S` ✅
 **Depends on:** approval of [consent-v2.md](../consent-v2.md)
-- [ ] Consent text component → `consent-v2` wording; backend `FR_CONSENT_VERSION` default → `consent-v2` (existing v1 consents must re-consent, which the existing re-consent banner handles)
-- [ ] Replace phone/helper copy: home page step 1, My Model empty state, capture placeholder checklist
-- [ ] Update tests that reference `consent-v1`
+- [x] Consent text component → `consent-v2` wording; backend `FR_CONSENT_VERSION` default → `consent-v2` (existing v1 consents must re-consent, which the existing re-consent banner handles)
+- [x] Replace phone/helper copy: home page step 1, My Model empty state, capture placeholder checklist
+- [x] Update tests that reference `consent-v1` (+ new re-consent test)
 
 **Done when:** no UI text mentions a phone or helper for capture; all tests pass.
 

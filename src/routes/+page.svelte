@@ -5,7 +5,7 @@
 	let { data }: PageProps = $props();
 
 	const steps = [
-		{ title: 'Scan once', text: 'A helper takes about 40 photos of you with a phone.' },
+		{ title: 'Scan once', text: 'Stand in front of your MacBook camera and turn slowly. About 4 minutes.' },
 		{ title: 'Your own 3D model', text: 'We build a model from your real appearance. No avatar editing.' },
 		{ title: 'Try on anytime', text: 'Switch shirts and pants on your saved model, until you delete it.' }
 	];

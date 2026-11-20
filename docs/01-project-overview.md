@@ -69,7 +69,7 @@ The app must **not** offer controls to change the customer's face or body propor
 | Requirements FR-01…FR-15, NFR-01…NFR-05 | ✅ **Approved by project owner, 20 Nov 2026** |
 | Out-of-scope list (§1.5) | ✅ **Approved, 20 Nov 2026** |
 | Phase 1 design docs (flows, consent v1, capture steps, garment format, targets, wireframes, test cases) | ✅ **Approved with no changes, 20 Nov 2026** |
-| **Requirement change: MacBook built-in camera replaces phone capture** (FR-01, FR-08, FR-11, FR-16, NFR-01, NFR-02, out-of-scope) | 📝 **Docs updated 20 Nov 2026, waiting for owner approval.** See [change-log.md](change-log.md) |
+| **Requirement change: MacBook built-in camera replaces phone capture** (FR-01, FR-08, FR-11, FR-16, NFR-01, NFR-02, out-of-scope) | ✅ **Approved 20 Nov 2026.** See [change-log.md](change-log.md) |
 
 ## 1.4 Technical constraints (must be understood before building)
 

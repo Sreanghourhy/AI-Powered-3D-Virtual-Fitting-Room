@@ -17,8 +17,8 @@
 		</div>
 		<h2 class="mt-6 text-lg font-semibold text-slate-900">You haven't been scanned yet</h2>
 		<p class="mx-auto mt-2 max-w-md text-sm text-slate-600">
-			It takes about 6 minutes with a helper holding the phone. You scan once, and your model is saved until you
-			delete it.
+			It takes about 4 minutes in front of your MacBook camera, on your own. You scan once, and your model is saved
+			until you delete it.
 		</p>
 		<a
 			href="/capture"

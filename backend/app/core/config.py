@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     session_ttl_days: int = 14
     cookie_secure: bool = True
 
-    consent_version: str = "consent-v1"
+    consent_version: str = "consent-v2"  # docs/consent-v2.md (MacBook camera)
 
     @field_validator("encryption_key")
     @classmethod

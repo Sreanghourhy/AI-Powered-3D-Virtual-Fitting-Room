@@ -50,8 +50,8 @@ This folder turns the planning PDF (`AI_3D_Virtual_Fitting_Room_Step_by_Step_Pla
 - ✅ SvelteKit + TypeScript + Tailwind CSS starter at the repo root (`src/`, placeholder fitting-room page, `Garment` type).
 - ✅ Git repo (GitHub remote), FastAPI backend with `/health`, Three.js viewer demo at `/viewer-demo`, frontend ↔ backend proxy.
 - ✅ Phase 1 complete and approved (20 Nov 2026).
-- ✅ Phase 2 built: database, sign-in, consent, catalog, encrypted storage, job worker, Try-On/My Model placeholders (waiting for owner approval).
-- 🔄 **20 Nov 2026 requirement change:** capture uses the **MacBook built-in camera** (no phone). Docs and Phase 3 plan updated, waiting for approval. See [change-log.md](change-log.md).
+- ✅ Phase 2 complete and approved: database, sign-in, consent, catalog, encrypted storage, job worker, Try-On/My Model placeholders.
+- ✅ **20 Nov 2026 requirement change approved:** capture uses the **MacBook built-in camera** (no phone). See [change-log.md](change-log.md). P3-00 done (consent-v2 live).
 - ❌ No capture or reconstruction yet. Next: [Phase 3](tasks/phase-3-capture.md), starting with the camera feasibility gate.
 
 Start with [Phase 0](tasks/phase-0-start-today.md).

@@ -11,7 +11,10 @@ def signup(client: TestClient, email: str = "alice@example.com") -> dict:
     return response.json()
 
 
-def accept_consent(client: TestClient, version: str = "consent-v1") -> dict:
+CONSENT_VERSION = "consent-v2"
+
+
+def accept_consent(client: TestClient, version: str = CONSENT_VERSION) -> dict:
     response = client.post(
         "/consents",
         json={"version": version, "confirmsAdultAndSelf": True, "agreesToCaptureAndStorage": True},

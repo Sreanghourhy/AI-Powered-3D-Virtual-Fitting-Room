@@ -2,7 +2,7 @@
 
 ## CR-01 · MacBook built-in camera replaces phone capture (20 Nov 2026)
 
-**Requested by:** project owner · **Status:** 📝 docs updated, **waiting for owner approval** · **Code:** not changed yet
+**Requested by:** project owner · **Status:** ✅ **approved by owner 20 Nov 2026** (docs, Phase 3 plan, consent-v2, D8, dev camera lab) · **Code:** applied in P3-00
 
 ### New requirements (owner)
 1. Capture with the **MacBook's built-in camera**.

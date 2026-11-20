@@ -48,7 +48,7 @@ CONSENT_SCOPE = "capture_and_store_body_model"
 
 class ConsentRequest(ApiModel):
     version: str = Field(max_length=32)
-    # Both on-screen checkboxes from docs/consent-v1.md must be ticked.
+    # Both on-screen checkboxes from docs/consent-v2.md must be ticked.
     confirms_adult_and_self: bool
     agrees_to_capture_and_storage: bool
 

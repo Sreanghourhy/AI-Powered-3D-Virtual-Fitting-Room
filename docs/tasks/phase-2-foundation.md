@@ -3,7 +3,7 @@
 **Goal:** A working app skeleton: frontend, backend, database, storage, auth, catalog.
 **Deliverable:** Working app with sign-in, catalog, and a placeholder 3D viewer.
 
-**Status (20 Nov 2026):** all 18 tasks done, waiting for owner approval. Tests: backend 71 passed (pytest + ruff clean), frontend 22 passed (Vitest), `svelte-check` 0 errors, production build OK.
+**Status (20 Nov 2026):** all 18 tasks done, ✅ **approved by owner 20 Nov 2026**. Tests: backend 71 passed (pytest + ruff clean), frontend 22 passed (Vitest), `svelte-check` 0 errors, production build OK.
 
 **Implementation notes**
 - Auth = server-side sessions (token hash stored) + Argon2id → decision D6.

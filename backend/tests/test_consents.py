@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 from app.api.deps import ConsentedUser
 from app.main import create_app
-from tests.helpers import accept_consent, signup
+from tests.helpers import CONSENT_VERSION, accept_consent, signup
 
 
 def test_consent_requires_login(client: TestClient) -> None:
@@ -15,13 +15,13 @@ def test_consent_requires_login(client: TestClient) -> None:
 def test_new_user_has_no_consent(client: TestClient) -> None:
     signup(client)
     body = client.get("/consents/me").json()
-    assert body == {"requiredVersion": "consent-v1", "accepted": False, "consents": []}
+    assert body == {"requiredVersion": CONSENT_VERSION, "accepted": False, "consents": []}
 
 
 def test_accept_consent_stores_version_and_time(client: TestClient) -> None:
     signup(client)
     consent = accept_consent(client)
-    assert consent["version"] == "consent-v1"
+    assert consent["version"] == CONSENT_VERSION
     assert consent["scope"] == "capture_and_store_body_model"
     assert consent["grantedAt"]
     assert consent["withdrawnAt"] is None
@@ -39,7 +39,7 @@ def test_both_checkboxes_required(client: TestClient) -> None:
     response = client.post(
         "/consents",
         json={
-            "version": "consent-v1",
+            "version": CONSENT_VERSION,
             "confirmsAdultAndSelf": True,
             "agreesToCaptureAndStorage": False,
         },
@@ -111,3 +111,27 @@ def test_guard_blocks_after_withdrawal(data_dir: Path) -> None:
         consent = accept_consent(client)
         client.delete(f"/consents/{consent['id']}")
         assert client.get("/_test/protected").status_code == 403
+
+
+def test_older_consent_version_requires_reconsent(client: TestClient) -> None:
+    """Users who accepted v1 (phone wording) must accept v2 before capture."""
+    import uuid
+
+    from app.db.models import Consent
+    from app.db.session import session_factory
+
+    user = signup(client)
+    with session_factory()() as db:
+        db.add(
+            Consent(
+                user_id=uuid.UUID(user["id"]),
+                version="consent-v1",
+                scope="capture_and_store_body_model",
+            )
+        )
+        db.commit()
+    status = client.get("/consents/me").json()
+    assert status["accepted"] is False
+    assert status["consents"][0]["version"] == "consent-v1"
+    accept_consent(client)
+    assert client.get("/consents/me").json()["accepted"] is True

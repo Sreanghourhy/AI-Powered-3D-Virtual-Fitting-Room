@@ -52,7 +52,7 @@ class Consent(UUIDPrimaryKey, Base):
     user_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), index=True
     )
-    version: Mapped[str] = mapped_column(String(32))  # e.g. "consent-v1"
+    version: Mapped[str] = mapped_column(String(32))  # e.g. "consent-v2"
     scope: Mapped[str] = mapped_column(String(64))  # e.g. "capture_and_store_body_model"
     granted_at: Mapped[datetime] = mapped_column(default=utcnow)
     withdrawn_at: Mapped[datetime | None] = mapped_column(default=None)

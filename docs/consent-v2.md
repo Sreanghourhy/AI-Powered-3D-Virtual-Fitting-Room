@@ -1,6 +1,6 @@
 # Consent Text — v2 (MacBook camera)
 
-> **Version:** `consent-v2` · **Status:** Draft, **waiting for owner approval** · **Date:** 20 Nov 2026
+> **Version:** `consent-v2` · **Status:** ✅ Approved 20 Nov 2026, live in the app (P3-00) · **Date:** 20 Nov 2026
 > **Replaces:** [consent-v1](consent-v1.md) (phone + helper wording).
 > **What changed from v1:** the camera is the MacBook's built-in camera; the views are front, sides, back and face close-ups; no helper. Everything else is unchanged.
 > Engineering draft, not legal advice.
