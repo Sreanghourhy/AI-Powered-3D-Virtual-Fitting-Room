@@ -1,6 +1,6 @@
 # 2. Architecture (v3, CR-02, 20 Nov 2026)
 
-> **Status:** waiting for owner approval. Single-user, local-only. No accounts or authentication.
+> **Status:** ✅ approved 20 Nov 2026. Single-user, local-only. No accounts or authentication.
 
 ## 2.1 Technology stack
 
@@ -109,6 +109,6 @@ audit_log      id, action, target, created_at                                   
 | D6 | Auth approach | ❌ **Retired by CR-02** | Session + Argon2 auth removed in P2R-01 |
 | D7 | Capture method | ✅ CR-01 | MacBook built-in camera, person turns, 8 body views + 5 face close-ups, auto-capture |
 | D8 | In-browser computer vision | ✅ CR-01 | MediaPipe Tasks Vision, self-hosted models |
-| D9 | Single-user local mode | 📝 CR-02, waiting for approval | No users, sessions or consents; one current scan/model |
-| D10 | Localhost protection | 📝 CR-02, waiting for approval | 127.0.0.1 bind, Host allow-list, custom header on writes, no CORS |
-| D11 | Local persistence | 📝 CR-02, waiting for approval | Keep the latest scan/model encrypted in `data/` until Discard |
+| D9 | Single-user local mode | ✅ CR-02, approved 20 Nov 2026 | No users, sessions or consents; one current scan/model |
+| D10 | Localhost protection | ✅ CR-02, approved 20 Nov 2026 | 127.0.0.1 bind, Host allow-list, custom header on writes, no CORS |
+| D11 | Local persistence | ✅ CR-02, approved 20 Nov 2026 | Keep the latest scan/model encrypted in `data/` until Discard |

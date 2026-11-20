@@ -1,6 +1,6 @@
 # 1. Project Overview (v3, CR-02, 20 Nov 2026)
 
-> **Status:** v3 waiting for owner approval. Replaces the multi-user, account-based version (history in [change-log.md](change-log.md)).
+> **Status:** v3 ✅ approved 20 Nov 2026. Replaces the multi-user, account-based version (history in [change-log.md](change-log.md)).
 
 ## 1.1 Goal
 
@@ -94,4 +94,4 @@ See [05-mvp-acceptance.md](05-mvp-acceptance.md).
 |------|--------|
 | Original requirements v1 (multi-user, phone) | Approved 20 Nov 2026, **superseded** |
 | CR-01 MacBook camera | Approved 20 Nov 2026 |
-| **CR-02 single-user, no authentication (this version)** | 📝 **Waiting for owner approval** |
+| **CR-02 single-user, no authentication (this version)** | ✅ **Approved 20 Nov 2026** |

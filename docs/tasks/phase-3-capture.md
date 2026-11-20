@@ -2,7 +2,7 @@
 
 > **Re-planned 20 Nov 2026:** capture uses the **MacBook built-in camera** via `getUserMedia`. Phone capture, helper mode, LAN HTTPS (mkcert) and phone-to-MacBook transfer are **removed**.
 > **Status:** plan ✅ approved 20 Nov 2026 (CR-01: D8 in-browser MediaPipe, dev-only `/dev/camera-lab`). P3-00 done.
-> **CR-02 update (waiting for approval):** single user, no accounts or consent. Runs after [Phase 2R](phase-2r-single-user.md). Capture lives at `/scan` and ends with **Generate 3D Model**. Endpoints renamed `/captures` → `/scans`.
+> **CR-02 update (✅ approved 20 Nov 2026):** single user, no accounts or consent. Runs after [Phase 2R](phase-2r-single-user.md). Capture lives at `/scan` and ends with **Generate 3D Model**. Endpoints renamed `/captures` → `/scans`.
 
 **Goal:** The owner, alone, captures guided front / side / back views and face close-ups with the MacBook camera, reviews and retakes, then clicks **Generate 3D Model**. Images are quality-checked and stored locally, encrypted.
 **Deliverable:** (1) feasibility report with go/no-go, then (2) a repeatable capture workflow with quality checks.

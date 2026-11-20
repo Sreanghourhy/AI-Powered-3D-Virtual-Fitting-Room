@@ -1,6 +1,6 @@
 # Phase 2R — Simplify to a Single-User Local Prototype (CR-02)
 
-> **Status:** 📝 plan waiting for owner approval. Nothing implemented yet.
+> **Status:** ✅ plan approved 20 Nov 2026 (full removal of auth/consent code and tables approved). In progress.
 > Refactors Phase 2. Working code is **kept** where it doesn't conflict: catalog, encrypted storage, job worker, viewer, pickers, typed client, SSR `/api` proxy.
 
 **Goal:** The app opens straight into one fitting-room interface. No login, accounts, profiles or consent records. The backend is locked to localhost, and everything can be discarded.

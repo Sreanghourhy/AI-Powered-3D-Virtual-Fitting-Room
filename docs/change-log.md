@@ -2,7 +2,7 @@
 
 ## CR-02 · Simplified single-user prototype, no authentication (20 Nov 2026)
 
-**Requested by:** project owner · **Status:** 📝 **docs updated, waiting for owner approval** · **Code:** not changed yet
+**Requested by:** project owner · **Status:** ✅ **approved by owner 20 Nov 2026** (docs, sequence, full removal of auth/consent code and tables, local persistence D11, privacy notice) · **Code:** Phase 2R in progress
 
 ### New requirements (owner, summarised)
 - **Single-user personal prototype** on the owner's MacBook. The app opens **directly** to the fitting-room interface.

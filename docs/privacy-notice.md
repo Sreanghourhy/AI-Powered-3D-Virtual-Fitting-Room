@@ -1,6 +1,6 @@
 # In-App Privacy Notice (CR-02)
 
-> **Status:** draft, waiting for owner approval. Replaces the consent screens ([consent-v1](consent-v1.md), [consent-v2](consent-v2.md)), which are retired.
+> **Status:** ✅ approved 20 Nov 2026. Replaces the consent screens ([consent-v1](consent-v1.md), [consent-v2](consent-v2.md)), which are retired.
 > Shown in a dialog the first time **Start Scan** is clicked. "Don't show again" is remembered in this browser only.
 
 ---
