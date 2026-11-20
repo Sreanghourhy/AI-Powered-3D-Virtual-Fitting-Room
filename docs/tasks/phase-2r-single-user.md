@@ -1,6 +1,6 @@
 # Phase 2R — Simplify to a Single-User Local Prototype (CR-02)
 
-> **Status:** ✅ **all 7 tasks done (20 Nov 2026), waiting for owner approval.** Tests: backend 62 passed (ruff clean), frontend 22 passed, `svelte-check` 0 errors, production build OK.
+> **Status:** ✅ **all 7 tasks done and ✅ approved by owner (20 Nov 2026).** Tests: backend 62 passed (ruff clean), frontend 22 passed, `svelte-check` 0 errors, production build OK.
 > Refactors Phase 2. Working code is **kept** where it doesn't conflict: catalog, encrypted storage, job worker, viewer, pickers, typed client, SSR `/api` proxy.
 
 **Goal:** The app opens straight into one fitting-room interface. No login, accounts, profiles or consent records. The backend is locked to localhost, and everything can be discarded.
