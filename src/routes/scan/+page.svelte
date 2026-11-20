@@ -1,7 +1,8 @@
-<svelte:head><title>Capture · Fitting Room</title></svelte:head>
+<svelte:head><title>Scan · Fitting Room</title></svelte:head>
 
 <main class="mx-auto max-w-2xl px-4 py-10 sm:px-6">
-	<h1 class="text-2xl font-bold text-slate-950">Get ready (1 minute)</h1>
+	<a href="/" class="text-sm font-medium text-indigo-600 hover:underline">← Back to fitting room</a>
+	<h1 class="mt-4 text-2xl font-bold text-slate-950">Get ready (1 minute)</h1>
 	<ul class="mt-6 space-y-3 text-slate-700">
 		<li>☐ Laptop on a table, nothing moving behind you</li>
 		<li>☐ Bright, even light in front of you. No window behind you.</li>

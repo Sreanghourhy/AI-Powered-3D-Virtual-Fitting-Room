@@ -3,14 +3,14 @@
 
 	// Single-user local prototype (CR-02): no account menu, sign-in or profiles.
 	const links = [
-		{ href: '/catalog', label: 'Catalog' },
-		{ href: '/try-on', label: 'Try-On' },
-		{ href: '/my-model', label: 'My Model' }
+		{ href: '/', label: 'Fitting room' },
+		{ href: '/catalog', label: 'Catalog' }
 	];
 
 	let menuOpen = $state(false);
 
-	const isActive = (href: string) => page.url.pathname === href || page.url.pathname.startsWith(`${href}/`);
+	const isActive = (href: string) =>
+		href === '/' ? page.url.pathname === '/' : page.url.pathname === href || page.url.pathname.startsWith(`${href}/`);
 
 	// Close the mobile menu whenever the route changes.
 	$effect(() => {
@@ -20,7 +20,7 @@
 </script>
 
 <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
-	<div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+	<div class="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
 		<div class="flex items-center gap-2">
 			<button
 				type="button"

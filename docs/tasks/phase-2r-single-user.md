@@ -44,13 +44,13 @@
 
 **Done when:** `svelte-check` is clean and no route or component refers to login, sign-up, user or consent.
 
-### P2R-05 · Frontend: one fitting-room interface at `/`   `M`
+### P2R-05 · Frontend: one fitting-room interface at `/`   `M` ✅
 **Depends on:** P2R-04
-- [ ] `/` = viewer area + shirt/pants pickers (reuse `GarmentPicker`, outfit helpers) + **Start Scan** + **Discard** (states: no scan / generating / ready / failed per [wireframes/fitting-room.md](../wireframes/fitting-room.md))
-- [ ] **No sample/avatar body in the main viewer.** The empty state says "No scan yet". `static/models/sample.glb` is used only on `/viewer-demo`.
-- [ ] `/scan` placeholder with setup checklist (real capture in Phase 3)
-- [ ] Old URLs redirect: `/my-model`, `/try-on` → `/`; `/capture` → `/scan`
-- [ ] Keep `/catalog` (browse) with "Try on" linking to `/?top=…` / `/?bottom=…`
+- [x] `/` = viewer area + shirt/pants pickers (reuse `GarmentPicker`, outfit helpers) + **Start Scan** + **Discard** (states: no scan / generating / ready / failed per [wireframes/fitting-room.md](../wireframes/fitting-room.md))
+- [x] **No sample/avatar body in the main viewer.** The empty state says "No scan yet". `static/models/sample.glb` is used only on `/viewer-demo`.
+- [x] `/scan` placeholder with setup checklist (real capture in Phase 3)
+- [x] Old URLs redirect: `/my-model`, `/try-on` → `/`; `/capture` → `/scan`
+- [x] Keep `/catalog` (browse) with "Try on" linking to `/?top=…` / `/?bottom=…`
 
 **Done when:** the app opens directly to the fitting room on desktop; the old routes redirect.
 

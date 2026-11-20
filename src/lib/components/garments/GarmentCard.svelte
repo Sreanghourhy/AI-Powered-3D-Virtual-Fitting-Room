@@ -3,7 +3,7 @@
 
 	let { garment }: { garment: Garment } = $props();
 
-	const tryOnHref = $derived(`/try-on?${garment.category}=${encodeURIComponent(garment.id)}`);
+	const tryOnHref = $derived(`/?${garment.category}=${encodeURIComponent(garment.id)}`);
 </script>
 
 <article class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">

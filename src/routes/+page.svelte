@@ -1,41 +1,50 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
+	import FittingRoomStage from '#lib/components/fitting-room/FittingRoomStage.svelte';
+	import type { ModelState } from '#lib/components/fitting-room/model-state.ts';
+	import GarmentPicker from '#lib/components/garments/GarmentPicker.svelte';
+	import { outfitFromParams, outfitQuery } from '#lib/components/garments/outfit.ts';
 	import BackendStatus from '#lib/components/ui/BackendStatus.svelte';
+	import type { Outfit } from '#lib/types/garment.ts';
+	import type { PageProps } from './$types';
 
-	const steps = [
-		{ title: 'Scan once', text: 'Stand in front of your MacBook camera and turn slowly. About 4 minutes.' },
-		{ title: 'Your own 3D model', text: 'We build a model from your real appearance. No avatar editing.' },
-		{ title: 'Try on anytime', text: 'Switch shirts and pants on your saved model, until you delete it.' }
-	];
+	let { data }: PageProps = $props();
+
+	// Scans and models arrive in Phases 3–5. Until a real model exists, the stage
+	// stays empty: no sample or generic avatar is ever shown in its place (FR-07).
+	const modelState = { kind: 'none' } as ModelState;
+
+	const shirts = $derived(data.garments.filter((g) => g.category === 'top'));
+	const pants = $derived(data.garments.filter((g) => g.category === 'bottom'));
+	const outfit = $derived(outfitFromParams(page.url.searchParams, data.garments));
+
+	// Changing one slot keeps the other: shirts and pants are independent (FR-09).
+	function select(change: Partial<Outfit>) {
+		goto(`/${outfitQuery({ ...outfit, ...change })}`, { replaceState: true, reset: false });
+	}
 </script>
 
 <svelte:head>
-	<title>AI-Powered 3D Virtual Fitting Room</title>
-	<meta name="description" content="Scan once, then try on shirts and pants on your own 3D model." />
+	<title>Fitting Room</title>
+	<meta name="description" content="Scan yourself with your MacBook camera and try on shirts and pants on your own 3D model." />
 </svelte:head>
 
-<main class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-20">
-	<div class="flex justify-end"><BackendStatus /></div>
-	<h1 class="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
-		Try on clothes on your own 3D model
-	</h1>
-	<p class="mt-5 max-w-2xl text-lg text-slate-600">Scan once, save until you delete it, try on clothes anytime.</p>
-	<div class="mt-8 flex flex-wrap gap-3">
-		<a href="/my-model" class="rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-500">Go to my model</a>
-		<a href="/catalog" class="rounded-lg border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50">Browse catalog</a>
-	</div>
+<main class="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_20rem]">
+	<FittingRoomStage state={modelState} />
 
-	<ol class="mt-16 grid gap-4 sm:grid-cols-3">
-		{#each steps as step, i (step.title)}
-			<li class="rounded-2xl border border-slate-200 p-6">
-				<p class="text-sm font-semibold text-indigo-600">Step {i + 1}</p>
-				<h2 class="mt-2 text-lg font-semibold text-slate-900">{step.title}</h2>
-				<p class="mt-2 text-sm text-slate-600">{step.text}</p>
-			</li>
-		{/each}
-	</ol>
+	<aside class="flex flex-col gap-6">
+		<GarmentPicker label="Shirt" garments={shirts} selectedId={outfit.topId} onselect={(id) => select({ topId: id })} />
+		<GarmentPicker label="Pants" garments={pants} selectedId={outfit.bottomId} onselect={(id) => select({ bottomId: id })} />
+		{#if modelState.kind !== 'ready'}
+			<p class="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-3 text-xs text-slate-600">
+				You can pick clothes now. They appear on your 3D model once it has been generated.
+			</p>
+		{/if}
 
-	<p class="mt-10 text-xs text-slate-500">
-		The try-on is a visual preview only — not a size or fit guarantee.
-		<a href="/viewer-demo" class="underline">See the 3D viewer demo</a>.
-	</p>
+		<div class="mt-auto flex flex-col gap-3 border-t border-slate-200 pt-4 text-sm">
+			<a href="/scan" class="font-medium text-indigo-600 hover:underline">{modelState.kind === 'none' ? 'Start Scan' : 'Rescan'}</a>
+			<div><BackendStatus /></div>
+		</div>
+	</aside>
 </main>
