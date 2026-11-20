@@ -8,10 +8,9 @@
 	<title>3D Viewer Demo · Virtual Fitting Room</title>
 </svelte:head>
 
-<main class="mx-auto flex min-h-screen max-w-5xl flex-col px-4 py-8 sm:px-6">
+<main class="mx-auto flex max-w-5xl flex-col px-4 py-8 sm:px-6">
 	<header class="mb-4 flex flex-wrap items-end justify-between gap-3">
 		<div>
-			<a href="/" class="text-sm text-indigo-600 hover:underline">← Home</a>
 			<h1 class="mt-1 text-2xl font-bold text-slate-950">3D viewer demo</h1>
 			<p class="text-sm text-slate-600">Drag to rotate 360°, scroll or pinch to zoom.</p>
 		</div>
