@@ -1,76 +1,92 @@
 # AI-Powered 3D Virtual Fitting Room
 
-A SvelteKit + TypeScript + Tailwind CSS starter. Includes a responsive placeholder page and a feature-oriented folder structure. AI inference, avatar generation, uploads, persistence, and 3D rendering are not implemented yet.
+Scan once, save until the customer deletes it, try on shirts and pants anytime, on a 3D model of the customer's **real** appearance (no avatar editing).
+
+- **Frontend:** SvelteKit 3 + TypeScript + Tailwind CSS 4, Three.js / Threlte viewer
+- **Backend:** Python 3.12 + FastAPI, SQLAlchemy + Alembic (SQLite for the prototype), encrypted file storage, background job worker
+
+Project plan, design docs and task backlog: [`docs/`](docs/README.md).
 
 ## Getting started
 
-Use Node.js 22.12+ (Node.js 24 LTS recommended) and Python 3.12+.
-
-**1. Backend (FastAPI), one-time setup:**
+Requirements: Node.js 22.12+ (24 LTS recommended) and Python 3.12+.
 
 ```sh
-cd backend
-python3.12 -m venv .venv
-.venv/bin/pip install -e ".[dev]"
-cd ..
+npm install          # frontend dependencies
+npm run setup:api    # backend venv, dependencies, backend/.env with a new encryption key, database, seed data
 ```
 
-**2. Run (two terminals):**
+Run (separate terminals):
 
 ```sh
-npm run dev:api        # FastAPI on http://localhost:8000
-npm install            # first time only
+npm run dev:api      # FastAPI on http://localhost:8000 (API docs: /docs)
+npm run dev:worker   # background job worker (needed for processing jobs)
 npm run dev -- --open  # SvelteKit on http://localhost:5173
 ```
 
-The frontend proxies `/api/*` to the backend, and the home page shows **Backend: ok** when both are running. The 3D viewer demo is at `/viewer-demo`.
+The browser calls `/api/*`. Vite proxies it to FastAPI in dev, and during server-side rendering the `handleFetch` hook forwards it (see `src/hooks.server.ts`).
 
-Project plan and task backlog: see [`docs/`](docs/README.md).
+> **Encryption key:** `setup:api` creates `backend/.env` with `FR_ENCRYPTION_KEY`. It encrypts every customer file. Back it up securely, because losing it makes stored scans unreadable. Never commit `backend/.env`.
+
+> **Safari on `http://localhost`:** if you aren't kept signed in, set `FR_COOKIE_SECURE=false` in `backend/.env` for **local development only**.
+
+> **Dev styles look stale** after adding a new file? Restart `npm run dev` (dev-server CSS cache; production builds are unaffected).
+
+## Commands
+
+| Command | What it does |
+|---------|--------------|
+| `npm run dev` | SvelteKit dev server |
+| `npm run dev:api` | FastAPI with auto-reload (port 8000) |
+| `npm run dev:worker` | Job worker (`python -m app.worker`) |
+| `npm run setup:api` | Backend setup (safe to re-run; keeps an existing key) |
+| `npm run db:migrate` | Apply database migrations |
+| `npm run db:seed` | Seed the catalog (2 shirts + 2 pants) |
+| `npm run check` | Svelte + TypeScript validation |
+| `npm test` | Frontend unit tests (Vitest) |
+| `npm run lint:api` | Backend lint + format check (ruff) |
+| `npm run test:api` | Backend tests (pytest) |
+| `npm run test:all` | All of the above checks and tests |
+| `npm run build` / `npm run preview` | Production build / preview |
 
 ## Project structure
 
 ```text
-src/
+src/                         # SvelteKit frontend
+  env.ts                     # Environment variables (SvelteKit 3 defineEnvVars), e.g. API_URL
+  hooks.server.ts            # Resolves signed-in user; SSR /api proxy
   lib/
-    assets/                    # Imported images and icons
+    api/client.ts            # Typed FastAPI client
     components/
-      ui/                      # Shared UI components
-      fitting-room/            # Avatar viewer and try-on controls
-      garments/                # Garment cards, filters, and selectors
-    types/
-      garment.ts               # Shared garment data model
-    utils/                     # Shared utility functions
-    server/
-      ai/                      # Private AI provider integrations
-      garments/                # Server-side garment data access
+      ui/                    # Header, auth form, shared UI
+      consent/               # Consent text v1 + shared disclaimer labels
+      fitting-room/          # 3D viewer (Three.js / Threlte)
+      garments/              # Catalog card, shirt/pants pickers, outfit helpers
+    types/                   # api.ts (API responses), garment.ts (catalog)
+    utils/                   # safeRedirect, loginUrl
   routes/
-    +layout.svelte             # Root layout and global CSS import
-    +page.svelte               # Starter home page
-    layout.css                 # Tailwind entry point and global styles
-  app.html                     # HTML document template
-  app.d.ts                     # Application-level TypeScript declarations
-static/
-  models/                      # Public GLB/GLTF assets
-  images/                      # Public image assets
+    (auth)/login, signup     # Signed-out only
+    (app)/my-model, try-on, consent, capture   # Sign-in required
+    catalog/                 # Public catalog
+    viewer-demo/             # Public 3D viewer demo
+backend/                     # FastAPI
+  app/api/                   # Routers: health, auth, consents, garments, jobs
+  app/core/                  # Settings, password hashing, session tokens, key generator
+  app/db/                    # Models, session, migrations helper, seed
+  app/services/              # Encrypted storage, consent rules, jobs, audit log
+  app/worker/                # Background job runner + handlers
+  alembic/                   # Database migrations
+  tests/
+static/models/               # PUBLIC sample models only
+static/garments/             # PUBLIC catalog assets
+data/                        # PRIVATE, git-ignored: database + encrypted blobs
+docs/                        # Plan, design docs, task backlog
 ```
 
-Empty directories contain `.gitkeep` files so Git preserves the structure. Import shared code using `#lib/`, for example `#lib/types/garment`.
+## Security and privacy rules
 
-## Commands
-
-- `npm run dev` — development server
-- `npm run check` — Svelte and TypeScript validation
-- `npm run check:watch` — continuous validation
-- `npm run build` — production build
-- `npm run preview` — preview the production build locally
-- `npm run dev:api` — FastAPI backend with auto-reload (port 8000)
-- `npm run test:api` — backend tests (pytest)
-
-## Development guidance
-
-Create pages under `src/routes` using `+page.svelte`. Add server endpoints with `+server.ts` when needed. Keep private AI credentials and integrations in `src/lib/server`; copy `.env.example` to `.env` when configuring a provider. Never put user uploads or private data in `static/`, whose contents are publicly served.
-
-Tailwind CSS uses its Vite plugin and `@import 'tailwindcss'` in `src/routes/layout.css`. A separate Tailwind configuration file is not required for this starter.
-
-The 3D viewer uses Three.js + Threlte (`src/lib/components/fitting-room/ModelViewer.svelte`). Only public, licensed sample models go in `static/models/` (see its README). The included adapter-auto supports automatic deployment detection; select a target-specific adapter when choosing hosting.
-# AI-Powered-3D-Virtual-Fitting-Room
+- Customer scans and models are stored **encrypted** (AES-256-GCM) under `data/`. They are **never** placed in `static/` or any public URL.
+- Every user-data endpoint checks ownership and returns 404 for other users' resources.
+- Sessions use `HttpOnly`, `Secure`, `SameSite=Lax` cookies. Only a hash of the session token is stored.
+- Capture requires the current consent version. See [docs/03-privacy-security.md](docs/03-privacy-security.md).
+- Garments: **shirts (`top`) and pants (`bottom`) only**, enforced by the database.

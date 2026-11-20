@@ -17,7 +17,13 @@
 		"dev:api": "cd backend && .venv/bin/uvicorn app.main:app --reload --port 8000",
 		"test:api": "cd backend && .venv/bin/pytest -q",
 		"test": "vitest run",
-		"test:watch": "vitest"
+		"test:watch": "vitest",
+		"setup:api": "bash scripts/setup-backend.sh",
+		"dev:worker": "cd backend && .venv/bin/python -m app.worker",
+		"db:migrate": "cd backend && .venv/bin/python -m app.db.migrate",
+		"db:seed": "cd backend && .venv/bin/python -m app.db.seed",
+		"lint:api": "cd backend && .venv/bin/ruff check . && .venv/bin/ruff format --check .",
+		"test:all": "npm run check && npm test && npm run lint:api && npm run test:api"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^8.0.1",

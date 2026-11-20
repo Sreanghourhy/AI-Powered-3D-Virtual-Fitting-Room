@@ -81,14 +81,17 @@ ai-powered-3d-virtual-fitting-room/
 
 ```text
 users            id, email, password_hash, created_at, deleted_at
+sessions         id, user_id, token_hash, created_at, expires_at
 consents         id, user_id, version, scope, granted_at, withdrawn_at
 capture_sessions id, user_id, status[uploading|checking|rejected|accepted], created_at
 capture_files    id, session_id, kind[photo|video], view[front|left|back|right|other],
                  storage_key, quality_json, created_at
 body_models      id, user_id, session_id, status[queued|processing|review|ready|failed],
                  method, glb_storage_key, metrics_json, created_at
-jobs             id, type, ref_id, status, progress, error, started_at, finished_at
-garments         id, name, category[top|bottom], glb_url, thumbnail_url, sizes_json, active
+jobs             id, user_id, type, ref_id, payload, status, progress, step, error,
+                 created_at, started_at, finished_at
+garments         id(slug), name, category[top|bottom], model_url, thumbnail_url, colors, sizes,
+                 source_author, source_license, source_url, active, sort_order
 outfits          id, user_id, top_garment_id, bottom_garment_id, created_at
 audit_log        id, user_id, action, target, created_at
 ```
@@ -124,6 +127,6 @@ Write each decision as a short ADR (`docs/adr/NNN-title.md`) when it is made.
 | D1 | **Body representation**: raw photogrammetry mesh vs. parametric body template (e.g. SMPL-X fitted to the person + texture) vs. hybrid | End of Phase 4 | **Most important decision.** A shared template with a skeleton lets garments be rigged once and fit everyone. A raw scan keeps likeness but includes the original clothes. |
 | D2 | Reconstruction tool | Phase 4 | Candidates: Apple Object Capture (RealityKit, runs on macOS), COLMAP + OpenMVS, SMPL-X fitting from MediaPipe/2D keypoints. Many research repos need an NVIDIA CUDA GPU, so check Mac support first. |
 | D3 | Model licenses | Phase 4 | SMPL/SMPL-X are free for **non-commercial research only**. Commercial use needs a separate license. Check before choosing. |
-| D4 | Job runner | Phase 2 | Start with a simple DB-backed worker process. Move to a Redis queue (RQ/Celery) only if needed. |
+| D4 | Job runner | ✅ Decided, Phase 2 | DB-backed worker (`python -m app.worker`), one job at a time, interrupted jobs marked failed on restart. Move to a Redis queue (RQ/Celery) only if needed. |
 | D5 | Garment fitting method | Phase 6 | Rigid alignment → skinned garments on shared skeleton → cloth simulation (only if needed). |
-| D6 | Auth approach | Phase 2 | Session cookies + Argon2 password hashing, or an auth library. |
+| D6 | Auth approach | ✅ Decided, Phase 2 | Server-side sessions (SHA-256 of a random token stored; cookie `HttpOnly`/`Secure`/`SameSite=Lax`, 14 days) + Argon2id password hashing. |
