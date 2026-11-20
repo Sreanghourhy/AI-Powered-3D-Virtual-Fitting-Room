@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from app.api import garments, health, jobs
 from app.core.config import get_settings
+from app.core.local_only import protect
 
 
 def create_app() -> FastAPI:
@@ -14,6 +15,7 @@ def create_app() -> FastAPI:
         redoc_url=None,
         openapi_url=None if settings.environment == "production" else "/openapi.json",
     )
+    protect(app)  # localhost-only access, no CORS (CR-02, D10)
     app.include_router(health.router)
     app.include_router(garments.router)
     app.include_router(jobs.router)

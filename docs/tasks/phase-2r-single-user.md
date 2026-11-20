@@ -18,13 +18,13 @@
 
 **Done when:** the backend starts, migrations apply to the existing dev DB, and no auth code remains (`grep` check).
 
-### P2R-02 · 🔒 Backend: localhost protection   `S`
+### P2R-02 · 🔒 Backend: localhost protection   `S` ✅
 **Depends on:** P2R-01
-- [ ] `dev:api` binds explicitly to `127.0.0.1`
-- [ ] Trusted-host check: only `localhost` / `127.0.0.1` (any port) → else 400
-- [ ] Middleware: `POST`/`PUT`/`PATCH`/`DELETE` require `X-Fitting-Room: 1` → else 403
-- [ ] No CORS middleware (cross-origin preflights get no allow headers)
-- [ ] Frontend client always sends the header; SSR proxy forwards it
+- [x] `dev:api` binds explicitly to `127.0.0.1`
+- [x] Trusted-host check: only `localhost` / `127.0.0.1` (any port) → else 400
+- [x] Middleware: `POST`/`PUT`/`PATCH`/`DELETE` require `X-Fitting-Room: 1` → else 403
+- [x] No CORS middleware (cross-origin preflights get no allow headers)
+- [x] Frontend client always sends the header; SSR proxy forwards it
 
 **Done when:** tests TC-57, TC-58 and TC-59 pass.
 

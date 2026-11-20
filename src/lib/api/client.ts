@@ -11,6 +11,9 @@ import type { ConsentStatus, Consent, HealthResponse, Job, User } from '#lib/typ
 
 export const API_BASE = '/api';
 
+/** Required by the backend on every state-changing request (localhost protection, D10). */
+export const WRITE_HEADER = 'X-Fitting-Room';
+
 type Fetch = typeof fetch;
 
 export class ApiError extends Error {
@@ -44,6 +47,7 @@ export function errorMessage(status: number, body: unknown): string {
 export async function apiFetch<T>(path: string, init: RequestInit = {}, fetchFn: Fetch = fetch): Promise<T> {
 	const headers = new Headers(init.headers);
 	headers.set('Accept', 'application/json');
+	headers.set(WRITE_HEADER, '1');
 	if (init.body !== undefined && !(init.body instanceof FormData)) {
 		headers.set('Content-Type', 'application/json');
 	}

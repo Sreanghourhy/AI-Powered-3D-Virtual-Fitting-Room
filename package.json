@@ -14,7 +14,7 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"dev:api": "cd backend && .venv/bin/uvicorn app.main:app --reload --port 8000",
+		"dev:api": "cd backend && .venv/bin/uvicorn app.main:app --reload --host 127.0.0.1 --port 8000",
 		"test:api": "cd backend && .venv/bin/pytest -q",
 		"test": "vitest run",
 		"test:watch": "vitest",

@@ -28,6 +28,7 @@ describe('apiFetch', () => {
 		expect(url).toBe('/api/auth/login');
 		expect(init.credentials).toBe('include');
 		expect(new Headers(init.headers).get('Content-Type')).toBe('application/json');
+		expect(new Headers(init.headers).get('X-Fitting-Room')).toBe('1');
 	});
 
 	it('returns undefined for 204', async () => {

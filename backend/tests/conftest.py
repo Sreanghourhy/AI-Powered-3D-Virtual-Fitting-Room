@@ -36,10 +36,12 @@ def data_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Path]:
 
 @pytest.fixture
 def client(data_dir: Path) -> Iterator["TestClient"]:
-    """API client on a fresh database. HTTPS so Secure cookies are sent back."""
+    """API client on a fresh database, talking to the app as http://localhost."""
     from fastapi.testclient import TestClient
 
     from app.main import create_app
 
-    with TestClient(create_app(), base_url="https://testserver") as test_client:
+    with TestClient(
+        create_app(), base_url="http://localhost", headers={"X-Fitting-Room": "1"}
+    ) as test_client:
         yield test_client
