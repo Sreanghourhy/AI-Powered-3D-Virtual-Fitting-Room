@@ -4,6 +4,8 @@
  */
 export type ModelState =
 	| { kind: 'none' }
+	/** Photos saved (Milestone 1); the 3D model is generated in Milestone 2. */
+	| { kind: 'scanned'; photos: number; savedAt: string }
 	| { kind: 'generating'; progress: number; step: string | null }
 	| { kind: 'ready'; modelUrl: string }
 	| { kind: 'failed'; reason: string };

@@ -33,9 +33,9 @@ Voice prompts, server-side MediaPipe quality checks, consistency checks (distanc
 
 - [x] "Skip this check" if calibration never turns green (manual capture still works)
 
-### M1-05 · Frontend: save scan   `S`
-- [ ] **Save scan** uploads with progress, completes the scan, stops the camera
-- [ ] Fitting room shows "Scan saved (N photos)", with Rescan and Discard. No body shown until Milestone 2.
+### M1-05 · Frontend: save scan   `S` ✅
+- [x] **Save scan** uploads with progress, completes the scan, stops the camera
+- [x] Fitting room shows "Scan saved (N photos)", with Rescan and Discard. No body shown until Milestone 2.
 
 ### M1-06 · Tests, docs, owner test   `S`
 - [ ] Unit + API tests; end-to-end check with Chrome's fake camera

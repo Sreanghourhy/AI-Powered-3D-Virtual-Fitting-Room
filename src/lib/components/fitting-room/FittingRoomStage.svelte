@@ -38,6 +38,18 @@
 						>Start Scan</a
 					>
 				</div>
+			{:else if state.kind === 'scanned'}
+				<div>
+					<div class="mx-auto grid size-20 place-items-center rounded-full bg-emerald-100 text-3xl text-emerald-700" aria-hidden="true">✓</div>
+					<h1 class="mt-5 text-xl font-semibold text-slate-900">Scan saved: {state.photos} photos</h1>
+					<p class="mx-auto mt-2 max-w-sm text-sm text-slate-600">
+						Saved privately (encrypted) on this Mac, {new Date(state.savedAt).toLocaleString()}. Building your 3D body from these
+						photos comes in the next milestone.
+					</p>
+					<a href="/scan" class="mt-6 inline-flex rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+						>Rescan</a
+					>
+				</div>
 			{:else if state.kind === 'generating'}
 				<div class="w-full max-w-sm">
 					<h1 class="text-lg font-semibold text-slate-900">Building your 3D model…</h1>

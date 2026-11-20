@@ -7,7 +7,7 @@
  * from load functions so that works.
  */
 import type { Garment, GarmentCategory } from '#lib/types/garment.ts';
-import type { HealthResponse, Job } from '#lib/types/api.ts';
+import type { HealthResponse, Job, Scan } from '#lib/types/api.ts';
 
 export const API_BASE = '/api';
 
@@ -81,6 +81,29 @@ export const getGarment = (id: string, f?: Fetch) =>
 // ---- Data ---------------------------------------------------------------------
 /** Discard scan & model: deletes all captured images and generated data on this Mac. */
 export const discardAll = (f?: Fetch) => apiFetch<void>('/data', { method: 'DELETE' }, f);
+
+// ---- Scans (Milestone 1) -------------------------------------------------------
+export const createScan = (f?: Fetch) => apiFetch<Scan>('/scans', { method: 'POST' }, f);
+
+export function uploadScanImage(scanId: string, view: string, image: Blob, f?: Fetch) {
+	const form = new FormData();
+	form.set('view', view);
+	form.set('file', image, `${view}.jpg`);
+	return apiFetch<Scan>(`/scans/${encodeURIComponent(scanId)}/images`, { method: 'POST', body: form }, f);
+}
+
+export const completeScan = (scanId: string, f?: Fetch) =>
+	apiFetch<Scan>(`/scans/${encodeURIComponent(scanId)}/complete`, { method: 'POST' }, f);
+
+/** The saved scan, or null if there is none yet. */
+export async function getCurrentScan(f?: Fetch): Promise<Scan | null> {
+	try {
+		return await apiFetch<Scan>('/scans/current', {}, f);
+	} catch (e) {
+		if (e instanceof ApiError && e.status === 404) return null;
+		throw e;
+	}
+}
 
 // ---- Jobs ---------------------------------------------------------------------
 export const getJob = (id: string, f?: Fetch) => apiFetch<Job>(`/jobs/${encodeURIComponent(id)}`, {}, f);

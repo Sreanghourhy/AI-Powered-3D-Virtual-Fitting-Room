@@ -26,8 +26,8 @@
 	import { AutoCapture, FRAMING_TEXT, SCAN_STEPS, type ScanStep } from '#lib/camera/scan-steps.ts';
 
 	interface Props {
-		/** Called with all captures when the user clicks "Save scan" (Milestone 1, M1-05). */
-		onsave: (captures: Capture[]) => Promise<void>;
+		/** Called with all captures when the user clicks "Save scan" (M1-05). */
+		onsave: (captures: Capture[], onprogress: (done: number, total: number) => void) => Promise<void>;
 	}
 	let { onsave }: Props = $props();
 
@@ -46,6 +46,7 @@
 	let still = $state(false);
 	let facing = $state<string | null>(null);
 	let countdown = $state(0);
+	let saveProgress = $state<{ done: number; total: number } | null>(null);
 	let flash = $state(false);
 
 	let video: HTMLVideoElement | undefined = $state();
@@ -270,10 +271,15 @@
 		stage = 'saving';
 		errorText = null;
 		try {
-			await onsave(SCAN_STEPS.map((s) => captures[s.view]).filter(Boolean));
+			await onsave(
+				SCAN_STEPS.map((s) => captures[s.view]).filter(Boolean),
+				(done, total) => (saveProgress = { done, total })
+			);
 		} catch (e) {
 			errorText = e instanceof Error ? e.message : 'Saving failed. Please try again.';
 			stage = 'review';
+		} finally {
+			saveProgress = null;
 		}
 	}
 
@@ -426,7 +432,8 @@
 			type="button"
 			class="rounded-lg bg-indigo-600 px-6 py-3 text-base font-semibold text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
 			disabled={missingRequired > 0 || stage === 'saving'}
-			onclick={save}>{stage === 'saving' ? 'Saving…' : 'Save scan'}</button
+			onclick={save}
+			>{stage === 'saving' ? (saveProgress ? `Saving ${saveProgress.done} of ${saveProgress.total}…` : 'Saving…') : 'Save scan'}</button
 		>
 		<button type="button" class="rounded-lg border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" disabled={stage === 'saving'} onclick={startOver}>
 			Start over

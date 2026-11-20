@@ -14,9 +14,13 @@
 
 	let { data }: PageProps = $props();
 
-	// Scans and models arrive in Phases 3–5. Until a real model exists, the stage
-	// stays empty: no sample or generic avatar is ever shown in its place (FR-07).
-	const modelState = { kind: 'none' } as ModelState;
+	// Until a real model exists the stage shows no body: no sample or generic avatar
+	// is ever shown in its place (FR-07). Milestone 2 adds generating/ready/failed.
+	const modelState = $derived<ModelState>(
+		data.scan
+			? { kind: 'scanned', photos: data.scan.images.length, savedAt: data.scan.completedAt ?? data.scan.createdAt }
+			: { kind: 'none' }
+	);
 
 	const shirts = $derived(data.garments.filter((g) => g.category === 'top'));
 	const pants = $derived(data.garments.filter((g) => g.category === 'bottom'));

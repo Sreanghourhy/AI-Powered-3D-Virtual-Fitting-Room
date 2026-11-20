@@ -18,3 +18,20 @@ export interface Job {
 export interface HealthResponse {
 	status: 'ok';
 }
+
+export interface ScanImage {
+	id: string;
+	view: string;
+	width: number;
+	height: number;
+	sizeBytes: number;
+}
+
+export interface Scan {
+	id: string;
+	status: 'capturing' | 'saved';
+	createdAt: string;
+	completedAt: string | null;
+	images: ScanImage[];
+	missingViews: string[];
+}

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
+	import { saveScan as uploadScan } from '#lib/camera/save-scan.ts';
 	import ScanCapture, { type Capture } from '#lib/components/capture/ScanCapture.svelte';
 	import Modal from '#lib/components/ui/Modal.svelte';
 	import PrivacyNoticeText from '#lib/components/ui/PrivacyNoticeText.svelte';
@@ -13,8 +14,13 @@
 		noticeOpen = !getFlag(PRIVACY_NOTICE_SEEN);
 	});
 
-	async function saveScan(_captures: Capture[]) {
-		throw new Error('Saving is added in the next step (M1-05). Your photos are only in this page for now.');
+	async function saveScan(captures: Capture[], onprogress: (done: number, total: number) => void) {
+		await uploadScan(
+			captures.map((c) => ({ view: c.view, blob: c.blob })),
+			onprogress
+		);
+		await invalidateAll();
+		await goto('/');
 	}
 
 	function acceptNotice() {
