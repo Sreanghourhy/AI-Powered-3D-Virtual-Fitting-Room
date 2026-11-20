@@ -28,8 +28,6 @@ The browser calls `/api/*`. Vite proxies it to FastAPI in dev, and during server
 
 > **Encryption key:** `setup:api` creates `backend/.env` with `FR_ENCRYPTION_KEY`. It encrypts every customer file. Back it up securely, because losing it makes stored scans unreadable. Never commit `backend/.env`.
 
-> **Safari on `http://localhost`:** if you aren't kept signed in, set `FR_COOKIE_SECURE=false` in `backend/.env` for **local development only**.
-
 > **Dev styles look stale** after adding a new file? Restart `npm run dev` (dev-server CSS cache; production builds are unaffected).
 
 ## Commands

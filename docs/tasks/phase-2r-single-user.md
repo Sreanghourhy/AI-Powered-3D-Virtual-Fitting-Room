@@ -8,13 +8,13 @@
 
 ---
 
-### P2R-01 · Backend: remove accounts, sessions and consent   `M`
+### P2R-01 · Backend: remove accounts, sessions and consent   `M` ✅
 **Depends on:** owner approval
-- [ ] Remove routers `auth.py`, `consents.py`; remove `CurrentUser` / `ConsentedUser` deps, `security.py` (passwords/sessions), `services/consent.py`
-- [ ] Models: drop `User`, `UserSession`, `Consent`; remove `jobs.user_id`; `audit_log` without `user_id`
-- [ ] Alembic migration that drops these tables/columns (SQLite batch mode); `downgrade` documented as not restoring data
-- [ ] `GET /jobs/{id}` without owner check; settings: remove session/cookie/consent fields
-- [ ] Remove `argon2-cffi` and `email-validator` dependencies
+- [x] Remove routers `auth.py`, `consents.py`; remove `CurrentUser` / `ConsentedUser` deps, `security.py` (passwords/sessions), `services/consent.py`
+- [x] Models: drop `User`, `UserSession`, `Consent`; remove `jobs.user_id`; `audit_log` without `user_id`
+- [x] Alembic migration that drops these tables/columns (SQLite batch mode); `downgrade` documented as not restoring data
+- [x] `GET /jobs/{id}` without owner check; settings: remove session/cookie/consent fields
+- [x] Remove `argon2-cffi` and `email-validator` dependencies
 
 **Done when:** the backend starts, migrations apply to the existing dev DB, and no auth code remains (`grep` check).
 

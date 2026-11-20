@@ -24,18 +24,12 @@ class Settings(BaseSettings):
 
     environment: str = Field(default="development", pattern="^(development|test|production)$")
 
-    # Private customer data lives here (git-ignored). Never inside static/.
+    # Private scan data lives here (git-ignored). Never inside static/.
     data_dir: Path = REPO_ROOT / "data"
     database_url: str | None = None
 
     # 32-byte key, base64-encoded. Generate with: python -m app.core.keys
     encryption_key: str = Field(min_length=1)
-
-    session_cookie_name: str = "fr_session"
-    session_ttl_days: int = 14
-    cookie_secure: bool = True
-
-    consent_version: str = "consent-v2"  # docs/consent-v2.md (MacBook camera)
 
     @field_validator("encryption_key")
     @classmethod
