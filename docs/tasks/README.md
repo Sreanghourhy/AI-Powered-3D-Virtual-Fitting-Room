@@ -23,6 +23,10 @@ Each phase is split into small tasks. **No task should take more than one workin
 - 🔒 marks a privacy/security task. Don't skip these, even in the prototype.
 - ⚠️ marks a high-risk / research task whose result may change the plan.
 
+## Active plan
+
+**[milestones.md](milestones.md)**: 3 milestones (CR-03). The phase files below are the reference backlog.
+
 ## Phase files
 
 | Phase | File | Tasks |

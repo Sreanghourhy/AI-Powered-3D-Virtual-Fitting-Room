@@ -1,5 +1,9 @@
 # Change Log — Requirements
 
+## CR-03 · Simplified 3-milestone plan (20 Nov 2026)
+
+**Requested and approved by owner.** The owner wants it simple: (1) scan the body with the camera, (2) build a real 3D body with an AI model, (3) put shirts and pants on that body. The active plan is now [tasks/milestones.md](tasks/milestones.md). Phase 3–8 files stay as a reference backlog. Voice prompts, server-side checks, method comparisons and evaluation reports are postponed. The P3-01 camera report is no longer required: Milestone 1 shows directly whether the full body fits.
+
 ## CR-02 · Simplified single-user prototype, no authentication (20 Nov 2026)
 
 **Requested by:** project owner · **Status:** ✅ **approved by owner 20 Nov 2026** (docs, sequence, full removal of auth/consent code and tables, local persistence D11, privacy notice) · **Code:** ✅ Phase 2R done (P2R-01 to P2R-07)
