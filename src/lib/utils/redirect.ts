@@ -14,3 +14,8 @@ export function safeRedirect(target: string | null | undefined, fallback = '/'):
 		return fallback;
 	}
 }
+
+/** URL of the login page that returns the user to `url` afterwards. */
+export function loginUrl(url: URL): string {
+	return `/login?redirectTo=${encodeURIComponent(`${url.pathname}${url.search}`)}`;
+}
