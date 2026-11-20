@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DISCLAIMERS } from '#lib/components/consent/disclaimers.ts';
+	import { DISCLAIMERS } from '#lib/components/ui/disclaimers.ts';
 </script>
 
 <svelte:head><title>My 3D model · Fitting Room</title></svelte:head>

@@ -3,11 +3,11 @@
  *
  * Always call paths under /api. In the browser, Vite proxies /api to FastAPI (dev).
  * During server-side rendering, the handleFetch hook (src/hooks.server.ts) rewrites
- * /api to the backend URL and forwards the session cookie. Pass SvelteKit's `fetch`
+ * /api to the local backend URL. Pass SvelteKit's `fetch`
  * from load functions so that works.
  */
 import type { Garment, GarmentCategory } from '#lib/types/garment.ts';
-import type { ConsentStatus, Consent, HealthResponse, Job, User } from '#lib/types/api.ts';
+import type { HealthResponse, Job } from '#lib/types/api.ts';
 
 export const API_BASE = '/api';
 
@@ -71,32 +71,6 @@ const json = (body: unknown) => JSON.stringify(body);
 
 // ---- Health -------------------------------------------------------------------
 export const getHealth = (f?: Fetch) => apiFetch<HealthResponse>('/health', {}, f);
-
-// ---- Auth ---------------------------------------------------------------------
-export interface Credentials {
-	email: string;
-	password: string;
-}
-export const signup = (c: Credentials, f?: Fetch) =>
-	apiFetch<User>('/auth/signup', { method: 'POST', body: json(c) }, f);
-export const login = (c: Credentials, f?: Fetch) =>
-	apiFetch<User>('/auth/login', { method: 'POST', body: json(c) }, f);
-export const logout = (f?: Fetch) => apiFetch<void>('/auth/logout', { method: 'POST' }, f);
-export const getMe = (f?: Fetch) => apiFetch<User>('/auth/me', {}, f);
-
-// ---- Consent ------------------------------------------------------------------
-export const getConsentStatus = (f?: Fetch) => apiFetch<ConsentStatus>('/consents/me', {}, f);
-export const acceptConsent = (version: string, f?: Fetch) =>
-	apiFetch<Consent>(
-		'/consents',
-		{
-			method: 'POST',
-			body: json({ version, confirmsAdultAndSelf: true, agreesToCaptureAndStorage: true })
-		},
-		f
-	);
-export const withdrawConsent = (id: string, f?: Fetch) =>
-	apiFetch<void>(`/consents/${encodeURIComponent(id)}`, { method: 'DELETE' }, f);
 
 // ---- Catalog ------------------------------------------------------------------
 export const listGarments = (category?: GarmentCategory, f?: Fetch) =>

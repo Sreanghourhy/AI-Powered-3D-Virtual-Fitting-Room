@@ -1,8 +1,5 @@
 <script lang="ts">
 	import BackendStatus from '#lib/components/ui/BackendStatus.svelte';
-	import type { PageProps } from './$types';
-
-	let { data }: PageProps = $props();
 
 	const steps = [
 		{ title: 'Scan once', text: 'Stand in front of your MacBook camera and turn slowly. About 4 minutes.' },
@@ -23,11 +20,7 @@
 	</h1>
 	<p class="mt-5 max-w-2xl text-lg text-slate-600">Scan once, save until you delete it, try on clothes anytime.</p>
 	<div class="mt-8 flex flex-wrap gap-3">
-		{#if data.user}
-			<a href="/my-model" class="rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-500">Go to my model</a>
-		{:else}
-			<a href="/signup" class="rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-500">Get started</a>
-		{/if}
+		<a href="/my-model" class="rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-500">Go to my model</a>
 		<a href="/catalog" class="rounded-lg border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50">Browse catalog</a>
 	</div>
 

@@ -1,11 +1,7 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
-	import { logout } from '#lib/api/client.ts';
-	import type { User } from '#lib/types/api.ts';
 
-	let { user }: { user: User | null } = $props();
-
+	// Single-user local prototype (CR-02): no account menu, sign-in or profiles.
 	const links = [
 		{ href: '/catalog', label: 'Catalog' },
 		{ href: '/try-on', label: 'Try-On' },
@@ -13,29 +9,14 @@
 	];
 
 	let menuOpen = $state(false);
-	let accountOpen = $state(false);
-	let signingOut = $state(false);
 
 	const isActive = (href: string) => page.url.pathname === href || page.url.pathname.startsWith(`${href}/`);
 
-	// Close menus whenever the route changes.
+	// Close the mobile menu whenever the route changes.
 	$effect(() => {
 		void page.url.pathname;
 		menuOpen = false;
-		accountOpen = false;
 	});
-
-	async function signOut() {
-		signingOut = true;
-		try {
-			await logout();
-		} catch {
-			// Already signed out or backend down; continue to clear the UI.
-		}
-		await invalidateAll();
-		signingOut = false;
-		await goto('/');
-	}
 </script>
 
 <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -71,45 +52,6 @@
 				>
 			{/each}
 		</nav>
-
-		<div class="relative">
-			{#if user}
-				<button
-					type="button"
-					class="flex items-center gap-2 rounded-full border border-slate-200 py-1 pr-3 pl-1 text-sm text-slate-700 hover:bg-slate-50"
-					aria-haspopup="menu"
-					aria-expanded={accountOpen}
-					onclick={() => (accountOpen = !accountOpen)}
-				>
-					<span class="grid size-7 place-items-center rounded-full bg-indigo-600 text-xs font-semibold text-white uppercase">
-						{user.email[0]}
-					</span>
-					<span class="hidden max-w-40 truncate sm:inline">{user.email}</span>
-				</button>
-				{#if accountOpen}
-					<div
-						class="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-1 text-sm shadow-lg"
-						role="menu"
-					>
-						<p class="truncate px-3 py-2 text-xs text-slate-500">{user.email}</p>
-						<a href="/my-model" class="block rounded-md px-3 py-2 text-slate-700 hover:bg-slate-100" role="menuitem">My 3D model</a>
-						<a href="/consent" class="block rounded-md px-3 py-2 text-slate-700 hover:bg-slate-100" role="menuitem">Privacy & consent</a>
-						<button
-							type="button"
-							class="block w-full rounded-md px-3 py-2 text-left text-slate-700 hover:bg-slate-100 disabled:opacity-50"
-							role="menuitem"
-							disabled={signingOut}
-							onclick={signOut}>{signingOut ? 'Signing out…' : 'Sign out'}</button
-						>
-					</div>
-				{/if}
-			{:else}
-				<div class="flex items-center gap-2 text-sm">
-					<a href="/login" class="rounded-md px-3 py-2 font-medium text-slate-700 hover:bg-slate-100">Sign in</a>
-					<a href="/signup" class="rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white hover:bg-indigo-500">Get started</a>
-				</div>
-			{/if}
-		</div>
 	</div>
 
 	{#if menuOpen}

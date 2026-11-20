@@ -4,7 +4,7 @@
 	import AppHeader from '#lib/components/ui/AppHeader.svelte';
 	import type { LayoutProps } from './$types';
 
-	let { children, data }: LayoutProps = $props();
+	let { children }: LayoutProps = $props();
 </script>
 
 <svelte:head>
@@ -12,7 +12,7 @@
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-white">
-	<AppHeader user={data.user} />
+	<AppHeader />
 	<div class="flex-1">
 		{@render children()}
 	</div>

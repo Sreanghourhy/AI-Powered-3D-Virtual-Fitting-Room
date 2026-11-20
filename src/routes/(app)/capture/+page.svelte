@@ -10,6 +10,6 @@
 		<li>☐ A marked spot (X) on the floor about 2.5 m from the laptop</li>
 	</ul>
 	<p class="mt-8 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
-		The guided MacBook camera capture is being built in Phase 3. Your consent is saved, so you're ready to scan when it's available.
+		The guided MacBook camera capture is being built in Phase 3.
 	</p>
 </main>

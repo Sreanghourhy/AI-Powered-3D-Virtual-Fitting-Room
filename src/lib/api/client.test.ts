@@ -9,11 +9,11 @@ const jsonResponse = (status: number, body: unknown) =>
 
 describe('errorMessage', () => {
 	it('uses FastAPI string detail', () => {
-		expect(errorMessage(401, { detail: 'Email or password is wrong' })).toBe('Email or password is wrong');
+		expect(errorMessage(404, { detail: 'Garment not found' })).toBe('Garment not found');
 	});
 	it('summarises the first validation error with its field', () => {
-		const body = { detail: [{ loc: ['body', 'password'], msg: 'String should have at least 10 characters' }] };
-		expect(errorMessage(422, body)).toBe('password: String should have at least 10 characters');
+		const body = { detail: [{ loc: ['query', 'category'], msg: "Input should be 'top' or 'bottom'" }] };
+		expect(errorMessage(422, body)).toBe("category: Input should be 'top' or 'bottom'");
 	});
 	it('hides server internals on 5xx', () => {
 		expect(errorMessage(500, null)).toBe('Something went wrong on our side. Please try again.');
@@ -23,9 +23,9 @@ describe('errorMessage', () => {
 describe('apiFetch', () => {
 	it('prefixes /api, sends credentials and JSON headers', async () => {
 		const fetchFn = vi.fn().mockResolvedValue(jsonResponse(200, { ok: true }));
-		await apiFetch('/auth/login', { method: 'POST', body: '{}' }, fetchFn);
+		await apiFetch('/scans', { method: 'POST', body: '{}' }, fetchFn);
 		const [url, init] = fetchFn.mock.calls[0];
-		expect(url).toBe('/api/auth/login');
+		expect(url).toBe('/api/scans');
 		expect(init.credentials).toBe('include');
 		expect(new Headers(init.headers).get('Content-Type')).toBe('application/json');
 		expect(new Headers(init.headers).get('X-Fitting-Room')).toBe('1');
@@ -33,15 +33,15 @@ describe('apiFetch', () => {
 
 	it('returns undefined for 204', async () => {
 		const fetchFn = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
-		await expect(apiFetch('/auth/logout', { method: 'POST' }, fetchFn)).resolves.toBeUndefined();
+		await expect(apiFetch('/data', { method: 'DELETE' }, fetchFn)).resolves.toBeUndefined();
 	});
 
 	it('throws ApiError with status and readable message', async () => {
-		const fetchFn = vi.fn().mockResolvedValue(jsonResponse(409, { detail: 'An account with this email already exists' }));
-		const error = (await apiFetch('/auth/signup', {}, fetchFn).catch((e: unknown) => e)) as ApiError;
+		const fetchFn = vi.fn().mockResolvedValue(jsonResponse(404, { detail: 'Job not found' }));
+		const error = (await apiFetch('/jobs/x', {}, fetchFn).catch((e: unknown) => e)) as ApiError;
 		expect(error).toBeInstanceOf(ApiError);
-		expect(error.status).toBe(409);
-		expect(error.message).toBe('An account with this email already exists');
+		expect(error.status).toBe(404);
+		expect(error.message).toBe('Job not found');
 	});
 
 	it('maps network failure to status 0', async () => {

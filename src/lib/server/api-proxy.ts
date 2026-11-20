@@ -1,7 +1,5 @@
 /** Helpers for reaching FastAPI during server-side rendering. */
 
-export const SESSION_COOKIE = 'fr_session';
-
 /**
  * If `requestUrl` targets this app's /api/*, return the matching backend URL.
  * Otherwise return null (leave the request untouched).

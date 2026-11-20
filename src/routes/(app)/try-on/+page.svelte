@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { DISCLAIMERS } from '#lib/components/consent/disclaimers.ts';
+	import { DISCLAIMERS } from '#lib/components/ui/disclaimers.ts';
 	import ModelViewer from '#lib/components/fitting-room/ModelViewer.svelte';
 	import GarmentPicker from '#lib/components/garments/GarmentPicker.svelte';
 	import { outfitFromParams, outfitQuery } from '#lib/components/garments/outfit.ts';

@@ -35,12 +35,12 @@
 
 **Done when:** a test proves 0 rows and 0 blob files remain (TC-44, Q10).
 
-### P2R-04 · Frontend: remove sign-in and consent UI   `S`
+### P2R-04 · Frontend: remove sign-in and consent UI   `S` ✅
 **Depends on:** P2R-01
-- [ ] Delete `(auth)/` routes, `AuthForm.svelte`, `(app)/consent/`, `ConsentText.svelte`, `(app)/+layout.server.ts` guard
-- [ ] `hooks.server.ts`: remove user lookup (`handle`), keep `handleFetch` `/api` proxy; remove `App.Locals.user`
-- [ ] Header: app name + Catalog link only (no account menu)
-- [ ] Client/types: remove auth and consent calls/types; remove `loginUrl` (keep `safeRedirect` only if still used)
+- [x] Delete `(auth)/` routes, `AuthForm.svelte`, `(app)/consent/`, `ConsentText.svelte`, `(app)/+layout.server.ts` guard
+- [x] `hooks.server.ts`: remove user lookup (`handle`), keep `handleFetch` `/api` proxy; remove `App.Locals.user`
+- [x] Header: app name + Catalog link only (no account menu)
+- [x] Client/types: remove auth and consent calls/types; removed `redirect.ts` (`loginUrl`, `safeRedirect` no longer used)
 
 **Done when:** `svelte-check` is clean and no route or component refers to login, sign-up, user or consent.
 
