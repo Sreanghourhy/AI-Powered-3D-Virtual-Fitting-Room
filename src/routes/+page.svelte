@@ -6,6 +6,7 @@
 	import GarmentPicker from '#lib/components/garments/GarmentPicker.svelte';
 	import { outfitFromParams, outfitQuery } from '#lib/components/garments/outfit.ts';
 	import { ApiError, discardAll } from '#lib/api/client.ts';
+	import BackendOfflineNotice from '#lib/components/ui/BackendOfflineNotice.svelte';
 	import BackendStatus from '#lib/components/ui/BackendStatus.svelte';
 	import Modal from '#lib/components/ui/Modal.svelte';
 	import type { Outfit } from '#lib/types/garment.ts';
@@ -56,6 +57,9 @@
 	<FittingRoomStage state={modelState} />
 
 	<aside class="flex flex-col gap-6">
+		{#if data.backendError}
+			<BackendOfflineNotice message={data.backendError} />
+		{/if}
 		<GarmentPicker label="Shirt" garments={shirts} selectedId={outfit.topId} onselect={(id) => select({ topId: id })} />
 		<GarmentPicker label="Pants" garments={pants} selectedId={outfit.bottomId} onselect={(id) => select({ bottomId: id })} />
 		{#if modelState.kind !== 'ready'}

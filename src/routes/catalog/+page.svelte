@@ -1,5 +1,6 @@
 <script lang="ts">
 	import GarmentCard from '#lib/components/garments/GarmentCard.svelte';
+	import BackendOfflineNotice from '#lib/components/ui/BackendOfflineNotice.svelte';
 	import { CATEGORIES } from '#lib/components/garments/categories.ts';
 	import type { PageProps } from './$types';
 
@@ -26,7 +27,9 @@
 		</div>
 	</div>
 
-	{#if data.garments.length === 0}
+	{#if data.backendError}
+		<div class="mt-8"><BackendOfflineNotice message={data.backendError} /></div>
+	{:else if data.garments.length === 0}
 		<p class="mt-10 rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-600">
 			No items in this category yet.
 		</p>
