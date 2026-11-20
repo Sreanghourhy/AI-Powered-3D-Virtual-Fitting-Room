@@ -1,6 +1,6 @@
 # Phase 2R — Simplify to a Single-User Local Prototype (CR-02)
 
-> **Status:** ✅ plan approved 20 Nov 2026 (full removal of auth/consent code and tables approved). In progress.
+> **Status:** ✅ **all 7 tasks done (20 Nov 2026), waiting for owner approval.** Tests: backend 62 passed (ruff clean), frontend 22 passed, `svelte-check` 0 errors, production build OK.
 > Refactors Phase 2. Working code is **kept** where it doesn't conflict: catalog, encrypted storage, job worker, viewer, pickers, typed client, SSR `/api` proxy.
 
 **Goal:** The app opens straight into one fitting-room interface. No login, accounts, profiles or consent records. The backend is locked to localhost, and everything can be discarded.
@@ -64,11 +64,11 @@
 
 > Note: the notice's main button says **Continue** until the camera exists (Phase 3), then **Start camera**.
 
-### P2R-07 · Tests, README and docs   `S`
+### P2R-07 · Tests, README and docs   `S` ✅
 **Depends on:** P2R-01 … P2R-06
-- [ ] Remove `test_auth.py`, `test_consents.py`, `test_models_users.py` (or adapt); update `test_jobs.py`, `helpers.py`, client and redirect tests
-- [ ] New tests: TC-01, TC-02, TC-44, TC-57, TC-58, TC-59
-- [ ] README: remove sign-up from the manual test steps; add Discard; note localhost-only
-- [ ] `npm run test:all` green
+- [x] Remove `test_auth.py`, `test_consents.py`, `test_models_users.py` (or adapt); update `test_jobs.py`, `helpers.py`, client and redirect tests
+- [x] New tests: TC-01, TC-02, TC-44, TC-57, TC-58, TC-59
+- [x] README: remove sign-up from the manual test steps; add Discard; note localhost-only
+- [x] `npm run test:all` green
 
 **Done when:** all tests pass and the docs match the code.

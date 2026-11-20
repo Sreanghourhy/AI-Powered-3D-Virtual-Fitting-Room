@@ -30,14 +30,14 @@ Each phase is split into small tasks. **No task should take more than one workin
 | 0 | [phase-0-start-today.md](phase-0-start-today.md) | 7 |
 | 1 | [phase-1-requirements.md](phase-1-requirements.md) | 10 |
 | 2 | [phase-2-foundation.md](phase-2-foundation.md) | 18 ✅ (auth/consent parts superseded by CR-02) |
-| **2R** | [phase-2r-single-user.md](phase-2r-single-user.md) | **7 (new, CR-02)** |
+| **2R** | [phase-2r-single-user.md](phase-2r-single-user.md) | 7 ✅ (CR-02) |
 | 3 | [phase-3-capture.md](phase-3-capture.md) | 21 (MacBook camera; P3-00 ✅) |
 | 4 | [phase-4-reconstruction.md](phase-4-reconstruction.md) | 16 |
 | 5 | [phase-5-profiles-viewer.md](phase-5-profiles-viewer.md) | 9 (rewritten: viewer + local persistence) |
 | 6 | [phase-6-try-on.md](phase-6-try-on.md) | 16 |
 | 7 | [phase-7-hardening.md](phase-7-hardening.md) | 12 (rewritten: local privacy) |
 | 8 | [phase-8-pilot.md](phase-8-pilot.md) | 5 (rewritten: personal evaluation) |
-| | **Total** | **121** (34 done: P0 ×5, P1 ×10, P2 ×18, P3-00) |
+| | **Total** | **121** (41 done: P0 ×5, P1 ×10, P2 ×18, P2R ×7, P3-00) |
 
 ## Critical path
 

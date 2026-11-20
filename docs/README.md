@@ -50,4 +50,5 @@ This folder turns the planning PDF (`AI_3D_Virtual_Fitting_Room_Step_by_Step_Pla
 
 - ✅ Phases 0, 1, 2 done. P3-00 done.
 - ✅ **CR-02 (approved 20 Nov 2026):** single-user personal prototype. No login, accounts or profiles; the app opens straight into the fitting room. See [change-log.md](change-log.md).
-- Now: [Phase 2R](tasks/phase-2r-single-user.md), then the camera feasibility tests in [Phase 3](tasks/phase-3-capture.md).
+- ✅ [Phase 2R](tasks/phase-2r-single-user.md) done (waiting for approval): no login, app opens on the fitting room, localhost protection, Discard.
+- Next: camera feasibility tests in [Phase 3](tasks/phase-3-capture.md) (P3-01 to P3-05).

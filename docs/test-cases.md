@@ -1,6 +1,8 @@
 # Test Cases (v3, CR-02 — single user, MacBook camera)
 
-**Type:** M = manual, A = automated (pytest / Vitest / Playwright). The owner is the only test subject. Automated tests use synthetic images or fixtures, never real scans.
+**Type:** M = manual, A = automated (pytest / Vitest / Playwright).
+
+**Automated so far (Phase 2R):** TC-01, TC-02, TC-55 (`src/routes/routes.test.ts`), TC-44 (`backend/tests/test_discard.py`), TC-57 to TC-59 (`backend/tests/test_local_only.py`). The owner is the only test subject. Automated tests use synthetic images or fixtures, never real scans.
 
 ---
 
