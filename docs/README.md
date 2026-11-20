@@ -52,4 +52,4 @@ This folder turns the planning PDF (`AI_3D_Virtual_Fitting_Room_Step_by_Step_Pla
 - ✅ **CR-02 (approved 20 Nov 2026):** single-user personal prototype. No login, accounts or profiles; the app opens straight into the fitting room. See [change-log.md](change-log.md).
 - ✅ [Phase 2R](tasks/phase-2r-single-user.md) done and approved: no login, app opens on the fitting room, localhost protection, Discard.
 - ✅ **CR-03:** simplified to **3 milestones** (scan → AI 3D body → clothes). See [tasks/milestones.md](tasks/milestones.md).
-- Now: **Milestone 1, scan with the MacBook camera.**
+- 🔧 **Milestone 1 (scan) built**, waiting for the owner's real scan test. Next: Milestone 2 (AI 3D body).

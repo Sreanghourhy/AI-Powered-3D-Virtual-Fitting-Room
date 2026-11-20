@@ -37,6 +37,7 @@ Voice prompts, server-side MediaPipe quality checks, consistency checks (distanc
 - [x] **Save scan** uploads with progress, completes the scan, stops the camera
 - [x] Fitting room shows "Scan saved (N photos)", with Rescan and Discard. No body shown until Milestone 2.
 
-### M1-06 · Tests, docs, owner test   `S`
-- [ ] Unit + API tests; end-to-end check with Chrome's fake camera
-- [ ] README how-to; **owner scans for real** and reports what happened
+### M1-06 · Tests, docs, owner test   `S` 🔧 waiting for owner's real scan
+- [x] Unit + API tests (frontend 63, backend 75); end-to-end check with Chrome's fake camera (13 photos saved encrypted, camera off at review)
+- [x] README "How to scan yourself"
+- [ ] **Owner scans for real** and reports: did the full body fit at ~2.5 m? did auto-capture trigger? did the facing-direction hint match? any errors?

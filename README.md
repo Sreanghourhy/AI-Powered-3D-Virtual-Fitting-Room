@@ -5,7 +5,7 @@ A **single-user personal prototype**. It scans **you** with your MacBook's built
 - **Frontend:** SvelteKit 3 + TypeScript + Tailwind CSS 4, Three.js / Threlte viewer
 - **Backend:** Python 3.12 + FastAPI (localhost only), SQLAlchemy + Alembic (SQLite), encrypted file storage, background job worker
 
-> **Status:** Phase 2R done (single-user app). Camera capture (Phase 3) and 3D reconstruction (Phase 4) are **not built yet**, so "Start Scan" currently shows the setup checklist only.
+> **Status:** **Milestone 1 (scan) built.** You can scan yourself with the MacBook camera and save the photos. Milestone 2 (AI 3D body) and Milestone 3 (clothes on the body) are next. Plan: [docs/tasks/milestones.md](docs/tasks/milestones.md).
 
 Project plan, design docs and task backlog: [`docs/`](docs/README.md).
 
@@ -34,11 +34,24 @@ The app opens directly on the **fitting room**. The browser calls `/api/*`: Vite
 
 > **Camera lab (dev only):** http://localhost:5173/dev/camera-lab runs the P3-01 camera capability probe. See [docs/experiments/p3-01-camera-capabilities.md](docs/experiments/p3-01-camera-capabilities.md). It returns 404 in production builds.
 
+## How to scan yourself (Milestone 1)
+
+1. Keep both servers running (`npm run dev:api` and `npm run dev`) and open **http://localhost:5173** in the **Chrome or Safari app**.
+2. Turn **off** Control Center → **Video Effects** (Center Stage, Portrait, Studio Light). Turn the sound on.
+3. Put the MacBook on a table and mark a spot about **2.5 m** away.
+4. Click **Start Scan** → **Continue** → **Start camera** → allow the camera.
+5. **Stand on your mark** until the whole body check turns green. If it never does, click **Skip this check**.
+6. **8 body photos:** follow the big text. When you're in view and still, it counts **3-2-1** and beeps. Then turn **45° to your left** and hold still again.
+7. **5 face photos:** come close (about 70 cm) and follow the text.
+8. **Review:** click any photo to retake it, then **Save scan**. The fitting room shows **"Scan saved: 13 photos"**.
+
+Photos are taken automatically. You can also press **Space** or click **Capture now** for a 3-2-1 countdown. Nothing leaves the browser until **Save scan**, and then only to the local backend, encrypted. **Discard scan & model** deletes it all.
+
 ## Manual test checklist
 
 1. **`/` (Fitting room)** opens directly: "No scan yet", **Start Scan**, Shirt and Pants pickers, "Backend: ok". No login or profile screen.
 2. Pick a shirt, then pants: each picker changes only its own item, and the URL keeps the outfit (`?top=…&bottom=…`).
-3. **Start Scan** → the privacy notice appears. **Cancel** returns to the fitting room. **Continue** (with or without "Don't show this again") shows the setup checklist.
+3. **Start Scan** → the privacy notice appears. **Cancel** returns to the fitting room. **Continue** shows the scan page (see "How to scan yourself").
 4. **Discard scan & model** → confirm → green "deleted" message.
 5. **Catalog** shows 2 shirts / 2 pants; "Try on" opens the fitting room with that item selected.
 6. Old links redirect: `/try-on` → `/`, `/my-model` → `/`, `/capture` → `/scan`; `/login` is gone (404).
