@@ -26,10 +26,12 @@ Voice prompts, server-side MediaPipe quality checks, consistency checks (distanc
 - [x] `@mediapipe/tasks-vision` with WASM + pose model **self-hosted** in `static/mediapipe/` (no third-party requests while the camera is on)
 - [x] Pure helpers with tests: full body in frame, one person, stillness, facing direction estimate (front / side / back)
 
-### M1-04 · Frontend: guided capture   `M`
-- [ ] Camera (built-in, mirrored preview, unmirrored capture, always stopped on leave)
-- [ ] Steps: setup → stand on your mark (full body check) → 8 body views → 5 face close-ups → review/retake
-- [ ] Auto-capture: body fully visible + still ≈ 1 s → 3-2-1 countdown → photo. Click/Space works too. Facing direction is shown as a hint.
+### M1-04 · Frontend: guided capture   `M` ✅
+- [x] Camera (built-in, mirrored preview, unmirrored capture, always stopped on leave)
+- [x] Steps: setup → stand on your mark (full body check) → 8 body views → 5 face close-ups → review/retake
+- [x] Auto-capture: body fully visible + still ≈ 1 s → 3-2-1 countdown → photo. Click/Space works too. Facing direction is shown as a hint.
+
+- [x] "Skip this check" if calibration never turns green (manual capture still works)
 
 ### M1-05 · Frontend: save scan   `S`
 - [ ] **Save scan** uploads with progress, completes the scan, stops the camera

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import ScanCapture, { type Capture } from '#lib/components/capture/ScanCapture.svelte';
 	import Modal from '#lib/components/ui/Modal.svelte';
 	import PrivacyNoticeText from '#lib/components/ui/PrivacyNoticeText.svelte';
 	import { getFlag, PRIVACY_NOTICE_SEEN, setFlag } from '#lib/utils/local-flag.ts';
@@ -11,6 +12,10 @@
 	$effect(() => {
 		noticeOpen = !getFlag(PRIVACY_NOTICE_SEEN);
 	});
+
+	async function saveScan(_captures: Capture[]) {
+		throw new Error('Saving is added in the next step (M1-05). Your photos are only in this page for now.');
+	}
 
 	function acceptNotice() {
 		if (dontShowAgain) setFlag(PRIVACY_NOTICE_SEEN, true);
@@ -34,18 +39,24 @@
 	{/snippet}
 </Modal>
 
-<main class="mx-auto max-w-2xl px-4 py-10 sm:px-6">
+<main class="mx-auto max-w-6xl px-4 py-6 sm:px-6">
 	<a href="/" class="text-sm font-medium text-indigo-600 hover:underline">← Back to fitting room</a>
-	<h1 class="mt-4 text-2xl font-bold text-slate-950">Get ready (1 minute)</h1>
-	<ul class="mt-6 space-y-3 text-slate-700">
-		<li>☐ Laptop on a table, nothing moving behind you</li>
-		<li>☐ Bright, even light in front of you. No window behind you.</li>
-		<li>☐ Fitted, plain clothes. Hair tied back. No glasses or hat.</li>
-		<li>☐ Video effects off: Control Center → Video Effects → Center Stage, Portrait, Studio Light off</li>
-		<li>☐ A marked spot (X) on the floor about 2.5 m from the laptop</li>
-	</ul>
-	<p class="mt-8 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
-		The guided MacBook camera capture is being built in Phase 3. The camera is not used yet.
-	</p>
-	<button type="button" class="mt-4 text-sm text-slate-500 underline" onclick={() => (noticeOpen = true)}>Show privacy notice</button>
+	<h1 class="mt-3 text-2xl font-bold text-slate-950">Scan</h1>
+
+	<details class="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700" open>
+		<summary class="cursor-pointer font-semibold text-slate-900">Before you start (1 minute)</summary>
+		<ul class="mt-3 grid gap-2 sm:grid-cols-2">
+			<li>☐ Laptop on a table, screen facing where you will stand</li>
+			<li>☐ Bright, even light in front of you. No window behind you.</li>
+			<li>☐ Fitted, plain clothes. Hair tied back. No glasses or hat.</li>
+			<li>☐ <strong>Video effects off:</strong> Control Center → Video Effects → Center Stage, Portrait, Studio Light</li>
+			<li>☐ A spot (X) on the floor about 2.5 m from the laptop</li>
+			<li>☐ Turn the sound on: you'll hear a beep for each photo</li>
+		</ul>
+		<button type="button" class="mt-3 text-xs text-slate-500 underline" onclick={() => (noticeOpen = true)}>Show privacy notice</button>
+	</details>
+
+	<div class="mt-6">
+		<ScanCapture onsave={saveScan} />
+	</div>
 </main>
