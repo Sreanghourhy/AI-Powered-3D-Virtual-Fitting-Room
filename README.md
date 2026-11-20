@@ -15,7 +15,7 @@ Requirements: Node.js 22.12+ (24 LTS recommended) and Python 3.12+.
 
 ```sh
 npm install          # frontend dependencies
-npm run setup:api    # backend venv, dependencies, backend/.env with a new encryption key, database, seed data
+npm run setup        # MediaPipe files (self-hosted) + backend venv, dependencies, encryption key, database, seed data
 ```
 
 Run (separate terminals):

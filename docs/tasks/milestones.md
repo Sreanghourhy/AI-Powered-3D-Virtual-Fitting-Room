@@ -22,9 +22,9 @@ Voice prompts, server-side MediaPipe quality checks, consistency checks (distanc
 - [x] One current scan: completing a new scan deletes the old one and its files
 - [x] Discard deletes scans and images
 
-### M1-03 · Frontend: MediaPipe pose helpers   `M`
-- [ ] `@mediapipe/tasks-vision` with WASM + pose model **self-hosted** in `static/mediapipe/` (no third-party requests while the camera is on)
-- [ ] Pure helpers with tests: full body in frame, one person, stillness, facing direction estimate (front / side / back)
+### M1-03 · Frontend: MediaPipe pose helpers   `M` ✅
+- [x] `@mediapipe/tasks-vision` with WASM + pose model **self-hosted** in `static/mediapipe/` (no third-party requests while the camera is on)
+- [x] Pure helpers with tests: full body in frame, one person, stillness, facing direction estimate (front / side / back)
 
 ### M1-04 · Frontend: guided capture   `M`
 - [ ] Camera (built-in, mirrored preview, unmirrored capture, always stopped on leave)

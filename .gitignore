@@ -36,3 +36,6 @@ __pycache__/
 /pipeline/output/
 *.blend1
 *.egg-info/
+
+# Self-hosted MediaPipe runtime + models (recreate with: npm run setup:mediapipe)
+/static/mediapipe/

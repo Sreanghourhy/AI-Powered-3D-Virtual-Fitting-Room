@@ -23,7 +23,9 @@
 		"db:migrate": "cd backend && .venv/bin/python -m app.db.migrate",
 		"db:seed": "cd backend && .venv/bin/python -m app.db.seed",
 		"lint:api": "cd backend && .venv/bin/ruff check . && .venv/bin/ruff format --check .",
-		"test:all": "npm run check && npm test && npm run lint:api && npm run test:api"
+		"test:all": "npm run check && npm test && npm run lint:api && npm run test:api",
+		"setup:mediapipe": "node scripts/setup-mediapipe.mjs",
+		"setup": "npm run setup:mediapipe && npm run setup:api"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^8.0.1",
@@ -39,6 +41,7 @@
 		"vitest": "^5.1.1"
 	},
 	"dependencies": {
+		"@mediapipe/tasks-vision": "1.2.2",
 		"@threlte/core": "^8.7.0",
 		"@threlte/extras": "^9.23.1",
 		"three": "^0.187.0"
