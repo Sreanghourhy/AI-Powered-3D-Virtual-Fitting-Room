@@ -54,13 +54,15 @@
 
 **Done when:** the app opens directly to the fitting room on desktop; the old routes redirect.
 
-### P2R-06 · Privacy notice and discard confirmation   `S`
+### P2R-06 · Privacy notice and discard confirmation   `S` ✅
 **Depends on:** P2R-05
-- [ ] Dialog from [privacy-notice.md](../privacy-notice.md) on first **Start Scan** ("Don't show again" in localStorage, wrapped in try/catch)
-- [ ] Discard confirmation dialog → `DELETE /data` → back to the "No scan yet" state
-- [ ] Disclaimer labels kept (visual preview, approximation)
+- [x] Dialog from [privacy-notice.md](../privacy-notice.md) on first **Start Scan** ("Don't show again" in localStorage, wrapped in try/catch)
+- [x] Discard confirmation dialog → `DELETE /data` → back to the "No scan yet" state
+- [x] Disclaimer labels kept (visual preview, approximation)
 
 **Done when:** TC-03 and TC-49 pass manually; discard works from the UI.
+
+> Note: the notice's main button says **Continue** until the camera exists (Phase 3), then **Start camera**.
 
 ### P2R-07 · Tests, README and docs   `S`
 **Depends on:** P2R-01 … P2R-06

@@ -78,5 +78,9 @@ export const listGarments = (category?: GarmentCategory, f?: Fetch) =>
 export const getGarment = (id: string, f?: Fetch) =>
 	apiFetch<Garment>(`/garments/${encodeURIComponent(id)}`, {}, f);
 
+// ---- Data ---------------------------------------------------------------------
+/** Discard scan & model: deletes all captured images and generated data on this Mac. */
+export const discardAll = (f?: Fetch) => apiFetch<void>('/data', { method: 'DELETE' }, f);
+
 // ---- Jobs ---------------------------------------------------------------------
 export const getJob = (id: string, f?: Fetch) => apiFetch<Job>(`/jobs/${encodeURIComponent(id)}`, {}, f);
