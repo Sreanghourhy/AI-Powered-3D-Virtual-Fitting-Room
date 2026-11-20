@@ -29,6 +29,17 @@ describe('single-user app (CR-02)', () => {
 	});
 });
 
+describe('dev-only routes', () => {
+	it('every /dev page is blocked in production by a server load (404)', () => {
+		const devPages = routeFiles.filter((f) => f.startsWith('/src/routes/dev/') && f.endsWith('/+page.svelte'));
+		expect(devPages.length).toBeGreaterThan(0);
+		for (const pagePath of devPages) {
+			const guard = sources[pagePath.replace('+page.svelte', '+page.server.ts')];
+			expect(guard, `${pagePath} needs a +page.server.ts guard`).toMatch(/if \(!dev\) error\(404/);
+		}
+	});
+});
+
 describe('TC-02: old routes redirect', () => {
 	const call = async (path: string, url: string) => {
 		const { load } = await import(/* @vite-ignore */ path);

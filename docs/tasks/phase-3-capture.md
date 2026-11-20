@@ -27,13 +27,13 @@ P3-00 ─▶ P3-01 … P3-05  (feasibility spike) ─▶ 🛑 OWNER GATE ─▶ 
 
 All spike code lives on a **dev-only** route `/dev/camera-lab`. It is blocked in production builds and **saves nothing to the server**, except the owner's own sample sets saved in P3-05 (`data/samples/`, git-ignored).
 
-### P3-01 · ⚠️ Camera capability probe   `S`
+### P3-01 · ⚠️ Camera capability probe   `S` 🔧 tool done, waiting for owner's runs
 **Depends on:** — (independent of Phase 2R; may run in parallel)
-- [ ] List cameras; open the built-in camera with ideal 1920×1080 at 30 fps
-- [ ] Record `getSettings()` (real resolution, fps, aspect) and `getCapabilities()` (exposure / white balance / focus / zoom support)
-- [ ] Compare canvas frame grab vs `ImageCapture.takePhoto()` (if available): resolution, sharpness
-- [ ] Run in latest Chrome and Safari
-- [ ] Camera stops when leaving the page
+- [x] List cameras; open the built-in camera with ideal 1920×1080 at 30 fps (plus a 4K/1440p/1080p/720p ladder)
+- [x] Record `getSettings()` (real resolution, fps, aspect) and `getCapabilities()` (exposure / white balance / focus / zoom support)
+- [x] Compare canvas frame grab vs `ImageCapture.takePhoto()` (if available): resolution, sharpness
+- [ ] **Owner:** run in latest Chrome and Safari and download the reports ([how to](../experiments/p3-01-camera-capabilities.md))
+- [x] Camera stops when the test ends, on leaving the page, and on page hide
 
 **Done when:** results are recorded in `docs/experiments/p3-01-camera-capabilities.md`, filling feasibility checks F1 and part of F8/F9.
 

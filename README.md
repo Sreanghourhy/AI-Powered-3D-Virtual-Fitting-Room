@@ -30,7 +30,9 @@ The app opens directly on the **fitting room**. The browser calls `/api/*`: Vite
 
 > **Encryption key:** `setup:api` creates `backend/.env` with `FR_ENCRYPTION_KEY`, which encrypts your scan images and models. Back it up securely, because losing it makes stored scans unreadable. Never commit `backend/.env`.
 
-> **Dev styles look stale** after adding a new file? Restart `npm run dev` (dev-server CSS cache; production builds are unaffected).
+> **Dev styles:** `src/routes/layout.css` tells Tailwind to scan all of `src/` (`@source '../'`), which fixed classes missing on new or client-only pages in dev. If styles ever look stale, restart `npm run dev`.
+
+> **Camera lab (dev only):** http://localhost:5173/dev/camera-lab runs the P3-01 camera capability probe. See [docs/experiments/p3-01-camera-capabilities.md](docs/experiments/p3-01-camera-capabilities.md). It returns 404 in production builds.
 
 ## Manual test checklist
 

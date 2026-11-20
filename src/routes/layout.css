@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+/* Scan all of src/ explicitly. In dev, client-only pages (ssr = false, e.g. /dev/camera-lab)
+   otherwise miss their classes until a restart. Production builds were never affected. */
+@source '../';
+
 @layer base {
 	body {
 		@apply m-0 bg-white font-sans text-slate-900 antialiased;
