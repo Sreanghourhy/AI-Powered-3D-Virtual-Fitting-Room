@@ -127,13 +127,29 @@
 		}
 	}
 
+	let copyState = $state<'idle' | 'copied' | 'failed'>('idle');
+
 	function download() {
 		if (!report) return;
 		const name = `camera-report-${report.browser.split(' ')[0].toLowerCase()}.json`;
 		const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
+		// The link must be in the document, and the URL must outlive the click:
+		// revoking it immediately cancels the download in Safari.
 		const a = Object.assign(document.createElement('a'), { href: url, download: name });
+		document.body.append(a);
 		a.click();
-		URL.revokeObjectURL(url);
+		a.remove();
+		setTimeout(() => URL.revokeObjectURL(url), 60_000);
+	}
+
+	async function copyReport() {
+		if (!report) return;
+		try {
+			await navigator.clipboard.writeText(JSON.stringify(report, null, 2));
+			copyState = 'copied';
+		} catch {
+			copyState = 'failed';
+		}
 	}
 
 	// ?autorun=1 starts the probe on load (used for automated checks with a fake camera).
@@ -180,6 +196,9 @@
 			<button type="button" class="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50" onclick={download}>
 				Download report (.json)
 			</button>
+			<button type="button" class="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50" onclick={copyReport}>
+				{copyState === 'copied' ? 'Copied ✓ — paste it to Claude' : copyState === 'failed' ? 'Copy failed — use the text box below' : 'Copy report'}
+			</button>
 		{/if}
 	</div>
 
@@ -204,7 +223,7 @@
 			{/if}
 		</div>
 
-		<pre class="max-h-[28rem] overflow-auto rounded-xl bg-slate-950 p-4 text-xs leading-relaxed text-slate-200">{log.join('\n') || 'Log appears here.'}</pre>
+		<pre class="max-h-112 overflow-auto rounded-xl bg-slate-950 p-4 text-xs leading-relaxed text-slate-200">{log.join('\n') || 'Log appears here.'}</pre>
 	</div>
 
 	{#if report}
@@ -265,6 +284,16 @@
 					</tbody>
 				</table>
 				<p class="mt-2 text-xs text-slate-500">Supported constraints: {report.supportedConstraints.join(', ')}</p>
+			</div>
+
+			<div>
+				<h2 class="font-semibold text-slate-900">Raw report (select all and copy if the buttons don't work)</h2>
+				<textarea
+					readonly
+					class="mt-2 h-48 w-full rounded-lg border border-slate-300 p-3 font-mono text-xs"
+					value={JSON.stringify(report, null, 2)}
+					onfocus={(e) => e.currentTarget.select()}
+				></textarea>
 			</div>
 		</section>
 	{/if}
