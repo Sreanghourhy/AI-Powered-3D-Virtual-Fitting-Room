@@ -11,8 +11,8 @@
 │   │      🧍 (grey)    │   │     │  ███████░░░░░░  48%       │     │    model.                 │
 │   └───────────────────┘   │     │  Step: reconstructing     │     │  Reason: not enough back  │
 │  You haven't been scanned │     │                           │     │  views were matched.      │
-│  yet. It takes about 6    │     │  This can take several    │     │                           │
-│  minutes with a helper.   │     │  minutes. You can leave — │     │  [ Rescan ]               │
+│  yet. It takes about 4    │     │  This can take several    │     │                           │
+│  minutes on your MacBook. │     │  minutes. You can leave — │     │  [ Rescan ]               │
 │                           │     │  we keep working.         │     │  [ View capture guide ]   │
 │  [ Start capture ]        │     │                           │     │                           │
 └───────────────────────────┘     └───────────────────────────┘     └───────────────────────────┘

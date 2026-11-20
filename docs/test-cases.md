@@ -16,9 +16,13 @@ Test data: consenting adult testers, or the CC BY sample model. Never use real c
 | TC-04 | A | Open `/capture` without consent | Redirect to `/consent`; API capture endpoints return 403 |
 | TC-05 | M | Consent screen: tick only one box | "Agree" stays disabled |
 | TC-06 | A | Accept consent | Record stored with `consent-v1` + timestamp |
-| TC-07 | M | On iPhone Safari: full guided capture (40 photos) with helper | All steps completed ≤ 6 min; upload progress shown; result screen appears |
-| TC-08 | M | Same on Android Chrome | Same as TC-07 |
-| TC-09 | M | Deny camera permission | Clear message with how to enable; no crash |
+| TC-07 | M | MacBook, **Chrome**: customer alone completes calibration, 8 body views (auto-capture) and 5 face close-ups | All steps ≤ 4 min (Q2); upload progress shown; result screen appears |
+| TC-08 | M | Same on MacBook **Safari** | Same as TC-07 |
+| TC-09 | M | Deny camera permission (browser), and separately in macOS Privacy settings | Clear message with both fixes; no crash |
+| TC-51 | M | Leave the capture page mid-way, and finish a capture | Camera light turns off in both cases |
+| TC-52 | M | Capture with **Center Stage ON** and move during views | Rejected with `framing_changed` (or warning if not detectable; see P3-02) |
+| TC-53 | A | Upload a view whose body orientation doesn't match the declared view | Rejected with `wrong_view` |
+| TC-54 | A | Upload a set where the person height differs > 8% from calibration in one view | Rejected with `distance_changed` for that view |
 
 ## A1 — Negative capture cases (Flow 4)
 
@@ -29,11 +33,11 @@ Test data: consenting adult testers, or the CC BY sample model. Never use real c
 | TC-12 | A | Submit a backlit set | Rejected with `backlit` |
 | TC-13 | A | Submit a set with feet cut off | Rejected with `body_cut_off` |
 | TC-14 | A | Submit a set with two people visible | Rejected with `multiple_people` |
-| TC-15 | A | Submit a set with no back-facing photos | Rejected with `missing_view` (back) |
-| TC-16 | A | Submit 20 photos | Rejected with `too_few_photos` |
-| TC-17 | A | Upload a 50 MB file | 413 |
+| TC-15 | A | Submit a set with no back view | Rejected with `missing_view` (back) |
+| TC-16 | A | Submit 6 body views and 2 face close-ups | Rejected with `too_few_photos` |
+| TC-17 | A | Upload a 20 MB image | 413 |
 | TC-18 | A | Upload a `.exe` renamed to `.jpg` | 415 (magic-byte check) |
-| TC-19 | A | Upload a JPEG with GPS EXIF | Stored file has no EXIF |
+| TC-19 | A | Upload a JPEG containing metadata (e.g. EXIF/GPS) | Stored file has no metadata |
 | TC-20 | M | Retake only the flagged photos and resubmit | Accepted; only retaken photos were re-uploaded |
 
 ## A2 — Model generated, reviewed, saved, reopened
@@ -97,7 +101,7 @@ Test data: consenting adult testers, or the CC BY sample model. Never use real c
 
 | Acceptance item | Test cases |
 |-----------------|-----------|
-| A1 | TC-01 … TC-20 |
+| A1 | TC-01 … TC-20, TC-51 … TC-54 |
 | A2 | TC-21 … TC-26 |
 | A3 | TC-27 … TC-32 |
 | A4 | TC-33 … TC-38 |

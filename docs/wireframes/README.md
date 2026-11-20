@@ -24,7 +24,8 @@ Phone (≤ 640 px)                      Desktop (≥ 1024 px)
 ```
 
 - The account menu (👤) has: Account, Export my data, Delete my data, Sign out.
-- The Capture screen is **full-screen on phone** (no nav bar) so the camera has room.
+- The Capture screen runs **on the MacBook**, full-screen (no nav bar), with text large enough to read from ~3 m. Capture is not offered on phones.
+- Phone layouts below are for **viewing only** (catalog, My Model, Try-On).
 
 ## Rules for all screens
 

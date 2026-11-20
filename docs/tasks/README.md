@@ -30,7 +30,7 @@ Each phase is split into small tasks. **No task should take more than one workin
 | 0 | [phase-0-start-today.md](phase-0-start-today.md) | 7 |
 | 1 | [phase-1-requirements.md](phase-1-requirements.md) | 10 |
 | 2 | [phase-2-foundation.md](phase-2-foundation.md) | 18 |
-| 3 | [phase-3-capture.md](phase-3-capture.md) | 15 |
+| 3 | [phase-3-capture.md](phase-3-capture.md) | 21 (re-planned for MacBook camera) |
 | 4 | [phase-4-reconstruction.md](phase-4-reconstruction.md) | 16 |
 | 5 | [phase-5-profiles-viewer.md](phase-5-profiles-viewer.md) | 11 |
 | 6 | [phase-6-try-on.md](phase-6-try-on.md) | 16 |

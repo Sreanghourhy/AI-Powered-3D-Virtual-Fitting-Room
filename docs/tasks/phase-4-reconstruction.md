@@ -1,6 +1,8 @@
 # Phase 4 — 3D Reconstruction Proof of Concept (Weeks 6–9) ⚠️
 
-**Goal:** Find out what 3D person representation is actually possible from phone captures on a MacBook, and pick one.
+**Goal:** Find out what 3D person representation is actually possible from **MacBook built-in camera** captures (fixed camera, person turns, 8 body views + 5 face close-ups), and pick one.
+
+> **Updated 20 Nov 2026:** builds on the Phase 3 feasibility gate (P3-05 smoke test). With a fixed camera, **approach B (body-template fitting) is primary**, and photogrammetry is a comparison only.
 **Deliverable:** Rotatable prototype model with documented limitations, plus **decision D1** (body representation).
 
 > This is the riskiest phase. Do research tasks P4-01…P4-04 early, in parallel with Phase 2, if you can.
@@ -13,9 +15,9 @@
 ### P4-01 · ⚠️ Shortlist reconstruction approaches   `S`
 **Depends on:** P0-07
 - [ ] List candidates in 3 families:
-  - **A. Photogrammetry** (raw textured mesh): Apple Object Capture (RealityKit `PhotogrammetrySession`, macOS), COLMAP + OpenMVS
-  - **B. Parametric body fitting**: fit a body template (e.g. SMPL-X) to 2D keypoints/silhouettes, then project the texture from photos
-  - **C. Hybrid**: photogrammetry for appearance + fit a template to the scan for a clean, rigged body
+  - **A. Photogrammetry** (comparison only): Apple Object Capture with person masks, COLMAP. Expected weak: turning person is not rigid, only one camera height
+  - **B. Parametric body fitting (primary)**: fit a body template to silhouettes + 2D keypoints from the 8 views, then project the texture from the photos + face close-ups. **No reshaping beyond what the photos show; no generic avatar.**
+  - **C. Video/turn-based human reconstruction** (research): only if it runs on Apple silicon with a usable license
 - [ ] For each: Mac support (CUDA needed?), license (commercial OK?), input needs, output format
 - [ ] Save as `docs/experiments/reconstruction-shortlist.md`
 
@@ -35,15 +37,15 @@
 **Done when:** scorecard template exists in `docs/experiments/scorecard.md`.
 
 ### P4-04 · Prepare standard test dataset   `S`
-**Depends on:** P3-15
-- [ ] 3 consenting adults, captured with the Phase 3 workflow, good conditions
+**Depends on:** P3-20
+- [ ] 3 consenting adults, captured with the Phase 3 MacBook-camera workflow, good conditions
 - [ ] Stored encrypted under `data/`; consent recorded
 
 **Done when:** 3 accepted capture sessions are available.
 
 ## Experiments
 
-### P4-05 · Approach A: Apple Object Capture   `M`
+### P4-05 · Approach A (comparison): Apple Object Capture with person masks   `M`
 **Depends on:** P4-04
 - [ ] Small Swift CLI (or sample app) in `pipeline/object-capture/` that runs `PhotogrammetrySession` on a folder
 - [ ] Output USDZ → convert to GLB (Blender import USD → export glTF)
@@ -57,7 +59,7 @@
 
 **Done when:** results scored, or documented as "not practical on this Mac."
 
-### P4-07 · Approach B: Body-template fitting   `M`
+### P4-07 · Approach B (primary): Body-template fitting   `M`
 **Depends on:** P4-04, P4-02
 - [ ] Get pose/shape estimate from captures (MediaPipe landmarks or an image-to-body-model method that runs on Mac)
 - [ ] Produce a body template mesh in the person's pose and shape

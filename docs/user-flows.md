@@ -1,4 +1,4 @@
-# User Flows (v1)
+# User Flows (v2 — MacBook camera, 20 Nov 2026)
 
 Four core flows for the MVP. Screen names match the wireframes in [wireframes/](wireframes/README.md).
 
@@ -11,10 +11,12 @@ flowchart TD
     A[Home] --> B[Sign up]
     B --> C[Consent screen]
     C -- Decline --> C1[Account kept, capture locked.<br/>Can browse catalog only]
-    C -- Accept v1 --> D[Capture: setup checklist]
-    D --> E[Capture: pose guide]
-    E --> F[Capture: guided photos<br/>3 rings × 12 positions + face]
-    F --> G[Review thumbnails / retake any]
+    C -- Accept current version --> D[Capture: setup checklist<br/>incl. video effects off]
+    D --> D2[Camera permission<br/>MacBook built-in camera]
+    D2 --> E[Calibration on floor X<br/>+ A-pose guide]
+    E --> F[8 body views, person turns 45° each<br/>auto-capture + voice cues]
+    F --> F2[5 face close-ups at ~70 cm]
+    F2 --> G[Review thumbnails / retake any]
     G --> H[Upload with progress]
     H --> I{Quality checks}
     I -- Rejected --> R[Flow 4: retake guidance]
@@ -29,15 +31,17 @@ flowchart TD
 |---|------|--------|-------------|
 | 1 | Taps **Get started** | Home | — |
 | 2 | Enters email + password | Sign up | Creates account (password hashed) |
-| 3 | Reads and accepts consent | Consent | Stores consent record `v1` with time |
-| 4 | Confirms setup checklist (light, clothes, helper present) | Capture | — |
-| 5 | Person stands in A-pose; helper follows on-screen positions | Capture | Live brightness hint |
-| 6 | Reviews thumbnails, retakes bad ones | Capture | — |
-| 7 | Taps **Upload** | Capture | Encrypted upload, strips EXIF |
-| 8 | Waits | My Model | Quality checks, then queues reconstruction job |
-| 9 | Sees progress (%) — may leave and come back | My Model | Job runs (may take minutes) |
-| 10 | Rotates finished model | My Model | Streams private GLB |
-| 11 | Taps **Try on clothes** | Try-On | — |
+| 3 | Reads and accepts consent | Consent | Stores consent record (current version) with time |
+| 4 | Confirms setup checklist (light, clothes, floor X, **video effects off**) | Capture | — |
+| 5 | Allows camera access | Capture | Opens the MacBook built-in camera (`getUserMedia`) |
+| 6 | Stands on the X; calibration turns green | Capture | Checks full body, single person, brightness; stores person height |
+| 7 | Turns 45° at a time for 8 body views | Capture | Live pose/orientation; auto-captures when still; voice cues |
+| 8 | Comes closer for 5 face close-ups | Capture | Face-size guide |
+| 9 | Reviews thumbnails, retakes bad ones; clicks **Upload** | Capture | Encrypted upload to localhost; metadata removed; **camera stops** |
+| 10 | Waits | My Model | Quality + consistency checks, then queues reconstruction job |
+| 11 | Sees progress (%) — may leave and come back | My Model | Job runs (may take minutes) |
+| 12 | Rotates finished model 360° | My Model | Streams private GLB |
+| 13 | Clicks **Try on clothes** | Try-On | — |
 
 ## Flow 2 — Return visit: try on outfits
 
@@ -83,14 +87,14 @@ Options on this screen:
 flowchart TD
     A[Quality checks fail] --> B[Result screen: list of problems]
     B --> C{Problem type}
-    C -- Blurry photos 7, 12 --> D[Retake only those positions]
+    C -- Blurry / wrong direction / face too small --> D[Retake only those views]
     C -- Too dark / backlit --> E[Show lighting tips → restart]
-    C -- Missing back view --> F[Retake back positions]
-    C -- Person moved / 2 people --> G[Restart whole capture]
+    C -- Missing view / moved off X / pose changed --> F[Retake those views]
+    C -- Framing changed (Center Stage) / 2 people --> G[Fix setup → restart whole capture]
     D & E & F & G --> H[Upload again]
 ```
 
 Rules:
-- Each problem is shown in plain words with a fix, e.g. *"Photo 7 is blurry. Hold the phone still and tap to focus."*
+- Each problem is shown in plain words with a fix, e.g. *"The right view shows the wrong direction. Retake it and follow the turn diagram."* (codes in [capture-steps.md](capture-steps.md))
 - If only a few photos are bad, retake just those. If the problem affects the whole set, restart.
 - After **3 failed attempts**, show the full capture guide and suggest a better place or time.

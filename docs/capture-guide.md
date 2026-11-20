@@ -1,67 +1,66 @@
-# Photo Capture Guide (v0.2)
+# Capture Guide — MacBook Built-in Camera (v1.0)
 
-How to capture a person with a phone so the 3D reconstruction has the best chance of working. These steps become the on-screen instructions in Phase 1 (P1-04) and Phase 3.
+> **Changed 20 Nov 2026:** capture now uses the **MacBook's built-in camera** in the browser. There is no phone and no helper. Earlier phone instructions (v0.2) are retired.
+> Distances and counts are **proposals until the feasibility tests** ([feasibility-macbook-camera.md](feasibility-macbook-camera.md)) confirm them.
 
-> 🔒 Only capture **consenting adults**. Record written consent before capturing. Store captures in `data/samples/` (git-ignored) and never commit them.
+> 🔒 Only capture **consenting adults**, and only the account owner. Development sample captures go in `data/samples/` (git-ignored) and are never committed.
 
-## 1. Before you start
+## 1. Room setup
 
 | Item | Rule | Why |
 |------|------|-----|
-| **Lighting** | Bright, even, indirect light (e.g. cloudy daylight, or 2+ soft lamps from the front-left and front-right). No strong window behind the person. | Shadows and backlight break texture and shape. |
-| **Background** | Plain wall or uncluttered room, colour different from the clothes. | Makes it easier to separate the person from the background. |
-| **Clothing** | Fitted clothes in a solid, matte colour. No logos, stripes, shiny or very loose fabric. No black-on-black. | Loose clothing hides the body shape. Patterns and shine confuse matching. |
-| **Hair & accessories** | Hair tied back off the neck and shoulders. Remove glasses, hats, bags, watches. | Hair and reflective objects reconstruct badly. |
-| **Space** | About 2.5 m clear around the person. | The photographer needs room to walk around. |
+| **Laptop position** | On a table (~75 cm high), lid tilted so the person's whole body is centred on screen | The camera is fixed in the lid |
+| **Distance** | Person stands on a floor marker about **2.5 m** from the laptop (exact value set by calibration) | Whole body must fit in a landscape frame |
+| **Floor marker** | Tape an **X** on the floor | The person turns on the same spot for every view |
+| **Background** | Plain wall behind the person, colour different from the clothes, nothing moving | Clean person mask |
+| **Lighting** | Bright, even, soft light from the **front** (behind or beside the laptop). **No window behind the person.** | Small webcam sensors get noisy and auto-adjust in poor light |
+| **Space** | ~1 m free around the marker | Arms out in A-pose while turning |
 
-## 2. Pose (the person being scanned)
+## 2. Mac settings (before opening the capture page)
 
-- **A-pose:** stand straight, arms out about **30°** from the body, palms facing the thighs, fingers together.
-- Feet about **shoulder-width** apart, toes forward.
-- Neutral face, mouth closed, eyes looking straight ahead at a fixed point.
-- **Do not move** during the capture: no breathing deeply, no turning the head. Movement is the most common cause of failure.
+- **Control Center → Video Effects: turn OFF** Center Stage, Portrait, Studio Light, Reactions, and any background effect. These change the framing or your real appearance.
+- Close other apps using the camera (FaceTime, Zoom, Photo Booth…).
+- Use the latest **Chrome** or **Safari**. Allow camera access when asked, and also in System Settings → Privacy & Security → Camera if needed.
+- Plug in power. Keep the laptop still during the whole capture.
 
-## 3. Phone settings
+## 3. Clothing, hair, accessories
 
-- Rear camera, **1080p or higher** (4K video if possible). No portrait/beauty mode, no filters.
-- **Lock focus and exposure** (iPhone: long-press on the person → AE/AF Lock).
-- Turn off HDR/Live Photo if possible, and turn off flash.
-- Clean the lens.
+- Fitted clothes in a solid, matte colour. No logos, stripes, shiny or very loose fabric.
+- Hair tied back off the neck and shoulders.
+- Remove glasses, hats, bags, watches.
 
-## 4. Capture method A — photos (recommended for first tests)
+## 4. Pose
 
-1. Stand **about 1.5–2 m** away, so the **whole body fits in the frame with a small margin** above the head and below the feet.
-2. **Ring 1 (chest height):** walk a full circle around the person and take a photo at **12 positions, every 30°** (like a clock face: 12, 1, 2 … 11 o'clock). Add extra photos in between for difficult areas if you like.
-3. **Ring 2 (phone above head, tilted down):** the same 12 positions.
-4. **Ring 3 (knee height, tilted up):** the same 12 positions.
-5. **Face close-ups (about 60 cm away):** 4 photos: front, left, right, slightly from below.
-6. Neighbouring photos must **overlap ~60–70%**. Move the phone; never ask the person to turn.
+- **A-pose:** stand straight, arms out about **30°** from the body, palms facing the thighs.
+- Feet shoulder-width apart, centred on the **X**.
+- Keep the **same arm angle** in every view.
+- **Turn on the spot** with small steps. Don't walk off the marker.
+- When the screen says **HOLD**, stay completely still for about 1 second.
 
-**Total:** minimum 36, target 40, maximum 80 photos. These are the MVP numbers from [capture-steps.md](capture-steps.md).
+## 5. Capture sequence
 
-## 5. Capture method B — video
+1. **Calibration.** Stand on the X. The app checks that head to feet fit, the distance, and the brightness.
+2. **Body views (8).** Face the camera, then turn **45°** to your left after each capture, until you are facing the camera again:
+   front → front-right → right → back-right → back → back-left → left → front-left
+   The app captures automatically when you are in the right direction and still. You'll hear and see the next instruction.
+3. **Face close-ups (5).** Come closer (about **70 cm**, sitting is fine): front, turn slightly left (45°), slightly right (45°), left profile (90°), right profile (90°). Neutral face, mouth closed.
+4. **Review.** Check the thumbnails, retake any view, then upload.
 
-- One slow orbit at chest height, a second at head height, and a third at knee height. Each orbit takes about **30–40 s**.
-- Keep a steady speed, without fast turns or shaking.
-- Frames are extracted later (Phase 3, P3-07).
+**Total:** 8 body views + 5 face close-ups = **13 images** (min 11, max 30 including retakes).
 
-## 6. Quick self-check before ending the session
+## 6. Quick self-check
 
-- [ ] Front, left, back and right of the person are all covered
-- [ ] Top of the head and the feet are visible in every photo
-- [ ] Photos are sharp when you zoom in on the face
-- [ ] No large shadows on one side of the body
-- [ ] Person didn't move between the first and last photo
+- [ ] Video effects are off (no automatic zoom or blur)
+- [ ] Head and feet visible in all 8 body views
+- [ ] Same spot and same arm angle in every view
+- [ ] Face sharp in the close-ups
+- [ ] No big brightness change between views
 
-## 7. File naming
+## 7. Development sample naming (experiments only)
 
 ```text
-data/samples/<subject-code>/<YYYY-MM-DD>-<method>/IMG_0001.jpg
-e.g. data/samples/S01/2026-11-21-photos/
+data/samples/<subject-code>/<YYYY-MM-DD>-macbook/
+  body-front.jpg, body-front-right.jpg, …, face-front.jpg, …, settings.json
 ```
 
-Use a **subject code** (S01, S02…), never a real name. Keep the consent record separate from the images.
-
-## 8. Notes to record per session
-
-Lighting setup, phone model, number of photos, time taken, anything that went wrong. Record these in `docs/experiments/`.
+Use a **subject code** (S01, S02…), never a real name. Keep the consent record separate.

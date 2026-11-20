@@ -3,6 +3,8 @@
 **Goal:** Agree on what is built and how success is measured, before writing much code.
 **Deliverable:** Approved requirements, UI mockups, test cases.
 
+> **Note (20 Nov 2026):** the capture-related outputs (flows, capture steps, capture wireframe, consent, test cases) were revised for the MacBook built-in camera. See [change-log.md](../change-log.md) (CR-01). The tasks below are kept as the original record.
+
 **Outputs:** [user-flows.md](../user-flows.md) · [consent-v1.md](../consent-v1.md) · [capture-steps.md](../capture-steps.md) · [garment-format.md](../garment-format.md) · [05-mvp-acceptance.md](../05-mvp-acceptance.md) (targets) · [wireframes/](../wireframes/README.md) · [test-cases.md](../test-cases.md)
 
 ---

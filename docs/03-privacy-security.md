@@ -15,7 +15,8 @@ Face and body scans are **sensitive personal data**. In many jurisdictions, face
 ## 3.2 Data minimization
 
 - [ ] Keep raw photos/videos only as long as reconstruction needs them. Delete them after the model is approved, unless the user opts in to keep them.
-- [ ] Strip EXIF metadata (GPS location, device info) on upload.
+- [ ] Remove all image metadata on upload (re-encode server-side).
+- [ ] Captured images stay **in browser memory only** until the user presses Upload (no localStorage / IndexedDB).
 - [ ] Don't log images, file contents, or personal details.
 
 ## 3.3 Encryption & storage
@@ -23,9 +24,16 @@ Face and body scans are **sensitive personal data**. In many jurisdictions, face
 - [ ] Encrypt every customer file at rest (e.g. AES-GCM via Python `cryptography`) under `data/`, which is git-ignored.
 - [ ] Keep encryption keys out of Git (in `.env`/keychain; later a secrets manager).
 - [ ] Never place customer files in `static/` or any public URL.
-- [ ] Use HTTPS for every upload, including phone → MacBook on the local network.
+- [ ] Capture and upload happen on the same MacBook via `http://localhost` (a browser secure context). **Any non-localhost deployment must use HTTPS.**
 
-## 3.4 Access control
+## 3.4 Camera
+
+- [ ] Request the camera only on the capture page, after consent.
+- [ ] Stop all camera tracks when the user finishes, cancels or leaves the page (the camera light turns off).
+- [ ] Ask users to turn **off** macOS video effects (Center Stage, Portrait, Studio Light, backgrounds). They change framing and real appearance.
+- [ ] No third-party network requests while the camera is on (computer-vision models are self-hosted).
+
+## 3.4b Access control
 
 - [ ] Every model/capture endpoint checks `resource.user_id == current_user.id`.
 - [ ] Use opaque random IDs (UUIDv4), never sequential IDs, in URLs.

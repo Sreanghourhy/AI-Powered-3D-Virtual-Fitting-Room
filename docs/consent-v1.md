@@ -1,6 +1,8 @@
 # Consent Text — v1
 
-> **Version:** `consent-v1` · **Status:** Draft for review · **Date:** 20 Nov 2026
+> ⚠️ **Superseded** by [consent-v2](consent-v2.md) (MacBook camera) once approved. Kept for the record because some accounts may have accepted v1.
+>
+> **Version:** `consent-v1` · **Status:** Approved 20 Nov 2026, superseded · **Date:** 20 Nov 2026
 > Engineering draft only, not legal advice. Have it reviewed for the countries where you launch before real customers use it.
 > If any wording changes, create `consent-v2` and ask existing users to accept again.
 

@@ -49,13 +49,13 @@
 ### P0-06 · Draft the photo-capture checklist   `S`
 **Depends on:** —
 - [x] Write `docs/capture-guide.md` covering: lighting (even, no strong backlight), background (plain), clothing (fitted, solid colour, no logos), hair (tied back), pose (A-pose, arms ~30° from body, feet shoulder-width), distance (whole body in frame + margin), angles (every ~15–20° around the person, 2 heights), phone (fixed exposure, 1080p+)
-- [ ] Collect authorized sample images (yourself or a consenting adult; written consent)
+- [ ] ~~Collect authorized sample images with a phone~~ → **moved to P3-05** (MacBook camera sample capture, 20 Nov 2026)
 
 **Done when:** the checklist exists and one full sample capture set is stored **outside Git** in `data/samples/`.
 
 ### P0-07 · ⚠️ First reconstruction experiment   `M`
 **Depends on:** P0-06
-- [ ] Try one quick method on the sample set (e.g. Apple Object Capture on macOS, or COLMAP)
-- [ ] Record in `docs/experiments/000-first-try.md`: tool, version, input count, runtime, output format, a screenshot, problems seen
+- [ ] ~~Try one quick method on the sample set~~ → **moved to P3-05** (reconstruction smoke test)
+- [ ] ~~Record in `docs/experiments/000-first-try.md`~~ → recorded in the feasibility report instead
 
 **Done when:** you have *any* 3D output (even a bad one) plus written notes. Don't pick a final method yet; that happens in Phase 4.
